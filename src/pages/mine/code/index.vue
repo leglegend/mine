@@ -24,6 +24,12 @@
             <span @click="jumpToAccount">马上去设置</span>
           </div>
         </div>
+        <div class="no-alipay" v-if="isAccount==true">
+          <div>
+            依各商户意见，现提供赠送台牌活动，仅一万个，数量有限，送完即止。
+            <span @click="jumpToTable">马上去领取</span>
+          </div>
+        </div>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -48,7 +54,11 @@
     },
     methods: {
       jumpToAccount () {
-        const url = '../alipay/main?userId=' + this.userId + '&storeId=' + this.storeId + (this.account ? '&name=' + this.account.AccountName + '&account=' + this.account.AccountId + '&state=' + this.account.State : '')
+        const url = '../gathering/alipay/main?userId=' + this.userId + '&storeId=' + this.storeId + (this.account ? '&name=' + this.account.AccountName + '&account=' + this.account.AccountId + '&state=' + this.account.State : '')
+        wx.navigateTo({url})
+      },
+      jumpToTable () {
+        const url = '../service/table/main?userId=' + this.userId + '&storeId=' + this.storeId
         wx.navigateTo({url})
       },
       getQrCode () {

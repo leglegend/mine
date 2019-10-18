@@ -1,18 +1,21 @@
 <template>
-  <div class="windows-title" :style="{height:titleHeight-statusBarHeight+'px','padding-top':statusBarHeight +'px'}">
+  <div class="windows-title"
+       :style="{height:titleHeight-statusBarHeight+'px','padding-top':statusBarHeight +'px',background:background?background:''}">
     <div class="title-context">
       <span class="return" @click="navigateBack">
-        <img class="title-icon" src="/static/return.png"/>
+        <img v-if="noreturn!=true" class="title-icon" :src="color?'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/return2.png':'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/return.png'"/>
       </span>
-      <span class="center-title">
+      <span class="center-title" :style="{color:color?color:''}">
+        <img v-if="name=='续费关怀'" style="width: 28rpx;height: 30rpx;"
+             src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-renew.png"/>
         <img v-if="name=='生日送券'" style="width: 35rpx;height: 33rpx;"
-             src="/static/coupon-birthday.png"/>
+             src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-birthday.png"/>
         <img v-if="name=='满送券'" style="width: 34rpx;height: 29rpx;"
-             src="/static/coupon-discount.png"/>
+             src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-discount.png"/>
         <img v-if="name=='群发券'" style="width: 39rpx;height: 33rpx;"
-             src="/static/coupon-group.png"/>
+             src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-group.png"/>
         <img v-if="name=='定向券'" style="width: 38rpx;height: 39rpx;"
-             src="/static/coupon-appoint.png"/>
+             src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-appoint.png"/>
         {{name}}
       </span>
       <span class="return"></span>
@@ -22,7 +25,7 @@
 </template>
 <script>
   export default {
-    props: ['name', 'noline'],
+    props: ['name', 'noline', 'background', 'color', 'noreturn'],
     data () {
       return {
         statusBarHeight: null,

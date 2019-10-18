@@ -29,11 +29,11 @@
           </div>
         </div>
         <div class="coupon-create-context">
-          <div class="same-coupon" v-for="(item,index) in cards">
+          <div class="same-coupon" v-for="(item,index) in cards" v-if="type!='5'||item.State != 2">
             <div v-if="!item.Coupons" class="add-coupon" @click="jumpToGift(item,index)">
               + 添加礼券
             </div>
-            <div v-if="item.Coupons">
+            <div v-if="item.Coupons" @click="jumpToGift(item,index)">
               <div v-for="(itemCoupon,index2) in item.Coupons">
                 <coupon :coupon="itemCoupon"></coupon>
               </div>
@@ -45,7 +45,7 @@
                   <span class="item-4">计算规则</span>
                   <span class="item-5">{{item.IsOnlyOne ? '单次' : '累计'}}</span>
                   <span class="item-3">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
                 </picker>
               </div>
@@ -55,7 +55,7 @@
                   <span class="item-4">消费方式</span>
                   <span class="item-5">{{item.ConsumptionType == 2 ? '卡内消费' : '仅付款'}}</span>
                   <span class="item-3">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
                 </picker>
               </div>
@@ -64,7 +64,7 @@
                 <span class="item-1">金额达到</span>
                 <span class="item-2">{{item.MeetAmountMin ? item.MeetAmountMin + '元' : ''}}</span>
                 <span class="item-3">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
               </div>
             </div>
@@ -75,7 +75,7 @@
                   <span class="item-4">发放日期</span>
                   <span class="item-5">{{item.date ? item.date : ''}}</span>
                   <span class="item-3">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
                 </picker>
               </div>
@@ -85,18 +85,18 @@
                   <span class="item-4">发放时间</span>
                   <span class="item-5">{{item.time ? item.time : ''}}</span>
                   <span class="item-3">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
                 </picker>
               </div>
               <div class="input-item" @click="cardIndex=index">
-                <picker :range="['只发一次','按月发送','按年发送']"
+                <picker :range="['只发一次']"
                         :value="item.SendGroupTimes == 2 ? 1 : item.SendGroupTimes == 3 ? 2 : 0"
                         @change="timesChange">
                   <span class="item-4">发放次数</span>
                   <span class="item-5">{{item.SendGroupTimes == 2 ? '按月发送' : item.SendGroupTimes == 3 ? '按年发送' : '只发一次'}}</span>
                   <span class="item-3">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
                 </picker>
               </div>
@@ -104,21 +104,25 @@
                 <span class="item-4">发放群体</span>
                 <span class="item-5">全部会员<text style="color: #bfbfbf">(暂不支持筛选)</text></span>
                 <span class="item-3">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
               </div>
             </div>
             <div class="inputs" style="padding-top: 2vw" v-if="type=='6'">
-              <div class="input-item">
+              <div class="input-item"
+                   @click="jumpToData('number','微信分享限制',item.ShareRegularCount&&item.ShareRegularCount!=-1?item.ShareRegularCount:'',index)">
                 <span class="item-4">微信分享限制</span>
-                <span class="item-5">每次仅限一名顾客领取</span>
+                <span class="item-5"
+                      v-if="item.ShareRegularCount>0">每次仅限{{item.ShareRegularCount ? item.ShareRegularCount : 1}}名顾客领取</span>
+                <span class="item-5"
+                      v-if="!item.ShareRegularCount||item.ShareRegularCount==-1">无限制</span>
                 <span class="item-3">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
               </div>
             </div>
-            <div class="delete-button" v-if="cards.length>1" @click="deleteCard(index)">
-              <img src="/static/coupon-delete.png"/>
+            <div class="delete-button" @click="deleteCard(index)">
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-delete.png"/>
             </div>
           </div>
           <div class="add-buttons">
@@ -130,7 +134,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -160,6 +164,9 @@
     methods: {
       jumpToGift (item, index) {
         let url = '../gift/main?storeId=' + this.storeId + '&userId=' + this.userId
+        if (this.type === '5') {
+          url += '&scene=group'
+        }
         this.cardIndex = index
         if (item.Coupons && item.Coupons.length > 0) {
           wx.setStorageSync('coupon', item.Coupons[0])
@@ -201,50 +208,54 @@
           CouponCenterType: this.type,
           CouponCenters: []
         }
-        for (let item of this.cards) {
-          let couponCenter = {
-            CouponCenterType: this.type,
-            StoreId: this.storeId,
-            IsByUserLevel: false,
-            PreCardId: item.PrepaidCardId,
-            Coupons: item.Coupons
-          }
-          if (item.CouponCenterId) {
-            couponCenter.CouponCenterId = item.CouponCenterId
-          }
-          if (!item.Coupons) {
-            wx.showToast({
-              title: '请添加券',
-              image: '/static/warn.png'
-            })
-            return
-          }
-          if (this.type === '4') {
-            couponCenter.IsOnlyOne = item.IsOnlyOne ? item.IsOnlyOne : 0
-            couponCenter.ConsumptionType = item.ConsumptionType === 2 ? 2 : 1
-            couponCenter.MeetAmountMin = item.MeetAmountMin
-            if (item.MeetAmountMin === null || item.MeetAmountMin === undefined || item.MeetAmountMin === '') {
-              isError = true
+        if (this.isEdit && this.cards.length === 1 && !this.cards[0].Coupons) {
+        } else {
+          for (let item of this.cards) {
+            let couponCenter = {
+              CouponCenterType: this.type,
+              StoreId: this.storeId,
+              IsByUserLevel: false,
+              PreCardId: item.PrepaidCardId,
+              Coupons: item.Coupons,
+              State: item.State
             }
-          } else if (this.type === '5') {
-            couponCenter.SendGroup = 0
-            couponCenter.SendGroupTimes = item.SendGroupTimes ? item.SendGroupTimes : 1
-            if (!item.date || !item.time) {
-              isError = true
-            } else {
-              couponCenter.SendGroupDate = item.date + ' ' + item.time
+            if (item.CouponCenterId) {
+              couponCenter.CouponCenterId = item.CouponCenterId
             }
-          } else if (this.type === '6') {
-            couponCenter.ShareRegularCount = 1
+            if (!item.Coupons) {
+              wx.showToast({
+                title: '请添加券',
+                image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
+              })
+              return
+            }
+            if (this.type === '4') {
+              couponCenter.IsOnlyOne = item.IsOnlyOne ? item.IsOnlyOne : 0
+              couponCenter.ConsumptionType = item.ConsumptionType === 2 ? 2 : 1
+              couponCenter.MeetAmountMin = item.MeetAmountMin
+              if (item.MeetAmountMin === null || item.MeetAmountMin === undefined || item.MeetAmountMin === '') {
+                isError = true
+              }
+            } else if (this.type === '5') {
+              couponCenter.SendGroup = 0
+              couponCenter.SendGroupTimes = item.SendGroupTimes ? item.SendGroupTimes : 1
+              if (!item.date || !item.time) {
+                isError = true
+              } else {
+                couponCenter.SendGroupDate = item.date + ' ' + item.time
+              }
+            } else if (this.type === '6') {
+              couponCenter.ShareRegularCount = item.ShareRegularCount ? item.ShareRegularCount : -1
+            }
+            if (isError) {
+              wx.showToast({
+                title: '请补全信息',
+                image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
+              })
+              return
+            }
+            papams.CouponCenters.push(couponCenter)
           }
-          if (isError) {
-            wx.showToast({
-              title: '请补全信息',
-              image: '/static/warn.png'
-            })
-            return
-          }
-          papams.CouponCenters.push(couponCenter)
         }
         if (this.isEdit) {
           this.$post('/couponCenter/businessCouponCentersUpdate', papams, true).then(res => {
@@ -265,13 +276,20 @@
           CouponCenterType: this.type
         }, this.firstLoad).then(res => {
           that.state = res.State
+          let count = 0
           for (let item of res.CouponCenterInfos) {
             item.Coupons = [that.calcCoupon(item.Coupons[0])]
             if (that.type === '5') {
+              if (item.State === 2) {
+                count += 1
+              }
               let dates = item.SendGroupDate.split(' ')
               item.date = dates[0]
               item.time = dates[1]
             }
+          }
+          if (that.type === '5' && count !== 0 && count === res.CouponCenterInfos.length) {
+            res.CouponCenterInfos.push({})
           }
           that.cards = res.CouponCenterInfos
         })
@@ -315,13 +333,17 @@
         this.cards.push({})
       },
       deleteCard (index) {
-        let cards = []
-        for (let i = 0; i < this.cards.length; i++) {
-          if (index !== i) {
-            cards.push(this.cards[i])
+        if (this.cards.length === 1) {
+          this.cards = [{}]
+        } else {
+          let cards = []
+          for (let i = 0; i < this.cards.length; i++) {
+            if (index !== i) {
+              cards.push(this.cards[i])
+            }
           }
+          this.cards = cards
         }
-        this.cards = cards
         this.changeData += 1
       }
     },
@@ -331,6 +353,8 @@
       this.type = option.type
       this.firstLoad = false
       this.calcName()
+      this.cards = [{}]
+      this.coupon = null
       if (option.edit) {
         this.isEdit = true
         this.getCouponCenter()
@@ -356,7 +380,7 @@
           }
         }
         if (this.cards[this.cardIndex].Coupons && this.cards[this.cardIndex].Coupons[0].Id) {
-          coupon.Id = this.coupon.Id
+          coupon.Id = this.cards[this.cardIndex].Coupons[0].Id
         }
         this.cards[this.cardIndex].Coupons = [coupon]
         wx.removeStorageSync('coupon')
@@ -367,6 +391,8 @@
           this.cards[this.cardIndex].MeetAmountMin = data.value
         } else if (data.key === 'minTimes') {
           this.cards[this.cardIndex].LessTimes = data.value
+        } else if (data.key === 'ShareRegularCount') {
+          this.cards[this.cardIndex].ShareRegularCount = data.value
         }
         wx.removeStorageSync('data')
       }

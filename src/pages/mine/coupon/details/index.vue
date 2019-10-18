@@ -42,7 +42,7 @@
             </span>
             <span class="item-right">
               <div class="item-title">
-                <span>{{item.UserName}}<img src="/static/ismember.png"
+                <span>{{item.UserName}}<img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ismember.png"
                                             style="width: 14rpx;height: 22.4rpx;position: relative;top:2rpx"
                                             v-if="item.IsVip"/></span>
                 <span :style="{color:item.IsUsed?'#000000':''}">{{item.IsUsed ? '已使用' : '未使用'}}</span>
@@ -53,11 +53,12 @@
               </span>
           </div>
         </div>
-        <div class="footer" v-show="isOver">—— &nbsp;没有更多了哦&nbsp; ——</div>
+        <div class="footer" v-show="isOver&&items.length>0">—— &nbsp;没有更多了哦&nbsp; ——</div>
+        <div class="footer" v-show="isOver&&items.length==0">还没有数据 =_="</div>
         <div class="footer" v-show="isLoading">加载中...</div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -126,6 +127,7 @@
       this.couponCenterId = this.couponCenter.CouponCenterId
       this.couponId = this.couponCenter.Coupons[0].Id
       this.store = wx.getStorageSync('store')
+      this.page = 1
       this.getItems(1)
       wx.removeStorageSync('couponCenter')
       wx.removeStorageSync('store')

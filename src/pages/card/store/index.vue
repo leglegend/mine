@@ -36,21 +36,9 @@
                       :value="store.StoreMobile"
                       :type="'input'"
                       @changeValue="changeValue"></inputBox>
-            <div class="date-select">
+            <div class="date-select" @click="jumpToTime">
               <span class="title">营业时间</span>
-              <picker class="picker" @change="changeStartTime" mode="time" :value="store.WorkingTimeStart"
-                      name="WorkingTimeStart">
-                <view class="model" :style="{color:store.WorkingTimeStart?'#7e7e7e':'#dadada'}">
-                  {{store.WorkingTimeStart ? store.WorkingTimeStart : '请选择'}}
-                </view>
-              </picker>
-              <span style="width: 10vw;color: #7e7e7e;display: inline-block">至</span>
-              <picker class="picker" @change="changeEndTime" mode="time" :value="store.WorkingTimeEnd"
-                      name="WorkingTimeEnd">
-                <view class="model" :style="{color:store.WorkingTimeEnd?'#7e7e7e':'#dadada'}">
-                  {{store.WorkingTimeEnd ? store.WorkingTimeEnd : '请选择'}}
-                </view>
-              </picker>
+              <span class="model">点击进入营业时间设置</span>
             </div>
             <div class="commit">
               <button formType="submit">保存</button>
@@ -59,7 +47,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -129,6 +117,10 @@
       }
     },
     methods: {
+      jumpToTime () {
+        const url = '../time/main?userId=' + this.info.userId + '&storeId=' + this.info.storeId
+        wx.navigateTo({url})
+      },
       changeValue (key, value) {
         this.store[key] = value
       },
@@ -225,6 +217,7 @@
           that.store = res
           that.logoUrl = res.StoreLogo
           that.firstLoad = false
+          that.$store.commit('storeInfo', res)
         })
       },
       setStoreInfo (store) {
@@ -234,6 +227,7 @@
         let that = this
         this.$post('/store/businessSetStoreInfo', store, true).then(res => {
           that.$success('保存成功', true)
+          that.getStoreInfo()
         })
       },
       cropperReady (...args) {
@@ -397,7 +391,6 @@
           }
           .model {
             display: inline-block;
-            width: 15vw;
             height: 5vh;
             height: 7vh;
             line-height: 7vh;

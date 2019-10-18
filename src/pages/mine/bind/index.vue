@@ -6,7 +6,7 @@
            :style="{'min-height':'calc(90vh - '+titleHeight +'px)'}">
         <div class="demo-context bind-context">
           <div>
-            <img :src="!accept ?store.StoreLogo:'/static/accept.png'"/>
+            <img :src="!accept ?store.StoreLogo:'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/accept.png'"/>
           </div>
           <div>
             {{!accept ? store.StoreName : '已接受邀请'}}
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="demo-footer bind-footer" style="padding-top: 10vh">
-        <img class="demo-nutcards" src="/static/logo3.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/logo3.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -55,8 +55,10 @@
         })
       },
       done () {
+        wx.removeStorageSync('auth')
+        wx.setStorageSync('currentStore', this.storeId)
         const url = '../../index/main'
-        wx.redirectTo({url})
+        wx.reLaunch({url})
       },
       checkBind () {
         let that = this

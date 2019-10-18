@@ -12,14 +12,14 @@
                 {{'来源：' + coupon.CouponSourceContent}}
               </div>
               <div class="coupon-used">
-                <img src="/static/current-used.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/current-used.png"/>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -57,27 +57,30 @@
           }
         }
         return coupon
+      },
+      getCoupons (option) {
+        let that = this
+        this.$post('/consumption/businessGetConsumptionInfo', {
+          StoreId: option.storeId,
+          Uid: option.userId,
+          ConsumptionId: option.consumptionId
+        }).then(res => {
+          if (res.Coupons) {
+            for (let coupon of res.Coupons) {
+              coupon = that.calcCoupon(coupon)
+            }
+            that.items = res.Coupons
+          }
+        })
       }
     },
     onLoad (option) {
-      let that = this
       this.userId = option.userId
       this.storeId = option.storeId
       this.info = {}
+      this.getCoupons(option)
       this.statusBarHeight = this.getGlobalData().statusBarHeight
       this.titleHeight = this.getGlobalData().titleHeight
-      this.$post('/consumption/businessGetConsumptionInfo', {
-        StoreId: option.storeId,
-        Uid: option.userId,
-        ConsumptionId: option.consumptionId
-      }).then(res => {
-        if (res.Coupons) {
-          for (let coupon of res.Coupons) {
-            coupon = that.calcCoupon(coupon)
-          }
-          that.items = res.Coupons
-        }
-      })
     }
   }
 </script>

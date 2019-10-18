@@ -4,7 +4,7 @@
     <span class="info" :class="last?'last':''">
       <div class="operate">
         <span class="user">{{item.UserStoreName ? item.UserStoreName : item.UserName}}
-          <img src="/static/ismember.png" style="width: 14rpx;height: 22.4rpx;position: relative;top:2rpx"
+          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ismember.png" style="width: 14rpx;height: 22.4rpx;position: relative;top:2rpx"
                v-if="item.CardId>0"/>
         </span>
         <span class="opera"></span>

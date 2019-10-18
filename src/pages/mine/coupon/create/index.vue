@@ -45,7 +45,7 @@
               <div v-if="!coupon" class="add-coupon" @click="jumpToGift">
                 + 添加礼券
               </div>
-              <div v-if="coupon">
+              <div v-if="coupon" @click="jumpToGift">
                 <coupon :coupon="coupon"></coupon>
               </div>
               <div class="inputs" style="padding: 2vw 0 5vw 0" v-if="type=='2'">
@@ -53,27 +53,28 @@
                   <span class="item-1">当余额低于多少时赠送 (元)</span>
                   <span class="item-2">{{minAmount}}元</span>
                   <span class="item-3">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
                 </div>
                 <div class="input-item" @click="jumpToData('number','续费(次)',minTimes)">
                   <span class="item-1">当余额低于多少时赠送 (次)</span>
                   <span class="item-2">{{minTimes}}次</span>
                   <span class="item-3">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
                 </div>
               </div>
             </div>
             <div class="coupon-buttons">
-              <span @click="deleteCards">删除此卡</span>
+              <span @click="deleteCards">清除设置</span>
               <span @click="doSave">保 存</span>
             </div>
           </swiper-item>
           <swiper-item>
             <div class="level-coupon">
               <div v-for="(item,index) in cards">
-                <card :num="index" :card="item" :last="index+1==cards.length" :store="store" :uid="userId" :coupon="true"></card>
+                <card :num="index" :card="item" :last="index+1==cards.length" :store="store" :uid="userId"
+                      :coupon="true"></card>
                 <div class="item-coupon">
                   <div class="coupon-bg" @click="jumpToGift(item,index)">
                     <div v-if="!item.Coupons" class="add-button">+ 添加礼券</div>
@@ -83,6 +84,9 @@
                       </div>
                     </div>
                     <div class="coupon-horn"></div>
+                    <div class="delete-button" v-if="item.Coupons" @click.stop="deleteCard(index)">
+                      <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-delete.png"/>
+                    </div>
                   </div>
                   <div class="inputs" v-if="type=='2'">
                     <div v-if="item.CardType" class="input-item"
@@ -90,7 +94,7 @@
                       <span class="item-1">当余额低于多少时赠送 (元)</span>
                       <span class="item-2">{{item.LessMoney ? item.LessMoney : 0}}元</span>
                       <span class="item-3">
-                        <img src="/static/right2.png"/>
+                        <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                       </span>
                     </div>
                     <div v-if="!item.CardType" class="input-item"
@@ -98,14 +102,14 @@
                       <span class="item-1">当余额低于多少时赠送 (次)</span>
                       <span class="item-2">{{item.LessTimes ? item.LessTimes : 0}}次</span>
                       <span class="item-3">
-                        <img src="/static/right2.png"/>
+                        <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="coupon-buttons">
-                <span @click="deleteCards">删除此卡</span>
+                <span @click="deleteCards">清除设置</span>
                 <span @click="doSave">保 存</span>
               </div>
             </div>
@@ -113,7 +117,7 @@
         </swiper>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -122,7 +126,7 @@
 
 <script>
   import title from '@/components/title'
-  import card from '@/components/card'
+  import card from '@/components/option'
   import coupon from '@/components/coupon'
 
   export default {
@@ -151,6 +155,11 @@
     methods: {
       jumpToGift (item, index) {
         let url = '../gift/main?storeId=' + this.storeId + '&userId=' + this.userId
+        if (this.type === '2') {
+          url += '&scene=renew'
+        } else if (this.type === '3') {
+          url += '&scene=group'
+        }
         if (this.current === 0 && this.coupon) {
           wx.setStorageSync('coupon', this.coupon)
         } else {
@@ -202,7 +211,15 @@
           this.changeData += 1
         } else {
           this.coupon = null
+          this.minAmount = 0
+          this.minTimes = 0
         }
+      },
+      deleteCard (index) {
+        this.cards[index].Coupons = null
+        this.cards[index].LessMoney = 0
+        this.cards[index].LessTimes = 0
+        this.changeData += 1
       },
       doSave () {
         let that = this
@@ -214,11 +231,18 @@
           CouponCenters: []
         }
         if (this.current === 0) {
+          if (!this.edit && this.coupon === null) {
+            wx.showToast({
+              title: '请添加优惠券',
+              image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
+            })
+            return
+          }
           let couponCenter = {
             CouponCenterType: this.type,
             StoreId: this.storeId,
             IsByUserLevel: 0,
-            Coupons: [this.coupon]
+            Coupons: this.coupon ? [this.coupon] : null
           }
           if (this.couponCenterId) {
             couponCenter.CouponCenterId = this.couponCenterId
@@ -227,7 +251,11 @@
             couponCenter.LessMoney = this.minAmount
             couponCenter.LessTimes = this.minTimes
           }
-          params.CouponCenters.push(couponCenter)
+          if (this.coupon) {
+            params.CouponCenters.push(couponCenter)
+          } else {
+            params.CouponCenters = null
+          }
         } else {
           for (let item of this.cards) {
             let couponCenter = {
@@ -249,10 +277,10 @@
             }
             params.CouponCenters.push(couponCenter)
           }
-          if (params.CouponCenters.length === 0) {
+          if (!this.edit && params.CouponCenters.length === 0) {
             wx.showToast({
               title: '请添加优惠券',
-              image: '/static/warn.png'
+              image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
             })
             return
           }
@@ -292,7 +320,11 @@
             if (items) {
               for (let coupon of items) {
                 if (item.PrepaidCardId === coupon.PreCardId) {
+                  for (let item2 of coupon.Coupons) {
+                    item2 = that.calcCoupon(item2)
+                  }
                   item.Coupons = coupon.Coupons
+                  item.CouponCenterId = coupon.CouponCenterId
                   if (that.type === '2') {
                     item.LessMoney = coupon.LessMoney
                     item.LessTimes = coupon.LessTimes
@@ -314,10 +346,10 @@
           IsByUserLevel: index,
           CouponCenterType: this.type
         }, this.firstLoad).then(res => {
+          if (index === -1) {
+            that.current = res.IsByUserLevel ? 1 : 0
+          }
           for (let item of res.CouponCenterInfos) {
-            if (index === -1) {
-              that.current = item.IsByUserLevel ? 1 : 0
-            }
             if (item.IsByUserLevel) {
               that.getCards(res.CouponCenterInfos)
               that.getCouponCenter(0)
@@ -332,6 +364,12 @@
           }
           if (index === -1 && !that.current) {
             that.getCouponCenter(1)
+          }
+          if (index === -1 && that.current) {
+            that.getCouponCenter(0)
+          }
+          if (index === -1 && res.CouponCenterInfos.length === 0 && that.current) {
+            that.getCards()
           }
           if (index === 1 && res.CouponCenterInfos.length === 0) {
             that.getCards()
@@ -382,7 +420,7 @@
             this.name = '开卡送券'
             break
           case '2':
-            this.name = '续费送券'
+            this.name = '续费关怀'
             break
           case '3':
             this.name = '生日送券'
@@ -405,6 +443,8 @@
       this.type = option.type
       this.edit = option.edit
       this.couponCenterId = ''
+      this.coupon = null
+      this.cards = []
       this.firstLoad = true
       this.calcName()
       this.getStoreInfo()
@@ -558,6 +598,17 @@
                   position: absolute;
                   left: 15vw;
                   top: -2vw;
+                }
+                .delete-button {
+                  position: absolute;
+                  width: 5.6vw;
+                  height: 5.6vw;
+                  top: -2.5vw;
+                  right: -2.5vw;
+                  img {
+                    width: 5.6vw;
+                    height: 5.6vw;
+                  }
                 }
               }
             }

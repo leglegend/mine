@@ -41,6 +41,18 @@
     border: none;
   }
 
+  .overdue-button {
+    color: white !important;
+    background: #AAAAAA !important;
+    border-color: #AAAAAA !important;
+  }
+
+  .overdue-button2 {
+    color: #AAAAAA !important;
+    background: white !important;
+    border-color: #AAAAAA !important;
+  }
+
   .container {
     height: 100%;
     display: flex;

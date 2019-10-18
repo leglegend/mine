@@ -16,6 +16,8 @@
     "pages/member/persion/main",
     "pages/member/face/main",
     "pages/member/coupons/main",
+    "pages/member/use/main",
+    "pages/member/addcard/main",
     "pages/card/home/main",
     "pages/card/agreement/main",
     "pages/card/benefit/main",
@@ -25,6 +27,8 @@
     "pages/card/store/main",
     "pages/card/choose/main",
     "pages/card/record/main",
+    "pages/card/time/main",
+    "pages/card/share/home/main",
     "pages/mine/bind/main",
     "pages/mine/account/main",
     "pages/mine/add/main",
@@ -32,26 +36,58 @@
     "pages/mine/alipay/main",
     "pages/mine/app/main",
     "pages/mine/code/main",
-    "pages/mine/collect/main",
-    "pages/mine/day/main",
     "pages/mine/detail/main",
     "pages/mine/edit/main",
     "pages/mine/help/main",
     "pages/mine/message/main",
     "pages/mine/mobile/main",
-    "pages/mine/money/main",
     "pages/mine/name/main",
     "pages/mine/nutcards/main",
     "pages/mine/permission/main",
     "pages/mine/store/main",
     "pages/mine/voice/main",
     "pages/mine/apphelp/main",
-    "pages/mine/choose/main",
-    "pages/mine/data/main",
-    "pages/mine/ident/main",
+    "pages/mine/contact/main",
     "pages/mine/home/main"
   ],
   "subPackages": [
+    {
+      "root": "pages/mine/gathering",
+      "pages": [
+        "choose/main",
+        "remark/main",
+        "alipay/main",
+        "collect/main",
+        "upgrade/main",
+        "money/main",
+        "day/main",
+        "view/main",
+        "create/main"
+      ]
+    },
+    {
+      "root": "pages/mine/promotion",
+      "pages": [
+        "home/main",
+        "code/main",
+        "send/main"
+      ]
+    },
+    {
+      "root": "pages/mine/service",
+      "pages": [
+        "home/main",
+        "record/main",
+        "export/main",
+        "contract/main",
+        "table/main",
+        "success/main",
+        "fee/main",
+        "help/main",
+        "business/main",
+        "renew/main"
+      ]
+    },
     {
       "root": "pages/mine/activity",
       "pages": [
@@ -78,6 +114,11 @@
       ]
     }
   ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于定位您的店铺"
+    }
+  },
   "window": {
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#fff",

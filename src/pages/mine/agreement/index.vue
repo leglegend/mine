@@ -1,28 +1,23 @@
 <template>
   <div class="demo-page mine-agreement">
-    <title :name="'服务协议'"></title>
-    <web-view src="https://www.nutcards.com/jghyxy.html">
+    <web-view :src="src">
 
     </web-view>
   </div>
 </template>
 
 <script>
-  import title from '@/components/title'
-
   export default {
-    components: {
-      title
-    },
-
     data () {
       return {
-        titleHeight: null
+        src: null
       }
     },
     methods: {},
-    onLoad () {
-      this.titleHeight = this.getGlobalData().titleHeight
+    onLoad (option) {
+      this.storeId = option.storeId
+      this.userId = option.userId
+      this.src = 'https://www.nutcards.com/jghyxy.html?storeId=' + option.storeId + '&userId=' + option.userId
     }
   }
 </script>

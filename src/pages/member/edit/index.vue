@@ -9,10 +9,12 @@
         <div style="padding-bottom: 5vh;background-color: white">
           <div class="info">
             <span class="logo" v-bind:style="{background:'url('+user.UserImg+')','background-size':'100%,100%'}"></span>
-            <div class="nick">{{user.UserName}}</div>
+            <div class="nick">
+              {{user.RemarkName ? user.RemarkName : user.UserStoreName ? user.UserStoreName : user.UserName}}
+            </div>
           </div>
           <div style="width: 90vw;margin: 0 auto">
-            <div v-if="phone&&userId=='0'">
+            <div v-if="phone&&userId=='0'&&!isFirstLoad">
               <inputBox :keyword="'phone'"
                         :name="'电话'"
                         :request="true"
@@ -22,7 +24,7 @@
                         :value="phone"
                         @changeValue="changeValue"></inputBox>
             </div>
-            <div v-if="!phone&&userId=='0'">
+            <div v-if="!phone&&userId=='0'&&!isFirstLoad">
               <inputBox :keyword="'phone'"
                         :name="'电话'"
                         :request="true"
@@ -41,27 +43,31 @@
                       :validations="item.ControlsValidations"
                       :type="item.ControlType"
                       @changeValue="changeValue"></inputBox>
+            <div v-if="!isFirstLoad">
+              <inputBox :keyword="'remarkName'"
+                        :name="'备注名'"
+                        :type="'input'"
+                        :value="remarkName"
+                        @changeValue="changeValue"></inputBox>
+            </div>
           </div>
-          <div class="noItems" v-if="items.length==0">
-            没有可编辑资料 =_="
-          </div>
-          <div class="commit" v-if="items.length>0">
-            <span @click="deleting = true">删除会员</span>
-            <span @click="commit">保存</span>
-          </div>
-          <div class="commit" style="text-align: center" v-if="items.length==0">
-            <span @click="deleting = true">删除会员</span>
+          <div class="commit">
+            <span @click="isOverdue?showToast=true:deleting=true" :class="isOverdue?'overdue-button2':''">删除会员</span>
+            <span @click="isOverdue?showToast=true:commit()" :class="isOverdue?'overdue-button':''">保存</span>
           </div>
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
     <div v-if="deleting">
       <confirm :title="'确定删除该会员吗？'" :confirm="'删除'" :cancel="'取消'"
                @confirm="doDelete" @cancel="deleting = false"></confirm>
+    </div>
+    <div v-if="showToast">
+      <renewtoast @close="showToast = false"></renewtoast>
     </div>
   </div>
 </template>
@@ -70,10 +76,11 @@
   import inputBox from '@/components/input'
   import title from '@/components/title'
   import confirm from '@/components/confirm'
+  import renewtoast from '@/components/renewtoast'
 
   export default {
     components: {
-      inputBox, title, confirm
+      inputBox, title, confirm, renewtoast
     },
 
     data () {
@@ -86,8 +93,20 @@
         user: {},
         userId: '',
         phone: '',
+        remarkName: '',
+        newInfo: {
+          phone: '',
+          remarkName: ''
+        },
+        showToast: false,
         titleHeight: null,
+        isFirstLoad: true,
         deleting: false
+      }
+    },
+    computed: {
+      isOverdue () {
+        return this.$store.getters.GET_ISOVERDUE
       }
     },
     methods: {
@@ -104,11 +123,12 @@
         }
         let that = this
         this.$post('/user/businessSetStoreUser', {
-          UserMobile: this.userId === '0' ? this.phone : null,
+          UserMobile: this.userId === '0' ? this.newInfo['phone'] : null,
           UserId: this.info.memberId,
           CardId: this.info.cardId,
           Uid: this.info.userId,
           StoreId: this.info.storeId,
+          RemarkName: this.newInfo['remarkName'],
           UserInfos: this.userInfos
         }, true).then(res => {
           that.$success('修改成功', true)
@@ -139,7 +159,9 @@
           }
         }
         if (key === 'phone') {
-          this.phone = value
+          this.newInfo['phone'] = value
+        } else if (key === 'remarkName') {
+          this.newInfo['remarkName'] = value
         }
       },
       getCustomControls () {
@@ -153,7 +175,6 @@
           if (res.UserInfos && res.UserInfos.length > 0) {
             that.items = res.UserInfos
           }
-          that.phone = res.UserMobile
           for (let item of that.items) {
             that.userInfos.push({
               ControlName: item.ControlName,
@@ -171,11 +192,17 @@
           StoreId: this.info.storeId
         }).then(res => {
           that.user = res
+          that.phone = res.UserMobile
+          if (res.RemarkName) {
+            this.remarkName = res.RemarkName
+            this.newInfo['remarkName'] = res.RemarkName
+          }
           for (let item of res.StoreUserInfo) {
             if (item.ControlName === 'user_store_name') {
               that.user.UserName = item.ControlValue
             }
           }
+          that.isFirstLoad = false
         })
       }
     },
@@ -186,6 +213,13 @@
       this.userInfos = []
       this.user = {}
       this.phone = ''
+      this.remarkName = ''
+      this.newInfo = {
+        phone: '',
+        remarkName: ''
+      }
+      this.isFirstLoad = true
+      this.showToast = false
       this.getCustomControls()
       this.getUserInfo()
       this.titleHeight = this.getGlobalData().titleHeight

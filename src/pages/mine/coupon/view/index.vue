@@ -7,7 +7,9 @@
         <div class="card-state"
              :class="{'state-open':state,'state-close':!state}">
           <span>
-            {{state ? '状态：已启用' : '状态：已暂停'}}
+            <text v-if="state==1">状态：已启用</text>
+            <text
+              v-if="state==0">状态：{{stateReason == 0 ? '已暂停' : stateReason == 1 ? '已暂停' : stateReason == 2 ? '已达到发行数量上限' : '优惠券截止日期已过'}}</text>
           </span>
           <span>
             <switch :checked="state" @change="switchChange" color="#78BC6D"/>
@@ -21,7 +23,7 @@
             <div class="switch-bg" style="right: 0" v-if="current==1"></div>
           </div>
         </div>
-        <div class="same-coupon" v-if="current==0">
+        <div class="same-coupon" v-if="current==0&&coupon">
           <div v-if="coupon">
             <coupon :coupon="coupon"></coupon>
           </div>
@@ -91,19 +93,19 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
     <div class="coupon-setting" @click="jumpToEdit">
-      <img src="/static/coupon-setting.png"/>
+      <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-setting.png"/>
     </div>
   </div>
 </template>
 
 <script>
   import title from '@/components/title'
-  import card from '@/components/card'
+  import card from '@/components/option'
   import coupon from '@/components/coupon'
 
   export default {
@@ -125,6 +127,7 @@
         minAmount: 0,
         minTimes: 0,
         state: 0,
+        stateReason: '',
         titleHeight: null
       }
     },
@@ -164,6 +167,9 @@
             item.StoreName = res.StoreNameitems
             for (let coupon of items) {
               if (item.PrepaidCardId === coupon.PreCardId) {
+                for (let item2 of coupon.Coupons) {
+                  item2 = that.calcCoupon(item2)
+                }
                 item.Coupons = coupon.Coupons
                 item.CouponCenterId = coupon.CouponCenterId
                 item.TotalSendCount = coupon.TotalSendCount
@@ -201,6 +207,8 @@
           CouponCenterType: this.type
         }, this.firstLoad).then(res => {
           that.state = res.State
+          that.stateReason = res.StateReason
+          that.current = res.IsByUserLevel ? 1 : 0
           for (let item of res.CouponCenterInfos) {
             if (item.IsByUserLevel) {
               that.current = 1
@@ -211,6 +219,12 @@
             that.currentItem = item
             that.coupon = that.calcCoupon(item.Coupons[0])
           }
+          if ((!res || !res.CouponCenterInfos || res.CouponCenterInfos.length === 0) && !that.firstLoad) {
+            wx.navigateBack({
+              delta: 1
+            })
+          }
+          that.firstLoad = false
         })
       },
       calcCoupon (coupon) {
@@ -257,7 +271,7 @@
             this.name = '开卡送券'
             break
           case '2':
-            this.name = '续费送券'
+            this.name = '续费关怀'
             break
           case '3':
             this.name = '生日送券'
@@ -279,6 +293,8 @@
       this.storeId = option.storeId
       this.type = option.type
       this.firstLoad = true
+      this.coupon = null
+      this.currentItem = {}
       this.calcName()
       this.getCouponCenter()
       this.getStoreInfo()

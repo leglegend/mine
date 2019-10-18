@@ -1,28 +1,28 @@
 <template>
   <div class="demo-page nutcards">
-    <!--:style="{background:'url(/static/我的_了解坚果卡包.png)','background-size':'100%,auto'}"-->
+    <!--:style="{background:'url(https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/我的_了解坚果卡包.png)','background-size':'100%,auto'}"-->
     <title :name="'关于坚果卡包'"></title>
     <scroll-view class="demo-scroll nutcards-scroll" scroll-y="true"
                  :style="{height:'calc(100vh - '+titleHeight +'px)'}">
       <div class="nutcards-context">
-        <img src="/static/logo2.png"/>
+        <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/logo2.png"/>
         <div class="version">v{{version}}</div>
         <div class="nutcards-button" @click="jumpToAgreement">
           <span>服务协议</span>
           <span>
-            <img src="/static/right2.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
           </span>
         </div>
         <div class="nutcards-button nutcards-button2" @click="jumpToApp">
           <span>软件介绍</span>
           <span>
-            <img src="/static/right2.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
           </span>
         </div>
         <div class="nutcards-button nutcards-button2" @click="jumpToHelp">
           <span>使用帮助</span>
           <span>
-            <img src="/static/right2.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
           </span>
         </div>
       </div>

@@ -8,16 +8,16 @@
         <div class="gift-context">
           <div class="gift-type">
             <span :class="{'celected':type=='代金券'}" @click="changeType('代金券')">
-              <img v-if="type=='代金券'" src="/static/type-check.png"/> 代金券
+              <img v-if="type=='代金券'" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/type-check.png"/> 代金券
             </span>
             <span :class="{'celected':type=='打折券'}" @click="changeType('打折券')">
-              <img v-if="type=='打折券'" src="/static/type-check.png"/> 打折券
+              <img v-if="type=='打折券'" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/type-check.png"/> 打折券
             </span>
-            <span :class="{'celected':type=='送服务'}" @click="changeType('送服务')">
-              <img v-if="type=='送服务'" src="/static/type-check.png"/> 送服务
+            <span v-if="scene!='renew'" :class="{'celected':type=='送服务'}" @click="changeType('送服务')">
+              <img v-if="type=='送服务'" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/type-check.png"/> 送服务
             </span>
-            <span :class="{'celected':type=='送礼品'}" @click="changeType('送礼品')">
-              <img v-if="type=='送礼品'" src="/static/type-check.png"/> 送礼品
+            <span v-if="scene!='renew'" :class="{'celected':type=='送礼品'}" @click="changeType('送礼品')">
+              <img v-if="type=='送礼品'" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/type-check.png"/> 送礼品
             </span>
           </div>
           <div class="gift-coupon">
@@ -42,7 +42,7 @@
                 <div class="left-gift" v-if="type=='送礼品'">
                   <div @click="choosePhoto"
                        :style="{'background-image':'url('+giftImg+')','background-size':'100%,auto'}">
-                    <img src="/static/camera2.png" v-if="!giftImg"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/camera2.png" v-if="!giftImg"/>
                     <span v-if="!giftImg">上传图片</span>
                   </div>
                 </div>
@@ -66,7 +66,7 @@
                 <div class="right-name">
                   {{name ? name : type}}
                   <span v-if="needMember">
-                    <img src="/static/buycard.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/buycard.png"/>
                   </span>
                 </div>
                 <div class="right-date">
@@ -74,13 +74,13 @@
                 </div>
                 <div class="right-remark" @click="couponRemark=remark">
                   <span>说 明：{{remark}}</span>
-                  <img src="/static/coupon-remark.png"/>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-remark.png"/>
                 </div>
               </span>
             </div>-->
-            <coupon :coupon="coupon"></coupon>
+            <coupon :coupon="coupon" @picture="choosePhoto"></coupon>
           </div>
-          <div class="coupon-item">
+          <div class="coupon-item" v-if="scene!='renew'">
             <span class="item-1">购买会员卡之后才能使用该券</span>
             <span class="item-2">
               <switch :checked="needMember" color="#78bc6d" @change="needMemberChange"/>
@@ -95,30 +95,35 @@
           <div class="coupon-item" v-if="type=='代金券'||type=='打折券'">
             <span class="item-1">仅用于购买会员卡</span>
             <span class="item-2">
-              <switch :checked="payMember" color="#78bc6d" @change="payMemberChange"/>
+              <switch :checked="scene=='renew'||payMember" :disabled="scene=='renew'"
+                      :color="scene=='renew'?'#8fde80':'#78bc6d'"
+                      @change="payMemberChange"/>
             </span>
           </div>
           <div class="coupon-item"
-               v-if="type=='代金券'||type=='打折券'||type=='送礼品'"
+               v-if="type!='送服务'&&scene!='renew'"
                @click="jumpToData('number','最低消费',minConsume)">
             <span class="item-3">最低消费满多少可用</span>
             <span class="item-4">{{minConsume ? minConsume + '元' : '不限制'}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" v-if="type=='送服务'" @click="jumpToData('number','原价',originalPrice)">
             <span class="item-3">原价</span>
             <span class="item-4">{{originalPrice ? originalPrice + '元' : ''}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
-          <div class="coupon-item" v-if="type=='代金券'||type=='送服务'" @click="jumpToData('number','金额',amount)">
+          <div class="coupon-item" v-if="type=='代金券'||type=='送服务'"
+               @click="jumpToData('number',type == '送服务' ? '现价' : '金额',amount?amount:'')">
             <span class="item-3">{{type == '送服务' ? '现价' : '金额'}}</span>
-            <span class="item-4">{{amount ? amount + '元' : ''}}</span>
+            <span class="item-4"
+                  v-if="type == '送服务'">{{amount || amount == 0 || amount == '0' ? amount + '元' : ''}}</span>
+            <span class="item-4" v-if="type != '送服务'">{{amount ? amount + '元' : ''}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" v-if="type=='打折券'">
@@ -127,7 +132,7 @@
               <span class="item-3">折扣</span>
               <span class="item-4">{{discountRange[0][discount[0]]}}.{{discountRange[2][discount[2]]}}折</span>
               <span class="item-5">
-                <img src="/static/right2.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </picker>
           </div>
@@ -139,35 +144,36 @@
                     :style="{'background-image':'url('+giftImg+')','background-size':'100%,auto'}">{{giftImg ? '' : '+'}}</span>
             </span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" @click="jumpToData('input','名称',name?name:type)">
             <span class="item-3">名称</span>
             <span class="item-4">{{name ? name : type}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" @click="jumpToData('input','说明',remark=='无'?'':remark)">
             <span class="item-3">说明</span>
             <span class="item-4">{{remark}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" @click="jumpToData('date','券有效期')">
             <span class="item-1" style="width: 20%">券有效期</span>
-            <span class="item-2" style="width: 75%">{{beginDate ? beginDate + '至' + endDate : '请选择'}}</span>
+            <span class="item-2"
+                  style="width: 75%">{{rangeDate ? rangeDateString : beginDate ? beginDate + '至' + endDate : '请选择'}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
-          <div class="coupon-item" @click="jumpToData('number','总发行量',qty==-1?'':qty)">
+          <div class="coupon-item" v-if="scene!='group'" @click="jumpToData('number','总发行量',qty==-1?'':qty)">
             <span class="item-1" style="width: 75%">总发行量（送完为止）</span>
             <span class="item-2">{{qty && qty != -1 ? qty : '不限量'}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="data-button">
@@ -176,7 +182,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -208,11 +214,14 @@
         giftImg: '',
         beginDate: '',
         endDate: '',
+        rangeDate: '',
+        rangeDateString: '',
         needMember: false, // 仅限会员领取
         payMember: false, // 只用于支付会员
         useMore: false, // 可使用多张
         minConsume: null, // 最低消费
         discount: [0, 0, 0],
+        scene: '',
         discountRange: [
           [9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
           ['.'],
@@ -224,7 +233,9 @@
     methods: {
       jumpToData (type, name, value) {
         let url = '../data/main?type=' + type + '&name=' + name + (value ? '&value=' + value : '')
-        if (type === 'date' && this.beginDate) {
+        if (type === 'date' && this.rangeDate) {
+          url = url + '&rangeDate=' + this.rangeDate
+        } else if (type === 'date' && this.beginDate) {
           url = url + '&beginDate=' + this.beginDate + '&endDate=' + this.endDate
         }
         wx.navigateTo({url})
@@ -289,6 +300,8 @@
           CouponType: this.type === '代金券' ? 0 : this.type === '打折券' ? 1 : this.type === '送服务' ? 2 : 3,
           CouponTitle: this.name ? this.name : this.type,
           BeginDate: this.beginDate,
+          RangeDate: this.rangeDate,
+          RangeDateRead: this.rangeDateString,
           EndDate: this.endDate,
           IsUseVip: this.needMember,
           CouponDescription: this.remark,
@@ -319,14 +332,17 @@
         this.coupon = coupon
       },
       cleanDate () {
+        this.scene = ''
         this.name = ''
         this.remark = '无'
-        this.amount = ''
+        this.amount = 0
         this.originalPrice = ''
         this.qty = ''
         this.giftImg = ''
         this.beginDate = ''
         this.endDate = ''
+        this.rangeDate = ''
+        this.rangeDateString = ''
         this.needMember = false
         this.payMember = false
         this.useMore = true
@@ -342,21 +358,19 @@
         let errorInfo = ''
         if (this.type === '代金券' && !this.amount) {
           errorInfo = '请填写金额'
-        } else if (this.type === '送服务' && !this.amount) {
-          errorInfo = '请填写现价'
         } else if (this.type === '送服务' && !this.originalPrice) {
           errorInfo = '请填写原价'
         } else if (this.type === '送服务' && !this.originalPrice) {
           errorInfo = '请填写原价'
         } else if (this.type === '送礼品' && !this.giftImg) {
           errorInfo = '请上传礼品图'
-        } else if (!this.beginDate || !this.endDate) {
+        } else if (!this.rangeDate && (!this.beginDate || !this.endDate)) {
           errorInfo = '请选择有效期'
         }
         if (errorInfo) {
           wx.showToast({
             title: errorInfo,
-            image: '/static/warn.png'
+            image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
           })
           return
         }
@@ -367,6 +381,8 @@
           CouponTitle: this.name ? this.name : this.type,
           BeginDate: this.beginDate,
           EndDate: this.endDate,
+          RangeDate: this.rangeDate,
+          RangeDateRead: this.rangeDateString,
           IsUseVip: this.needMember,
           CouponDescription: this.remark,
           CouponCount: this.qty
@@ -396,6 +412,16 @@
         wx.navigateBack({
           delta: 1
         })
+      },
+      calcRangeDate () {
+        if (this.rangeDate) {
+          if (this.rangeDate === '0-0-0') {
+            this.rangeDateString = '永久有效'
+          } else {
+            let dates = this.rangeDate.split('-')
+            this.rangeDateString = (dates[0] === '0' ? '' : (dates[0] + '年')) + (dates[1] === '0' ? '' : (dates[1] + '月')) + (dates[2] === '0' ? '' : (dates[2] + '日'))
+          }
+        }
       }
     },
     onLoad (option) {
@@ -406,6 +432,12 @@
       this.titleHeight = this.getGlobalData().titleHeight
       this.url = this.getGlobalUrl().url
       this.cleanDate()
+      if (option.scene) {
+        if (option.scene === 'renew') {
+          this.payMember = true
+        }
+        this.scene = option.scene
+      }
       let coupon = wx.getStorageSync('coupon')
       if (coupon) {
         this.type = coupon.CouponType === 0 ? '代金券' : coupon.CouponType === 1 ? '打折券' : coupon.CouponType === 2 ? '送服务' : '送礼品'
@@ -419,8 +451,10 @@
         this.remark = coupon.CouponDescription
         this.beginDate = coupon.BeginDate
         this.endDate = coupon.EndDate
+        this.rangeDate = coupon.RangeDate
         this.qty = coupon.CouponCount
         this.giftImg = coupon.CouponIcon
+        this.calcRangeDate()
         if (coupon.CouponType === 1) {
           let values = (coupon.CouponValue + '').split('.')
           let value1 = 9 - values[0] * 1
@@ -452,6 +486,12 @@
         } else if (data.key === 'date') {
           this.beginDate = data.value.beginDate
           this.endDate = data.value.endDate
+          this.rangeDate = ''
+        } else if (data.key === 'rangeDate') {
+          this.beginDate = ''
+          this.endDate = ''
+          this.rangeDate = data.value
+          this.calcRangeDate()
         }
         wx.removeStorageSync('data')
       }

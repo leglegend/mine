@@ -3,7 +3,7 @@
     <span class="logo" v-bind:style="{background:'url('+item.UserImg+')','background-size':'100%,100%'}"></span>
     <span class="context" :class="{'no-line':last}">
       <div class="operate">
-        <span class="user">{{item.UserStoreName ? item.UserStoreName : item.UserName}}</span>
+        <span class="user">{{item.RemarkName ? item.RemarkName : item.UserStoreName ? item.UserStoreName : item.UserName}}</span>
         <span class="opera">{{item.ConsumptionTag}}</span>
         <span class="result" v-if="item.Cards.length>0"
               :style="{'font-size':item.Cards.length==1?'4.5vw':item.Cards.length==2?'3.8vw':'3vw'}">
@@ -57,7 +57,7 @@
         position: relative;
         top: rpx(15);
         .user {
-          width: 52vw;
+          width: 48vw;
           display: inline-block;
           text-align: left;
           font-size: rpx(28);
@@ -74,7 +74,7 @@
         }
 
         .result {
-          width: 26vw;
+          width: 30vw;
           right: 0;
           top: 0;
           display: inline-block;

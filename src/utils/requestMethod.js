@@ -1,3 +1,5 @@
+import {sign} from './sign.js'
+import log from './log'
 // let serverPath = 'https://testbapi.nutcards.com/api'
 let serverPath = 'https://bapi.nutcards.com/api'
 // let wssPath = 'wss://testws.nutcards.com'
@@ -15,6 +17,12 @@ export function getGlobalUrl () {
 }
 
 export function post (url, body, showLoading, anyway, callback) {
+  let timestamp = Date.parse(new Date())
+  console.log(header)
+  if (header.userid) {
+    let signstring = sign(header, timestamp, JSON.stringify(body))
+    modifySign(signstring, timestamp)
+  }
   if (showLoading) {
     wx.showLoading({
       title: '加载中...',
@@ -48,6 +56,9 @@ export function post (url, body, showLoading, anyway, callback) {
           return
         }
         if (res.data.StatusCode === 403 || res.data.StatusCode === 405 || res.data.StatusCode === 406) {
+          log.warn('POST:' + serverPath + url)
+          log.warn(body)
+          log.warn(res)
           callback().then(function (resp) {
             resolve(resp)
           })
@@ -59,6 +70,9 @@ export function post (url, body, showLoading, anyway, callback) {
           if (res.data.StatusCode === 200) {
             resolve(res.data.Data)
           } else {
+            log.error('POST:' + serverPath + url)
+            log.error(body)
+            log.error(res)
             wx.showToast({
               title: res.data.Message,
               image: '/static/warn.png'
@@ -67,6 +81,9 @@ export function post (url, body, showLoading, anyway, callback) {
         }
       },
       fail: function (ret) {
+        log.error('POST:' + serverPath + url)
+        log.error(body)
+        log.error(ret)
         if (showLoading) {
           wx.hideToast()
         }

@@ -7,7 +7,7 @@
         <span class="opera">{{item.ConsumptionTag}}</span>
         <span class="result">{{item.ConsumptionValue}}</span>
         <div class="use-coupon" v-if="item.IsCoupon">
-          <img src="/static/use-coupon.png"/>
+          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/use-coupon.png"/>
         </div>
       </div>
       <div>

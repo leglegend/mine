@@ -5,7 +5,7 @@
               <span class="header-logo"
                     v-bind:style="{'background':'url('+store.StoreLogo+')','background-size':'100% 100%'}"></span>
       <span class="header-name" style="width: 55vw">{{store.StoreName}}</span>
-      <img class="header-code" src="/static/code.png"/>
+      <img class="header-code" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/code.png"/>
     </div>
     <div class="card-content"
          :style="{'font-size':item.CardName&&item.CardName.length>5?item.CardName.length<10?(145-item.CardName.length*9+'rpx'):'59rpx':'','line-height':item.CardName&&item.CardName.length>10?'67rpx':''}">
@@ -23,7 +23,6 @@
     props: ['item', 'store'],
     data () {
       return {
-        item: {}
       }
     },
     computed: {

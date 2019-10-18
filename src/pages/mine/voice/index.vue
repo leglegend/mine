@@ -8,7 +8,7 @@
         <div class="demo-context">
           <div class="top">
             <span class="app">
-              <img src="/static/app.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/app.png"/>
             </span>
             <span>
               <div>
@@ -23,13 +23,13 @@
             </span>
           </div>
           <div class="middle">
-            <img src="/static/wave.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/wave.png"/>
             <div class="button">
               <span @click="showDownload=true">下载安装</span>
             </div>
             <div class="info">
               <div>
-                暂时仅支持安卓手机
+                支持IOS和安卓设备
               </div>
               <div>
                 团队倾心打造，小巧实用
@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh;background-color: white">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
     </scroll-view>
     <div v-if="showDownload">

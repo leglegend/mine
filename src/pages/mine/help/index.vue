@@ -1,7 +1,6 @@
 <template>
   <div class="demo-page mine-agreement">
-    <title :name="'服务协议'"></title>
-    <web-view src="https://www.nutcards.com/help.html">
+    <web-view src="https://www.nutcards.com/help.html?type=weixin">
 
     </web-view>
   </div>

@@ -2,15 +2,20 @@
   <div class="custom-box">
     <div class="input" :style="{'border-bottom-color':focus?'#7e7e7e':isError?'red':'#d5d5d5'}">
       <span class="name">
-        {{name}}
+        <text v-if="name"><text v-for="item in name"
+                                :style="{visibility:item=='囧'?'hidden':''}">{{item}}</text></text>
         <span class="request" v-if="request">*</span>
       </span>
-      <input v-if="type=='input'&&context" class="value" :value="newValue" :placeholder="'请输入'" @input="onChange"
-             @blur="onBlur"
+      <input v-if="type=='input'&&name=='售囧价'" class="value" v-model="newValue" :placeholder="'请输入'" @input="onNumberChange"
+             @blur="onBlur" :name="keyword"
+             @focus="onFocus" type="digit" :maxlength="max?max:-1"
+             placeholder-style="color:#dadada"/>
+      <input v-if="type=='input'&&context&&name!='售囧价'" class="value" :value="newValue" :placeholder="'请输入'" @input="onChange"
+             @blur="onBlur" :name="keyword"
              @focus="onFocus" :type="context?context:'text'" :maxlength="max?max:-1"
              placeholder-style="color:#dadada"/>
-      <input v-if="type=='input'&&!context" class="value" v-model="newValue" :placeholder="'请输入'" @input="onChange"
-             @blur="onBlur"
+      <input v-if="type=='input'&&!context&&name!='售囧价'" class="value" v-model="newValue" :placeholder="'请输入'" @input="onChange"
+             @blur="onBlur" :name="keyword"
              @focus="onFocus" type="text" :maxlength="max?max:-1"
              placeholder-style="color:#dadada"/>
       <radio-group v-if="type=='radio'" class="value" @change="radioChange">
@@ -26,6 +31,9 @@
               :style="{color:newValue?'':'#dadada'}">{{newValue ? newValue : '请选择' }}
         </view>
       </picker>
+      <div class="price-box" v-if="name=='售囧价'">
+        元
+      </div>
     </div>
     <!--<div class="error" :style="{'visibility':isError?'visible':'hidden'}">{{infomation}}</div>-->
   </div>
@@ -37,11 +45,10 @@
     data () {
       return {
         focus: false,
-        value: '',
         newValue: '',
         isError: false,
         infomation: '',
-        keyword: ''
+        changeData: 0
       }
     },
     methods: {
@@ -54,6 +61,25 @@
         this.newValue = e.mp.detail.value
         this.validate()
         this.$emit('changeValue', this.keyword, e.mp.detail.value)
+      },
+      onNumberChange (e) {
+        if (e.mp.detail.value === '.' || e.mp.detail.value === '') {
+          this.newValue = ''
+          return
+        }
+        if (e.mp.detail.value === '0.0' || e.mp.detail.value === '0.00') {
+          this.newValue = '0.'
+          return
+        }
+        let value = e.mp.detail.value
+        value = value.replace(/[^\d.]/g, '')
+        value = value.replace(/\.{2,}/g, '.')
+        value = value.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+        value = value.replace(/([0-9]+\.[0-9]{2})[0-9]*/, '$1')
+        if (value.indexOf('.') < 0 && value !== '') {
+          value = Math.floor(value * 100) / 100
+        }
+        this.newValue = value
       },
       onChange (e) {
         this.newValue = e.mp.detail.value
@@ -108,6 +134,7 @@
       line-height: 7vh;
       border-bottom: rpx(1) solid #bbbbbb;
       font-size: rpx(28);
+      position: relative;
       .name {
         height: 7vh;
         line-height: 7vh;
@@ -130,6 +157,14 @@
           display: inline-block;
           width: 25vw;
         }
+      }
+      .price-box {
+        position: absolute;
+        right: 0;
+        height: 7vh;
+        line-height: 7vh;
+        font-size: rpx(28);
+        top: 0;
       }
     }
 

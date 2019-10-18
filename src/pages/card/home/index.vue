@@ -11,7 +11,8 @@
         <div v-if="cards.length>0" class="card-context" :style="{'min-height':'calc(85vh - ' +titleHeight+'px)'}">
           <div class="context-cards">
             <div v-for="(item,index) in cards" @click="jumpToCard(item)">
-              <card :num="index" :card="item" :last="index+1==cards.length" :store="store" :uid="userId"></card>
+              <card :num="index" :card="item" :last="index+1==cards.length" :store="store" :uid="userId"
+                    @showServices="showServices"></card>
             </div>
             <div class="add-card">
               <div @click="jumpToCard()">添加卡</div>
@@ -32,42 +33,42 @@
               <div>{{store.Address ? store.Address : '请填写店铺地址'}}</div>
             </span>
               <span>
-              <img class="store-right" src="/static/right1.png"/>
+              <img class="store-right" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right1.png"/>
             </span>
             </div>
             <div class="card-option" @click="jumpToSetting">
             <span class="card-icon">
-              <img src="/static/datum.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/datum.png"/>
             </span>
               <span class="option-title">
               <span>会员资料设置</span>
               <span>
-                <img v-if="setting.IsControls" class="check" src="/static/check.png"/>
-                <img src="/static/right2.png"/>
+                <img v-if="setting.IsControls" class="check" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/check.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </span>
             </div>
             <div class="card-option" @click="jumpToBenefit">
             <span class="card-icon">
-              <img src="/static/benefit.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/benefit.png"/>
             </span>
               <span class="option-title">
               <span>会员权益说明</span>
               <span>
-                <img v-if="setting.IsLimit" class="check" src="/static/check.png"/>
-                <img src="/static/right2.png"/>
+                <img v-if="setting.IsLimit" class="check" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/check.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </span>
             </div>
             <div class="card-option" @click="jumpToAgreement">
             <span class="card-icon">
-              <img src="/static/rule.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/rule.png"/>
             </span>
               <span class="option-title no-line">
               <span>会员协议</span>
               <span>
-                <img v-if="setting.IsAgreement" class="check" src="/static/check.png"/>
-                <img src="/static/right2.png"/>
+                <img v-if="setting.IsAgreement" class="check" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/check.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </span>
             </div>
@@ -79,7 +80,7 @@
             <div class="card-hearder">
               <span class="header-logo"></span>
               <span class="header-name">盼盼示例工作室</span>
-              <img class="header-code" src="/static/code.png"/>
+              <img class="header-code" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/code.png"/>
             </div>
             <div class="card-content">
               会员卡
@@ -100,7 +101,7 @@
           </div>
         </div>
         <div class="demo-footer">
-          <img class="demo-nutcards" src="/static/nutcards.png"/>
+          <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
         </div>
         <div class="demo-bottom"></div>
       </scroll-view>
@@ -115,18 +116,22 @@
         {{auth == false ? '没有权限 =_="' : ''}}
       </div>
       <div class="demo-footer" style="padding-top: 0">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
+    </div>
+    <div v-if="showMore">
+      <more :services="services" @close="showMore=false"></more>
     </div>
   </div>
 </template>
 
 <script>
-  import card from '@/components/card'
+  import card from '@/components/option'
+  import more from '@/components/services'
 
   export default {
     components: {
-      card
+      card, more
     },
 
     data () {
@@ -137,6 +142,8 @@
         setting: {},
         store: {},
         firstLoad: true,
+        services: [],
+        showMore: false,
         auth: true
       }
     },
@@ -166,6 +173,10 @@
         const url = '../store/main?userId=' + this.userId + '&storeId=' + this.storeId
         wx.navigateTo({url})
       },
+      showServices (services) {
+        this.services = services
+        this.showMore = true
+      },
       getSettings () {
         let that = this
         this.$post('/store/businessGetStoreSeting', {
@@ -186,6 +197,9 @@
             item.ValidityDateTime = that.calcValidityDate(item.ValidityDate)
             item.StoreLogo = res.StoreLogo
             item.StoreName = res.StoreName
+            item.isShare = true
+            item.userId = that.userId
+            item.storeId = that.storeId
           }
           that.cards = res.PrepaidCards
           that.firstLoad = false
@@ -226,6 +240,15 @@
         let month = Math.floor(validityDay % 365 / 30)
         let day = validityDay % 365 % 30
         return (year === 0 ? '' : year + '年') + (month === 0 ? '' : month + '月') + (day === 0 ? '' : day + '天')
+      },
+      getServiceTags () {
+        let that = this
+        this.$post('/storeCard/businessGetStoreServiceItems', {
+          Uid: that.userId,
+          StoreId: that.storeId
+        }).then(res => {
+          wx.setStorageSync('serviceTags', res.Services)
+        })
       }
     },
     onLoad () {
@@ -233,6 +256,7 @@
       this.userId = globalData.user.Userid
       this.storeId = globalData.user.StoreId
       this.firstLoad = true
+      this.showMore = false
       this.getSettings()
       this.getStoreInfo()
       this.getCards()
@@ -256,6 +280,7 @@
       this.getStoreInfo()
       this.getCards()
       this.getSettings()
+      this.getServiceTags()
     },
     onShareAppMessage () {
       return {

@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="change-button" @click="exchange">
-          <span>更换条件<img src="/static/filter.png"/></span>
+          <span>更换条件<img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/filter.png"/></span>
         </div>
       </div>
       <div class="condition" v-show="type=='search'">
@@ -76,27 +76,27 @@
           <div class="param">
             <div class="title">消费(元)</div>
             <div>
-              <input class="model" v-model="ConsumptionMonyMin" adjust-position="false"/>
+              <input class="model" v-model="ConsumptionMonyMin" type="number" adjust-position="false"/>
               —
-              <input class="model" v-model="ConsumptionMonyMax" adjust-position="false"/>
+              <input class="model" v-model="ConsumptionMonyMax" type="number" adjust-position="false"/>
             </div>
           </div>
 
           <div class="param">
             <div class="title">消费次数</div>
             <div>
-              <input class="model" v-model="ConsumptionSumMin" adjust-position="false"/>
+              <input class="model" v-model="ConsumptionSumMin" type="number" adjust-position="false"/>
               —
-              <input class="model" v-model="ConsumptionSumMax" adjust-position="false"/>
+              <input class="model" v-model="ConsumptionSumMax" type="number" adjust-position="false"/>
             </div>
           </div>
 
           <div class="param">
             <div class="title">剩余次数</div>
             <div>
-              <input class="model" v-model="CardSumMin" adjust-position="false"/>
+              <input class="model" v-model="CardSumMin" type="number" adjust-position="false"/>
               —
-              <input class="model" v-model="CardSumMax" adjust-position="false"/>
+              <input class="model" v-model="CardSumMax" type="number" adjust-position="false"/>
             </div>
           </div>
         </div>
@@ -104,7 +104,7 @@
           <span class="reset" @click="reset">重置</span>
           <span class="confirm" @click="confirm(1)">确定</span>
         </div>
-        <div class="switch" @click="type='result'"><img src="/static/top.png"/></div>
+        <div class="switch" @click="type='result'"><img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/top.png"/></div>
       </div>
       <scroll-view class="searchresult" scroll-y="true" @scrolltolower="scrolltolower"
                    :style="{height:'calc(100vh - ' +titleHeight+'px)'}">
@@ -156,7 +156,7 @@
           </div>
         </div>
         <div class="demo-footer" v-show="items.length==0||isOver" style="padding-top: 0">
-          <img class="demo-nutcards" src="/static/nutcards.png"/>
+          <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
         </div>
         <div class="demo-bottom"></div>
       </scroll-view>

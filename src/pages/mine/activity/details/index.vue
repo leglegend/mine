@@ -55,7 +55,7 @@
               </span>
             <span class="item-right">
                 <div class="item-title">
-                  <span>{{item.UserName}}<img src="/static/ismember.png"
+                  <span>{{item.UserName}}<img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ismember.png"
                                               style="width: 14rpx;height: 22.4rpx;position: relative;top:2rpx"
                                               v-if="item.IsVip"/></span>
                   <span v-if="!item.LogType"><text>{{item.NewUserGetCount}}</text>/{{item.NewUserUsedCount}}</span>
@@ -71,7 +71,7 @@
         <div class="footer" v-show="isLoading">加载中...</div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>

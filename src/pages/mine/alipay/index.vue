@@ -5,10 +5,10 @@
                  :style="{height:'calc(100vh - '+titleHeight +'px)'}">
       <div class="alipay-main" :style="{'min-height':'calc(90vh - '+titleHeight +'px)'}">
         <div class="alipay-background">
-          <img class="alipay-logo" src="/static/alilogo.png"/>
+          <img class="alipay-logo" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/alilogo.png"/>
           <div>收款实时到账</div>
         </div>
-        <img class="alipay-img" src="/static/alihome.jpg"/>
+        <img class="alipay-img" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/alihome.jpg"/>
         <div class="alipay-form" v-if="isLoading==false">
           <form @submit="save">
             <div class="unusual" v-if="state=='0'||state==0">
@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -96,18 +96,27 @@
         }).then(res => {
           that.$success('设置成功', true)
         })
+      },
+      getAccount () {
+        let that = this
+        this.$post('/store/businessGetStorePayAccount', {
+          Uid: this.info.userId,
+          StoreId: this.info.storeId
+        }, true).then(res => {
+          if (res) {
+            that.account = res
+          }
+        })
       }
     },
     onLoad (option) {
       this.info = option
-      this.name = option.name
-      this.account = option.account
+      this.name = ''
+      this.account = ''
       this.state = option.state
       this.isLoading = true
-      setTimeout(function () {
-        this.isLoading = false
-      }.bind(this), 100)
       this.showHelp = false
+      this.getAccount()
       this.titleHeight = this.getGlobalData().titleHeight
     }
   }

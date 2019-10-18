@@ -9,17 +9,17 @@
            :style="{'min-height':'100vh'}">
         <div class="create-camera" :style="{'padding-top':statusBarHeight +5+'px'}">
           <span @click="navigateBack">
-            <img class="title-icon" src="/static/return2.png"/>
+            <img class="title-icon" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/return2.png"/>
           </span>
           <div @click="choosePhoto">
-            <img src="/static/camera.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/camera.png"/>
             <span>店内或门头照片</span>
           </div>
           <span></span>
         </div>
         <div class="create-context context-first">
           <div class="first-edit">
-            <img src="/static/ac-edit.png"/>点击大字即可编辑
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ac-edit.png"/>点击大字即可编辑
           </div>
           <div style="padding-top: 7vw"></div>
           <div class="first-textarea" @click="isFocus=true"
@@ -37,10 +37,10 @@
             </div>
           </div>
         </div>
-        <div class="create-context context-coupon" style="height: 53vw" :animation="getAnimation">
+        <div class="create-context context-coupon" :animation="getAnimation">
           <div class="coupon-title" :class="{'no-context':!getCoupon}">
             <span>
-              <img src="/static/coupon.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon.png"/>
             </span>
             <span>新客奖励</span>
             <span>
@@ -89,7 +89,7 @@
                   <div class="right-name">
                     {{coupon0.CouponTitle}}
                     <span v-if="coupon0.IsUseVip">
-                      <img src="/static/buycard.png"/>
+                      <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/buycard.png"/>
                     </span>
                   </div>
                   <div class="right-date">
@@ -97,27 +97,36 @@
                   </div>
                   <div class="right-remark" @click.stop="couponRemark=coupon0.CouponDescription">
                     <span>说 明：{{coupon0.CouponDescription}}</span>
-                    <img src="/static/coupon-remark.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-remark.png"/>
                   </div>
                 </span>
               </div>-->
               <coupon :coupon="coupon0" @remark="couponRemark=coupon0.CouponDescription"></coupon>
             </div>
-            <div class="coupon-rule">
+            <div class="coupon-rule coupon-rule1">
               <picker @change="memberLimitChange" :value="memberLimit" :range="memberLimits">
                 <span>领取限制</span>
                 <span>{{memberLimits[memberLimit]}}</span>
                 <span>
-                  <img src="/static/right2.png"/>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                </span>
+              </picker>
+            </div>
+            <div class="coupon-rule">
+              <picker @change="phoneLimitChange" :value="phoneLimit" :range="phoneLimits">
+                <span>领取者手机</span>
+                <span>{{phoneLimits[phoneLimit]}}</span>
+                <span>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                 </span>
               </picker>
             </div>
           </div>
         </div>
-        <div class="create-context context-coupon" :animation="shareAnimation">
+        <div class="create-context context-coupon" style="height:76.5vw;" :animation="shareAnimation">
           <div class="coupon-title" :class="{'no-context':!shareCoupon}">
             <span>
-              <img src="/static/coupon.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon.png"/>
             </span>
             <span>转发人奖励</span>
             <span>
@@ -163,7 +172,7 @@
                   <div class="right-name">
                     {{coupon1.CouponTitle}}
                     <span v-if="coupon1.IsUseVip">
-                      <img src="/static/buycard.png"/>
+                      <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/buycard.png"/>
                     </span>
                   </div>
                   <div class="right-date">
@@ -171,7 +180,7 @@
                   </div>
                   <div class="right-remark" @click.stop="couponRemark=coupon1.CouponDescription">
                     <span>说 明：{{coupon1.CouponDescription}}</span>
-                    <img src="/static/coupon-remark.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-remark.png"/>
                   </div>
                 </span>
               </div>-->
@@ -182,16 +191,25 @@
                 <span>奖励限制</span>
                 <span>{{getCouponLimits[getCouponLimit]}}</span>
                 <span>
-                  <img src="/static/right2.png"/>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                 </span>
               </picker>
             </div>
-            <div class="coupon-rule">
+            <div class="coupon-rule coupon-rule1" style="padding-top: 0">
               <picker @change="qtyLimitChange" :value="qtyLimit" :range="qtyLimits">
                 <span>奖励数量</span>
                 <span>{{qtyLimits[qtyLimit]}}</span>
                 <span>
-                  <img src="/static/right2.png"/>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                </span>
+              </picker>
+            </div>
+            <div class="coupon-rule">
+              <picker @change="phone1LimitChange" :value="phone1Limit" :range="phoneLimits">
+                <span>转发者手机</span>
+                <span>{{phoneLimits[phone1Limit]}}</span>
+                <span>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                 </span>
               </picker>
             </div>
@@ -203,14 +221,14 @@
             <span>活动规则</span>
             <span>{{activityRule ? activityRule : '请填写(可不写)'}}</span>
             <span>
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="activity-rule" @click="jumpToData('date','活动截止')">
             <span>活动截止</span>
             <span>{{beginDate ? beginDate + '至' + endDate : '请选择'}}</span>
             <span>
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
         </div>
@@ -259,10 +277,13 @@
         getCoupon: true,
         shareCoupon: true,
         memberLimit: 0,
+        phoneLimit: 0,
+        phone1Limit: 0,
         shareLimit: 0,
         getCouponLimit: 0,
         qtyLimit: 0,
         memberLimits: ['任何人都可以领取', '仅新客可以领取', '仅会员可以领取'],
+        phoneLimits: ['不需要', '须提供手机号才可领券'],
         shareLimits: ['领奖后允许再次转发', '不允许转发'],
         getCouponLimits: ['只要转发，就可得奖品', '只要有人领取后即可得到奖品', '新客到店消券后才可得到奖品'],
         qtyLimits: ['仅限一份', '被领取几份，得到几份'],
@@ -347,6 +368,12 @@
       memberLimitChange (e) {
         this.memberLimit = e.mp.detail.value
       },
+      phoneLimitChange (e) {
+        this.phoneLimit = e.mp.detail.value
+      },
+      phone1LimitChange (e) {
+        this.phone1Limit = e.mp.detail.value
+      },
       shareLimitChange (e) {
         this.shareLimit = e.mp.detail.value
       },
@@ -391,7 +418,7 @@
         }
         if (this.getCoupon) {
           let getAnimation = wx.createAnimation()
-          getAnimation.height('53vw').step({duration: 200})
+          getAnimation.height('65.5vw').step({duration: 200})
           this.getAnimation = getAnimation.export()
         } else {
           let getAnimation = wx.createAnimation()
@@ -407,7 +434,7 @@
         }
         if (this.shareCoupon) {
           let shareAnimation = wx.createAnimation()
-          shareAnimation.height('65.5vw').step({duration: 200})
+          shareAnimation.height('76.5vw').step({duration: 200})
           this.shareAnimation = shareAnimation.export()
         } else {
           let shareAnimation = wx.createAnimation()
@@ -437,6 +464,8 @@
           that.shareLimit = res.ShareLimit
           that.getCouponLimitChange(res.TwoReceiveLimit)
           that.memberLimit = res.OneReceiveLimit
+          that.phoneLimit = res.OneIsMobile ? 1 : 0
+          that.phone1Limit = res.TwoIsMobile ? 1 : 0
           that.qtyLimit = res.TwoReceiveCount
           that.activityRule = res.ActivityRules
           that.beginDate = res.BeginDate
@@ -463,19 +492,19 @@
         if (this.getCoupon && !this.coupon0) {
           wx.showToast({
             title: '请添加新客券',
-            image: '/static/warn.png'
+            image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
           })
           return
         } else if (this.shareCoupon && !this.coupon1) {
           wx.showToast({
             title: '请添加转发券',
-            image: '/static/warn.png'
+            image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
           })
           return
         } else if (!this.beginDate || !this.endDate) {
           wx.showToast({
             title: '请选择截止时间',
-            image: '/static/warn.png'
+            image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
           })
           return
         }
@@ -492,6 +521,8 @@
           IsOneReward: this.getCoupon,
           IsTwoReward: this.shareCoupon,
           OneReceiveLimit: this.memberLimit,
+          OneIsMobile: this.phoneLimit * 1,
+          TwoIsMobile: this.phone1Limit * 1,
           ShareLimit: this.shareLimit,
           TwoReceiveLimit: this.getCouponLimit,
           TwoReceiveCount: this.qtyLimit,
@@ -539,6 +570,8 @@
         this.coupon1 = null
         this.title = ''
         this.memberLimit = 0
+        this.phoneLimit = 0
+        this.phone1Limit = 0
         this.shareLimit = 0
         this.getCouponLimitChange(0)
         this.qtyLimit = 0

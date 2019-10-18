@@ -23,7 +23,6 @@
     data () {
       return {
         focus: false,
-        value: '',
         newValue: '',
         isError: false,
         request: true

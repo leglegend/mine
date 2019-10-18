@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="demo-footer" v-show="items.length==0||isOver" style="padding-top: 0">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -97,7 +97,7 @@
         }
         let date = item.Introduction.split('月')
         let day = date[1].split('日')
-        const url = '../day/main?month=' + date[0] + '&day=' + day[0] + '&year=' + this.year
+        const url = '../day/main?userId=' + this.userId + '&storeId=' + this.storeId + '&month=' + date[0] + '&day=' + day[0] + '&year=' + this.year
         wx.navigateTo({url})
       },
       scrolltolower () {
@@ -106,7 +106,7 @@
         }
         this.isLoading = true
         this.page += 1
-        this.getTable(this.page)
+        // this.getTable(this.page)
       },
       getMonthLength (year, month) {
         let d = new Date()
@@ -137,7 +137,7 @@
         this.$post('/operatingReports/businessGetStoreReportTable', {
           Uid: this.userId,
           StoreId: this.storeId,
-          PageSize: 10,
+          PageSize: 31,
           PageIndex: page,
           Conditions: 0,
           StartDate: this.year + '-' + this.month + '-1 00:00',
@@ -146,6 +146,7 @@
           if (res.Data.length < 10) {
             that.isOver = true
           }
+          that.isOver = true
           for (let i in res.Data) {
             that.items.push(res.Data[i])
           }
@@ -157,9 +158,8 @@
       }
     },
     onLoad (option) {
-      let globalData = this.getGlobalData()
-      this.userId = globalData.user.Userid
-      this.storeId = globalData.user.StoreId
+      this.userId = option.userId
+      this.storeId = option.storeId
       this.year = option.year
       if (option.month.indexOf('年') >= 0) {
         this.month = option.month.split('年')[1]

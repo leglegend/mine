@@ -11,7 +11,7 @@
               <div>购买次数，每消费一次总数减一</div>
             </span>
             <span>
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="choose-item" @click="chooseItem(1)">
@@ -20,13 +20,13 @@
               <div>预存金额，买卡时享赠送或消费时享打折</div>
             </span>
             <span>
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>

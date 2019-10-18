@@ -38,7 +38,7 @@
             </div>
           </div>
           <div class="demo-footer" style="padding-top: 0">
-            <img class="demo-nutcards" src="/static/nutcards.png"/>
+            <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
           </div>
         </div>
       </div>
@@ -68,7 +68,7 @@
                   </span>
                   <span class="detail" @click="jumpToDetail(item)">查看详情</span>
                   <span class="img">
-                    <img src="/static/right2.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
                   </span>
                 </div>
               </div>
@@ -80,7 +80,7 @@
             </div>
           </div>
           <div class="demo-footer" v-show="isOver||items.length==0" style="padding-top: 0">
-            <img class="demo-nutcards" src="/static/nutcards.png"/>
+            <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
           </div>
         </scroll-view>
       </div>

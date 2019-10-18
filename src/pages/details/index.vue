@@ -8,39 +8,43 @@
         <div class="details-context">
           <div class="titles" @click="jumpToDetails">
             <span class="logo" v-bind:style="{background:'url('+info.UserImg+')','background-size':'100%,100%'}"></span>
-            <span class="user-name">{{info.UserName ? info.UserName : ''}}</span>
+            <span
+              class="user-name">{{info.RemarkName ? info.RemarkName : info.UserStoreName ? info.UserStoreName : info.UserName ? info.UserName : ''}}</span>
           </div>
-          <div class="times">
+          <div class="times" v-if="info.ConsumptionType===1||info.ConsumptionType===4">
             {{info.ConsumptionValue ? info.ConsumptionValue : '' }}
+          </div>
+          <div class="times" v-if="info.ConsumptionType===0">
+            <div v-for="item in info.Service" v-if="item.ConsumptionValue">
+              <span>{{item.ItemName}}</span>
+              <span>{{(info.ConsumptionTag === '会员卡' || info.ConsumptionTag === '核减') ? '-' : '+'}}{{item.ConsumptionValue}}次</span>
+            </div>
           </div>
           <div class="result">办理成功</div>
           <div style="padding-top: 0.2vh">
             <span class="name">操作人员</span>
             <span class="value">{{info.StoreUserName ? info.StoreUserName : info.UserName}}</span>
           </div>
+          <div v-if="info.ConsumptionTag!='初始化'&&info.ConsumptionTag!='赠送'&&info.ConsumptionTag!='核减'">
+            <span class="name">付款方式</span>
+            <span class="value">{{info.PayType}}</span>
+          </div>
           <div>
             <span class="name">交易类型</span>
             <span class="value">{{info.ConsumptionTag}}</span>
           </div>
-          <div v-if="info.PayType&&info.PayType!=3">
-            <span class="name">付款方式</span>
-            <span class="value">{{info.PayType == 1 ? '微信' : '支付宝'}}</span>
-          </div>
-          <div v-if="info.TotalPrice&&info.ConsumptionTag!='初始化'">
+          <div
+            v-if="info.ConsumptionTag!='初始化'&&info.ConsumptionTag!='赠送'&&info.ConsumptionTag!='核减'&&(info.ConsumptionType == 1||info.ConsumptionType == 4)">
             <span class="name">应付金额</span>
-            <span class="value">{{info.TotalPrice}}{{info.ConsumptionType == 1 ? '元' : '次'}}</span>
+            <span class="value">{{info.ConsumptionType == 1 ? info.TotalPrice : info.ConsumptionValue}}</span>
           </div>
-          <div v-if="info.ConsumptionTag!='初始化'">
+          <div v-if="info.ConsumptionTag!='初始化'&&info.ConsumptionTag!='赠送'&&info.ConsumptionTag!='核减'">
             <span class="name">{{info.TotalPrice ? '实付金额' : '交易额度'}}</span>
             <span class="value">{{info.ConsumptionValue}}</span>
           </div>
-          <div v-if="info.ConsumptionTag=='会员卡'">
-            <span class="name">会员卡名称</span>
-            <span class="value">{{info.CardName}}</span>
-          </div>
-          <div v-if="info.ConsumptionTag=='会员卡'">
-            <span class="name">会员卡卡号</span>
-            <span class="value">{{info.CardNumber}}</span>
+          <div v-if="info.ConsumptionTag=='赠送'||info.ConsumptionTag=='核减'">
+            <span class="name">调整金额</span>
+            <span class="value">{{info.ConsumptionValue}}</span>
           </div>
           <div v-if="info.IsCoupon">
             <span class="name">优惠券</span>
@@ -48,28 +52,40 @@
               <span style="color: red">
                 {{info.Coupons.length + '张'}}
               </span>
-              <img src="/static/right2.png"
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"
                    style="position: absolute;width: 13rpx;height: 22rpx;right: -16rpx;bottom:5rpx;"/>
             </span>
           </div>
-          <div v-if="!info.IsCoupon">
+          <div v-if="!info.IsCoupon&&info.ConsumptionTag!='初始化'&&info.ConsumptionTag!='赠送'&&info.ConsumptionTag!='核减'">
             <span class="name">优惠券</span>
             <span class="value">
-              无
+              -
             </span>
           </div>
-          <div v-if="info.ConsumptionTag=='会员卡'">
-            <span class="name">剩余额度</span>
-            <span class="value">{{info.AfterValue}}</span>
+          <div v-if="info.CardName">
+            <span class="name">会员卡名</span>
+            <span class="value">{{info.CardName}}</span>
+          </div>
+          <div v-if="info.CardNumber">
+            <span class="name">会员卡号</span>
+            <span class="value">{{info.CardNumber}}</span>
+          </div>
+          <div v-if="info.ConsumptionTag!='付款'&&info.ConsumptionTag!='优惠券'">
+            <span class="name" style="vertical-align: top">剩余额度</span>
+            <span class="value" v-if="!info.Service||info.Service.length==0">{{info.AfterValue}}</span>
+            <span class="value" v-if="info.Service&&info.Service.length>0">
+              <span
+                v-for="(item,index) in info.Service">{{item.ItemName + item.AfterValue + '次'}}{{index == info.Service.length - 1 ? '' : ','}}</span>
+            </span>
           </div>
           <div>
             <span class="name">业务单号</span>
             <span class="value">{{info.ConsumptionId}}</span>
           </div>
           <div class="line"></div>
-          <div style="padding-bottom: 5vh">
-            <span class="name">交易时间</span>
-            <span class="value">{{info.CreateDate}}</span>
+          <div class="business-time" style="padding-bottom: 5vh">
+            <span>交易时间</span>
+            <span>{{info.CreateDate}}</span>
           </div>
         </div>
         <div class="coupons" style="display: none">
@@ -109,7 +125,7 @@
                   <div class="right-name">
                     {{coupon.CouponTitle}}
                     <span v-if="coupon.IsUseVip" :style="{filter:'grayscale(1)'}">
-                      <img src="/static/buycard.png"/>
+                      <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/buycard.png"/>
                     </span>
                   </div>
                   <div class="right-date">
@@ -124,17 +140,30 @@
                 {{'来源：' + coupon.CouponSourceContent}}
               </div>
               <div class="coupon-used">
-                <img src="/static/current-used.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/current-used.png"/>
               </div>
             </div>
           </div>
         </div>
+        <div class="printing-tickets">
+          <span @click="downloadDetails">打印小票</span>
+        </div>
       </div>
       <div class="demo-footer">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
+    <div class="printing-info" v-if="message" :style="{background:message=='打印已发送'?'#78BC6D':'#F87272'}">
+      <span>
+        <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/error.png" v-if="message!='打印已发送'"/>
+        <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/check2.png" v-if="message=='打印已发送'"/>
+      </span>
+      <span>{{message}}</span>
+      <div class="close" @click="message=''" v-if="message!='打印已发送'">
+        <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close.png"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -148,6 +177,7 @@
       return {
         info: {},
         items: [],
+        message: '',
         titleHeight: null
       }
     },
@@ -156,10 +186,8 @@
         if (this.type === 'member') {
           return
         }
-        if (this.info.UserId && this.info.CardId) {
-          const url = '../member/persion/main?userId=' + this.userId + '&storeId=' + this.storeId + '&memberId=' + this.info.UserId + '&cardId=' + this.info.CardId
-          wx.navigateTo({url})
-        }
+        const url = '../member/persion/main?userId=' + this.userId + '&storeId=' + this.storeId + '&memberId=' + this.info.UserId + '&cardId=' + this.info.CardId
+        wx.navigateTo({url})
       },
       jumpToCoupons () {
         const url = '../coupons/main?userId=' + this.userId + '&storeId=' + this.storeId + '&consumptionId=' + this.consumptionId
@@ -176,6 +204,23 @@
           }
         }
         return coupon
+      },
+      downloadDetails () {
+        let that = this
+        this.$post('/consumption/printConsumption', {
+          StoreId: that.storeId,
+          Uid: that.userId,
+          ConsumptionId: that.consumptionId
+        }, true, true).then(res => {
+          if (res.State) {
+            that.message = '打印已发送'
+            setTimeout(function () {
+              that.message = ''
+            }, 3000)
+          } else {
+            that.message = res.Message
+          }
+        })
       }
     },
     onLoad (option) {
@@ -185,6 +230,7 @@
       this.consumptionId = option.consumptionId
       this.type = option.type
       this.info = {}
+      this.message = ''
       this.statusBarHeight = this.getGlobalData().statusBarHeight
       this.titleHeight = this.getGlobalData().titleHeight
       this.$post('/consumption/businessGetConsumptionInfo', {
@@ -242,13 +288,31 @@
       .times {
         font-size: rpx(80);
         padding-top: 0vh;
+        div {
+          font-size: 7vw;
+          height: 8.5vw;
+          line-height: 8.5vw;
+          text-align: center;
+        }
+        span {
+          display: inline-block;
+          width: 50%;
+          box-sizing: border-box;
+          &:nth-child(1) {
+            text-align: right;
+            padding-right: 2vw;
+          }
+          &:nth-child(2) {
+            text-align: left;
+            padding-left: 2vw;
+          }
+        }
       }
       .result {
         font-size: rpx(30);
         height: 3vh;
         line-height: 3vh;
         padding-bottom: 7vh;
-        border-bottom: rpx(1) solid #bbbbbb;
       }
       .name {
         width: 45vw;
@@ -268,6 +332,17 @@
       .line {
         height: 1.8vh;
         border-bottom: rpx(1) solid #bbbbbb;
+      }
+      .business-time {
+        text-align: right;
+        color: #A7A7A7;
+        font-size: 2.8vw;
+        padding-top: 3.2vw;
+        padding-right: 0.6vw;
+        span {
+          display: inline-block;
+          padding-left: 2vw;
+        }
       }
     }
     .coupons {
@@ -668,6 +743,70 @@
           color: white;
           font-size: 5vw;
           background: #ff6700;
+        }
+      }
+    }
+    .printing-tickets {
+      padding-bottom: 10vw;
+      text-align: center;
+      background: white;
+      span {
+        display: inline-block;
+        width: 30vw;
+        height: 9.2vw;
+        line-height: 9.2vw;
+        background: rgba(255, 244, 237, 1);
+        border: 0.2vw solid rgba(255, 111, 0, 1);
+        border-radius: 4.7vw;
+        font-size: 3.6vw;
+        color: rgba(255, 111, 0, 1);
+      }
+    }
+    .printing-info {
+      position: fixed;
+      bottom: 9vw;
+      left: 2.5vw;
+      width: 95vw;
+      height: 14.8vw;
+      box-sizing: border-box;
+      line-height: 14.8vw;
+      background: #78BC6D;
+      border-radius: 2.8vw;
+      padding-left: 4.1vw;
+      span {
+        display: inline-block;
+        height: 14.8vw;
+        line-height: 14.8vw;
+        vertical-align: top;
+        box-sizing: border-box;
+        &:nth-child(1) {
+          padding-top: 3.9vw;
+          img {
+            display: inline-block;
+            width: 7.4vw;
+            height: 7.4vw;
+            vertical-align: top;
+          }
+        }
+        &:nth-child(2) {
+          padding-left: 2.7vw;
+          color: white;
+          font-size: 4vw;
+        }
+      }
+      .close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 3.6vw;
+        height: 2.9vw;
+        line-height: 2.9vw;
+        width: 2.9vw;
+        img {
+          display: inline-block;
+          width: 2.9vw;
+          height: 2.9vw;
+          vertical-align: top;
         }
       }
     }

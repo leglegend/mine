@@ -2,7 +2,8 @@
   <div class="custom">
     <div class="input" :style="{'border-bottom-color':focus?'#7e7e7e':error?'red':'#d5d5d5'}">
       <span class="name">
-        {{title}}
+        <text v-if="title"><text v-for="item in title"
+                                 :style="{visibility:item=='囧'?'hidden':''}">{{item}}</text></text>
         <span class="request" v-if="request">*</span>
       </span>
       <input v-if="type=='input'" class="value"

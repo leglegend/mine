@@ -7,7 +7,9 @@
         <div class="card-state"
              :class="{'state-open':state,'state-close':!state}">
           <span>
-            {{state ? '状态：已启用' : '状态：已暂停'}}
+            <text v-if="state==1">状态：已启用</text>
+            <text
+              v-if="state==0">状态：{{stateReason == 0 ? '已暂停' : stateReason == 1 ? '已暂停' : stateReason == 2 ? '已达到发行数量上限' : '优惠券截止日期已过'}}</text>
           </span>
           <span>
             <switch :checked="state" @change="switchChange" color="#78BC6D"/>
@@ -53,7 +55,8 @@
             <div class="inputs" style="padding-top: 2vw" v-if="type=='6'">
               <div class="input-item">
                 <span class="item-4">微信分享限制</span>
-                <span class="item-5">每次仅限一名顾客领取</span>
+                <span class="item-5" v-if="item.ShareRegularCount>0">每次仅限{{item.ShareRegularCount}}名顾客领取</span>
+                <span class="item-5" v-if="item.ShareRegularCount<=0">无限制</span>
               </div>
             </div>
             <div class="context-num" @click="jumpToReport(item)" :style="{'padding-top':type=='6'?'5vw':''}">
@@ -75,7 +78,7 @@
               <div class="share-logos">
                 <span @click="openQrCodeDialog(item.CouponCenterId)">
                   <div class="share-logo">
-                    <img src="/static/share-code.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/share-code.png"/>
                   </div>
                   <div class="share-name" style="color:#46218b;">
                     二维码
@@ -84,7 +87,7 @@
                 <span v-for="(itemCoupon,index2) in item.Coupons"
                       @click="openImageDialog(item.CouponCenterId,itemCoupon)">
                   <div class="share-logo">
-                    <img src="/static/share-image.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/share-image.png"/>
                   </div>
                   <div class="share-name" style="color: #1498a8;">
                     分享朋友圈
@@ -92,7 +95,7 @@
                 </span>
                 <span @click="jumpToNutCard(item.CouponCenterId)">
                   <div class="share-logo">
-                    <img src="/static/share-group.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/share-group.png"/>
                   </div>
                   <div class="share-name" style="color: #029700;">
                     微信分享
@@ -100,11 +103,15 @@
                 </span>
               </div>
             </div>
+            <span class="option-state" v-if="type=='5'" :style="{filter:item.State == 1?'':'grayscale(1)'}">
+              <span>{{item.State == 1 ? '未开始' : '已发放'}}</span>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/sale.png"/>
+            </span>
           </div>
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -119,7 +126,7 @@
           </span>
           <span>
             <div style="background: #ff6700" @click="downloadImage">
-              <img src="/static/download-img.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/download-img.png"/>
               <text>下载</text>
             </div>
           </span>
@@ -135,7 +142,7 @@
       </div>
     </div>
     <div class="coupon-setting" @click="jumpToEdit">
-      <img src="/static/coupon-setting.png"/>
+      <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-setting.png"/>
     </div>
   </div>
 </template>
@@ -156,6 +163,7 @@
         name: '',
         type: '',
         state: 0,
+        stateReason: '',
         changeData: 0,
         cardIndex: 0,
         topUrl: '',
@@ -191,8 +199,8 @@
           let url = that.getGlobalUrl().url
           if (url.indexOf('test') > 0) {
             path += '&type=test'
-          } else if (url.indexOf('demo') > 0) {
-            path += '&type=demo'
+          } else if (url.indexOf('home') > 0) {
+            path += '&type=home'
           }
           that.jumpToCoupon(path)
         })
@@ -243,11 +251,24 @@
             src: res.QrCodeUrl + '?x-oss-process=image/quality,q_40',
             success: function (resp) {
               that.shareCode = resp.path
-              that.drawCanvasContext(item, null, function () {
-                wx.hideLoading()
-                that.showDialog = true
-                that.openDialogAnimation()
-              })
+              if (item.CouponType !== 3) {
+                that.drawCanvasContext(item, null, function () {
+                  wx.hideLoading()
+                  that.showDialog = true
+                  that.openDialogAnimation()
+                })
+              } else {
+                wx.getImageInfo({
+                  src: item.CouponIcon + '?x-oss-process=image/quality,q_40',
+                  success: function (resp2) {
+                    that.drawCanvasContext(item, resp2.path, function () {
+                      wx.hideLoading()
+                      that.showDialog = true
+                      that.openDialogAnimation()
+                    })
+                  }
+                })
+              }
             }
           })
         })
@@ -299,10 +320,17 @@
           CouponCenterType: this.type
         }, this.firstLoad).then(res => {
           that.state = res.State
+          that.stateReason = res.StateReason
           for (let item of res.CouponCenterInfos) {
             item.Coupons = [that.calcCoupon(item.Coupons[0])]
           }
           that.cards = res.CouponCenterInfos
+          that.firstLoad = false
+          if (!res || !res.CouponCenterInfos || res.CouponCenterInfos.length === 0) {
+            wx.navigateBack({
+              delta: 1
+            })
+          }
         })
       },
       getStoreInfo () {
@@ -322,12 +350,13 @@
               wx.hideLoading()
               res.StoreLogo = resp.path
               that.store = res
+              that.firstLoad = false
             }
           })
         })
       },
       getQrcode (id, callback) {
-        this.$post('/couponCenter/couponQrCodeShare', {
+        this.$post('/couponCenter/businessCouponQrCodeShare', {
           Uid: this.userId,
           StoreId: this.storeId,
           CouponCenterId: id
@@ -424,7 +453,7 @@
         context.draw(true)
         // 券背景
         context.save()
-        context.drawImage('/static/coupon-bg.png', 0.095 * width, 0.47 * width, 0.8 * width, 0.21 * width)
+        context.drawImage('https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-bg.png', 0.095 * width, 0.47 * width, 0.8 * width, 0.21 * width)
         context.draw(true) // 0.92
         // 券内容
         context.save()
@@ -521,7 +550,7 @@
         context.save()
         context.setFillStyle('#7e7e7e')
         context.setFontSize(0.025 * width)
-        context.fillText('有效期：' + coupon.BeginDate + '至' + coupon.EndDate, 0.41 * width, 0.6 * width)
+        context.fillText('有效期：' + (coupon.RangeDate === '0-0-0' ? '永久有效' : (coupon.BeginDate + '至' + coupon.EndDate)), 0.41 * width, 0.6 * width)
         context.fillText('说   明：' + remark, 0.41 * width, 0.64 * width)
         context.draw(true)
         // 券覆盖
@@ -573,7 +602,7 @@
       this.userId = option.userId
       this.storeId = option.storeId
       this.type = option.type
-      this.firstLoad = false
+      this.firstLoad = true
       this.calcName()
       this.getCouponCenter()
       if (this.type === '6') {
@@ -617,6 +646,9 @@
               width: 25%;
               text-align: right;
             }
+          }
+          text {
+            display: inline-block;
           }
         }
         .state-open {
@@ -695,6 +727,32 @@
                 .share-name {
                   padding-top: 2vw;
                 }
+              }
+            }
+            .option-state {
+              display: inline-block;
+              width: rpx(60);
+              height: rpx(61);
+              height: 0;
+              position: absolute;
+              top: calc(5vw - 25rpx);
+              right: calc(10vw - 25rpx);
+              font-size: rpx(15);
+              color: white;
+              text-align: center;
+              line-height: rpx(61);
+              img {
+                position: absolute;
+                left: 0;
+                top: 0;
+                display: inline-block;
+                width: rpx(60);
+                height: rpx(61);
+              }
+              span {
+                position: relative;
+                display: inline-block;
+                z-index: 100;
               }
             }
           }

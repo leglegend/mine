@@ -13,22 +13,22 @@
             </span>
             <span>{{mobile}}</span>
             <span>
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
-          <div class="mobile" @click="jumpToStore" v-if="type==1">
+          <div class="mobile" @click="jumpToStore" v-if="!(count==1&&!type)">
             <span>
               绑定店铺<text style="color: red">*</text>
             </span>
             <span>{{storeName}}</span>
             <span>
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -48,7 +48,8 @@
         titleHeight: null,
         mobile: '',
         type: null,
-        storeName: ''
+        storeName: '',
+        count: 0
       }
     },
     methods: {
@@ -71,6 +72,7 @@
       let globalData = this.getGlobalData()
       this.mobile = globalData.user.mobile
       this.type = globalData.user.type
+      this.count = globalData.storeList.length
     }
   }
 </script>

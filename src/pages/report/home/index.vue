@@ -75,7 +75,8 @@
               </div>
             </div>
             <div class="demo-footer" style="padding-top: 2vh">
-              <img class="demo-nutcards" src="/static/nutcards.png"/>
+              <img class="demo-nutcards"
+                   src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
             </div>
           </scroll-view>
         </swiper-item>
@@ -120,7 +121,8 @@
               </div>
             </div>
             <div class="demo-footer" style="padding-top: 2vh">
-              <img class="demo-nutcards" src="/static/nutcards.png"/>
+              <img class="demo-nutcards"
+                   src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
             </div>
           </scroll-view>
         </swiper-item>
@@ -136,7 +138,7 @@
         {{auth == false ? '没有权限 =_="' : ''}}
       </div>
       <div class="demo-footer" style="padding-top: 0">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
     </div>
   </div>
@@ -183,7 +185,7 @@
         if (month !== '10') {
           month = month.replace('0', '')
         }
-        const url = '../month/main?year=' + year + '&month=' + month
+        const url = '../month/main?userId=' + this.userId + '&storeId=' + this.storeId + '&year=' + year + '&month=' + month
         wx.navigateTo({url})
       },
       jumpToDetails () {
@@ -196,7 +198,7 @@
         }
         let date = item.Introduction.split('月')
         let day = date[1].split('日')
-        const url = '../day/main?month=' + date[0] + '&day=' + day[0] + '&year=' + item.Year
+        const url = '../day/main?userId=' + this.userId + '&storeId=' + this.storeId + '&month=' + date[0] + '&day=' + day[0] + '&year=' + item.Year
         wx.navigateTo({url})
       },
       change (e) {
@@ -285,6 +287,7 @@
         }
         let date = new Date(this.thisYear, this.thisMonth - 1, 1, 0, 0)
         day = this.getMonthLength(date)
+        let current = that.current * 1
         this.$post('/operatingReports/businessGetStoreReportTable', {
           StartDate: this.current ? this.thisYear + '-1-1 00:00' : this.thisYear + '-' + this.thisMonth + '-1 00:00',
           EndDate: this.current ? this.thisYear + '-12-31 23:59' : this.thisYear + '-' + this.thisMonth + '-' + day + ' 23:59',
@@ -292,10 +295,10 @@
           StoreId: this.storeId,
           PageSize: 31,
           PageIndex: 1,
-          Conditions: this.current
+          Conditions: current
         }, this.firstLoad).then(res => {
           that.firstLoad = false
-          if (that.current === 0) {
+          if (current === 0) {
             that.isLoadingOne = false
             if (page === 1) {
               that.maxValue = 0
@@ -401,6 +404,9 @@
       this.titleHeight = this.getGlobalData().titleHeight
     },
     onShow () {
+      let globalData = this.getGlobalData()
+      this.userId = globalData.user.Userid
+      this.storeId = globalData.user.StoreId
       let permissions = wx.getStorageSync('auth')
       if (permissions && permissions.length > 0) {
         for (let item of permissions) {
