@@ -4,11 +4,25 @@
     <scroll-view class="coupons-scroll" scroll-y="true"
                  :style="{height:'calc(100vh - '+titleHeight +'px)'}">
       <div class="coupons-main" :style="{'min-height':'calc(90vh - '+titleHeight +'px)'}">
-        <div class="demo-noitems" style="height: 7vh;line-height: 10vh" v-show="coupons.length==0&&!isLoading">
+        <div class="coupons-buttons">
+          <span class="buttton-item" :class="type==1?'buttton-item-check':''" @click="changeType(1)">
+            <span><img
+              :src="'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/hexiao-'+(type==1?'1':'2')+'.png'"/>核销优惠券</span>
+          </span>
+          <span class="buttton-item" :class="type==2?'buttton-item-check':''" @click="changeType(2)">
+            <span><img
+              :src="'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/songquan'+(type==2?'-1':'')+'.png'"/>送优惠券</span>
+          </span>
+        </div>
+        <div class="demo-noitems" style="height: 7vh;line-height: 10vh" v-show="type!=2&&coupons.length==0&&!isLoading">
           没有可用优惠券 =_="
         </div>
+        <div class="demo-noitems" style="height: 7vh;line-height: 10vh"
+             v-show="type==2&&giftCoupons.length==0&&!isLoading">
+          请先添加优惠券 =_="
+        </div>
         <div class="coupons-context">
-          <div class="coupons-list" v-if="!useCoupon&&coupons.length>0">
+          <div class="coupons-list" v-if="type==0&&coupons.length>0">
             <div class="coupon-item" v-for="coupon in coupons">
               <coupon :coupon="coupon" :nouse="coupon.State==0"
                       @remark="couponRemark=coupon.CouponDescription"></coupon>
@@ -19,37 +33,80 @@
                 <span>未生效原因：</span>{{coupon.StateReasonContent}}
               </div>
               <div class="coupon-no" v-if="coupon.State==0">
-                <img src="/static/coupon-nouse.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-nouse.png"/>
               </div>
             </div>
           </div>
-          <div class="coupon-view" v-if="!useCoupon&&!showAllCoupons&&otherCoupons.length>0">
+          <div class="coupon-view" v-if="type==0&&!showAllCoupons&&otherCoupons.length>0">
             失效的优惠券已被隐藏，<span @click="showAllCoupons=true">点击查看</span>
           </div>
-          <div class="coupons-list overdue" v-if="!useCoupon&&showAllCoupons">
+          <div class="coupons-list overdue" v-if="type==0&&showAllCoupons">
             <div class="coupon-item" v-for="coupon in otherCoupons">
               <coupon :coupon="coupon" :nouse="true" @remark="couponRemark=coupon.CouponDescription"></coupon>
               <div class="coupon-source">
                 {{'来源：' + coupon.CouponSourceContent}}
               </div>
               <div class="coupon-used" v-if="coupon.State==2">
-                <img src="/static/coupon-used.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-used.png"/>
               </div>
               <div class="coupon-used" v-if="coupon.State==3">
-                <img src="/static/coupon-overdue.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-overdue.png"/>
               </div>
+            </div>
+          </div>
+          <div class="coupons-list coupons-use" v-if="type==1&&coupons.length>0">
+            <div class="coupon-item" v-for="(coupon,index) in coupons" @click="selectCoupon(coupon,index)">
+              <span class="item-left">
+                <coupon :coupon="coupon" :nouse="coupon.State!=1"
+                        @remark="couponRemark=coupon.CouponDescription"></coupon>
+                <div class="coupon-source">
+                  {{'来源：' + coupon.CouponSourceContent}}
+                </div>
+                <div class="coupon-reason" v-if="coupon.StateReasonContent">
+                  <span>{{coupon.State == 0 ? '未生效' : '不可用'}}原因：</span>{{coupon.StateReasonContent}}
+                </div>
+              </span>
+              <span class="item-right" v-if="coupon.State==1">
+                <img v-if="coupon.checked=='check'"
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/NutCards/static/coupon-check.png"/>
+                <span v-if="!coupon.checked||coupon.checked=='uncheck'"></span>
+                <span v-if="coupon.checked=='cannotcheck'" style="background: #dddddd"></span>
+              </span>
+            </div>
+            <div class="coupon-button">
+              <span @click="save">确 定</span>
+            </div>
+          </div>
+          <div class="coupons-list coupons-use" v-if="type==2&&giftCoupons.length>0">
+            <div class="coupon-item" v-for="(coupon,index) in giftCoupons" @click="selectCoupon(coupon,index)">
+              <span class="item-left">
+                <coupon :coupon="coupon" :nouse="coupon.State!=1"
+                        @remark="couponRemark=coupon.CouponDescription"></coupon>
+                <!--<div class="coupon-source">
+                  {{'来源：' + coupon.CouponSourceContent}}
+                </div>-->
+                <div class="coupon-reason" v-if="coupon.StateReasonContent">
+                  <span>{{coupon.State == 0 ? '未生效' : '不可用'}}原因：</span>{{coupon.StateReasonContent}}
+                </div>
+              </span>
+              <span class="item-right" v-if="coupon.State==1">
+                <img v-if="coupon.checked=='check'"
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/NutCards/static/coupon-check.png"/>
+                <span v-if="!coupon.checked||coupon.checked=='uncheck'"></span>
+                <span v-if="coupon.checked=='cannotcheck'" style="background: #dddddd"></span>
+              </span>
+            </div>
+            <div class="coupon-button">
+              <span @click="sendCoupons">确 定</span>
             </div>
           </div>
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
-    <div class="coupon-button" v-if="type!=0">
-      <span @click="save">确 定</span>
-    </div>
     <div v-if="couponRemark">
       <remark :text="couponRemark" @close="couponRemark = ''"></remark>
     </div>
@@ -71,6 +128,7 @@
         couponRemark: '',
         coupons: [],
         otherCoupons: [],
+        giftCoupons: [],
         showAllCoupons: false,
         useCoupon: false,
         changeDate: 0,
@@ -81,18 +139,31 @@
       }
     },
     methods: {
+      jumpToUse () {
+        const url = '../use/main?userId=' + this.userId + '&storeId=' + this.storeId + '&memberId=' + this.memberId
+        wx.navigateTo({url})
+      },
       selectCoupon (coupon, index) {
         if (coupon.State !== 1) {
           return
         }
-        if (coupon.checked === 'cannotcheck') {
-          return
-        } else if (coupon.checked === 'check') {
-          this.calcCouponUncheck(coupon, index)
+        if (coupon.checked === 'check') {
+          coupon.checked = 'uncheck'
         } else {
-          this.calcCouponCheck(coupon, index)
+          coupon.checked = 'check'
         }
         this.changeDate = this.changeDate + 1
+      },
+      changeType (type) {
+        if (this.type === 0) {
+          this.type = type
+        } else {
+          if (this.type === type) {
+            this.type = 0
+          } else {
+            this.type = type
+          }
+        }
       },
       calcCouponCheck (coupon, index) {
         coupon.checked = 'check'
@@ -137,13 +208,45 @@
             checkCoupons.push(coupon)
           }
         }
+        if (checkCoupons.length === 0) {
+          wx.showToast({
+            title: '请选择优惠券',
+            image: '/static/warn.png'
+          })
+          return
+        }
         if (checkCoupons.length > 0) {
           wx.setStorageSync('coupons', checkCoupons)
+          this.jumpToUse()
         } else {
           wx.removeStorageSync('coupons')
         }
-        wx.navigateBack({
-          delta: 1
+      },
+      sendCoupons () {
+        let checkCoupons = []
+        for (let coupon of this.giftCoupons) {
+          if (coupon.checked === 'check') {
+            checkCoupons.push(coupon.Id)
+          }
+        }
+        if (checkCoupons.length === 0) {
+          wx.showToast({
+            title: '请选择优惠券',
+            image: '/static/warn.png'
+          })
+          return
+        }
+        let that = this
+        this.$post('/coupon/businessUserCouponAdd', {
+          StoreId: this.storeId,
+          Uid: this.userId,
+          UserId: this.memberId,
+          CouponIds: checkCoupons
+        }, true).then(res => {
+          that.$success('添加成功')
+          that.type = 0
+          that.getCoupons()
+          that.getAllCoupons()
         })
       },
       getCoupons () {
@@ -158,6 +261,19 @@
             coupon = that.calcCoupon(coupon)
           }
           that.coupons = res.Coupons
+          that.isLoading = false
+        })
+      },
+      getAllCoupons () {
+        let that = this
+        this.$post('/coupon/businessGetCouponListByStoreId', {
+          StoreId: this.storeId,
+          Uid: this.userId
+        }).then(res => {
+          for (let coupon of res.Coupons) {
+            coupon = that.calcCoupon(coupon)
+          }
+          that.giftCoupons = res.Coupons
           that.isLoading = false
         })
       },
@@ -194,22 +310,32 @@
       this.memberId = option.memberId
       this.coupons = []
       this.otherCoupons = []
+      this.giftCoupons = []
       this.showAllCoupons = false
       this.amount = ''
+      this.type = 0
       this.isLoading = true
       if (option.type) {
-        this.type = option.type
         this.useCoupon = true
       } else {
         this.useCoupon = false
-        this.type = 0
       }
       if (option.amount) {
         this.amount = option.amount
       }
       this.getCoupons()
       this.getOtherCoupons()
+      this.getAllCoupons()
       this.titleHeight = this.getGlobalData().titleHeight
+    },
+    onShow () {
+      if (this.isLoading) {
+        return
+      }
+      this.type = 0
+      this.getCoupons()
+      this.getOtherCoupons()
+      this.getAllCoupons()
     }
   }
 </script>
@@ -226,6 +352,41 @@
       height: 90vh;
       .coupons-main {
         min-height: 80vh;
+        .coupons-buttons {
+          height: 14.9vw;
+          line-height: 14.9vw;
+          text-align: center;
+          .buttton-item {
+            display: inline-block;
+            padding: 0 3vw;
+            span {
+              display: inline-block;
+              width: 27.2vw;
+              height: 6.8vw;
+              line-height: 6.8vw;
+              border-radius: 3.4vw;
+              border: 0.1vw solid rgba(186, 186, 186, 1);
+              font-size: 3vw;
+              background: white;
+              color: #696969;
+              img {
+                width: 3vw;
+                height: 3vw;
+                margin-right: 0.9vw;
+                vertical-align: middle;
+                position: relative;
+                top: -0.3vw;
+              }
+            }
+          }
+          .buttton-item-check {
+            span {
+              color: white;
+              background: #FF6700;
+              border-color: #FF6700;
+            }
+          }
+        }
         .coupons-info {
           height: 9vw;
           padding-left: 3vw;
@@ -242,7 +403,7 @@
           }
         }
         .coupons-context {
-          padding: 3vw;
+          padding: 0 3vw;
           .coupons-list {
             border-radius: 3vw;
             padding: 0 7vw 5vw 7vw;
@@ -655,14 +816,9 @@
       }
     }
     .coupon-button {
-      width: 100vw;
       text-align: center;
-      position: fixed;
-      bottom: 0;
-      left: 0;
       text-align: center;
       padding: 5vw 0;
-      background: #f0f0f0;
       span {
         display: inline-block;
         width: 70%;

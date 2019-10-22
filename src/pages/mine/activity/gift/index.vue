@@ -8,16 +8,16 @@
         <div class="gift-context">
           <div class="gift-type">
             <span :class="{'celected':type=='代金券'}" @click="changeType('代金券')">
-              <img v-if="type=='代金券'" src="/static/type-check.png"/> 代金券
+              <img v-if="type=='代金券'" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/type-check.png"/> 代金券
             </span>
             <span :class="{'celected':type=='打折券'}" @click="changeType('打折券')">
-              <img v-if="type=='打折券'" src="/static/type-check.png"/> 打折券
+              <img v-if="type=='打折券'" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/type-check.png"/> 打折券
             </span>
             <span :class="{'celected':type=='送服务'}" @click="changeType('送服务')">
-              <img v-if="type=='送服务'" src="/static/type-check.png"/> 送服务
+              <img v-if="type=='送服务'" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/type-check.png"/> 送服务
             </span>
             <span :class="{'celected':type=='送礼品'}" @click="changeType('送礼品')">
-              <img v-if="type=='送礼品'" src="/static/type-check.png"/> 送礼品
+              <img v-if="type=='送礼品'" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/type-check.png"/> 送礼品
             </span>
           </div>
           <div class="gift-coupon">
@@ -42,7 +42,7 @@
                 <div class="left-gift" v-if="type=='送礼品'">
                   <div @click="choosePhoto"
                        :style="{'background-image':'url('+giftImg+')','background-size':'100%,auto'}">
-                    <img src="/static/camera2.png" v-if="!giftImg"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/camera2.png" v-if="!giftImg"/>
                     <span v-if="!giftImg">上传图片</span>
                   </div>
                 </div>
@@ -66,7 +66,7 @@
                 <div class="right-name">
                   {{name ? name : type}}
                   <span v-if="needMember">
-                    <img src="/static/buycard.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/buycard.png"/>
                   </span>
                 </div>
                 <div class="right-date">
@@ -74,11 +74,11 @@
                 </div>
                 <div class="right-remark" @click="couponRemark=remark">
                   <span>说 明：{{remark}}</span>
-                  <img src="/static/coupon-remark.png"/>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-remark.png"/>
                 </div>
               </span>
             </div>-->
-            <coupon :coupon="coupon"></coupon>
+            <coupon :coupon="coupon" @picture="choosePhoto"></coupon>
           </div>
           <div class="coupon-item">
             <span class="item-1">购买会员卡之后才能使用该券</span>
@@ -104,21 +104,22 @@
             <span class="item-3">最低消费满多少可用</span>
             <span class="item-4">{{minConsume ? minConsume + '元' : '不限制'}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" v-if="type=='送服务'" @click="jumpToData('number','原价',originalPrice)">
             <span class="item-3">原价</span>
             <span class="item-4">{{originalPrice ? originalPrice + '元' : ''}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
-          <div class="coupon-item" v-if="type=='代金券'||type=='送服务'" @click="jumpToData('number','金额',amount)">
+          <div class="coupon-item" v-if="type=='代金券'||type=='送服务'"
+               @click="jumpToData('number',type == '送服务' ? '现价' : '金额',amount)">
             <span class="item-3">{{type == '送服务' ? '现价' : '金额'}}</span>
-            <span class="item-4">{{amount ? amount + '元' : ''}}</span>
+            <span class="item-4">{{amount || amount == 0 ? amount + '元' : ''}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" v-if="type=='打折券'">
@@ -127,7 +128,7 @@
               <span class="item-3">折扣</span>
               <span class="item-4">{{discountRange[0][discount[0]]}}.{{discountRange[2][discount[2]]}}折</span>
               <span class="item-5">
-                <img src="/static/right2.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </picker>
           </div>
@@ -139,35 +140,35 @@
                     :style="{'background-image':'url('+giftImg+')','background-size':'100%,auto'}">{{giftImg ? '' : '+'}}</span>
             </span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" @click="jumpToData('input','名称',name?name:type)">
             <span class="item-3">名称</span>
             <span class="item-4">{{name ? name : type}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" @click="jumpToData('input','说明',remark=='无'?'':remark)">
             <span class="item-3">说明</span>
             <span class="item-4">{{remark}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" @click="jumpToData('date','券有效期')">
             <span class="item-1" style="width: 20%">券有效期</span>
             <span class="item-2" style="width: 75%">{{beginDate ? beginDate + '至' + endDate : '请选择'}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="coupon-item" @click="jumpToData('number','总发行量',qty==-1?'':qty)">
             <span class="item-1" style="width: 75%">总发行量（送完为止）</span>
             <span class="item-2">{{qty && qty != -1 ? qty : '不限量'}}</span>
             <span class="item-5">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </span>
           </div>
           <div class="data-button">
@@ -176,7 +177,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -356,7 +357,7 @@
         if (errorInfo) {
           wx.showToast({
             title: errorInfo,
-            image: '/static/warn.png'
+            image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
           })
           return
         }

@@ -22,10 +22,7 @@
     data () {
       return {
         animation: {},
-        item: {},
-        max: null,
-        year: '',
-        month: ''
+        max: null
       }
     },
     methods: {

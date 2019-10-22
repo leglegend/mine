@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -59,6 +59,7 @@
     },
     onLoad (option) {
       this.info = option
+      this.value = ''
       this.titleHeight = this.getGlobalData().titleHeight
     }
   }

@@ -3,14 +3,14 @@
     <div class="toast-context" :class="type" :animation="animation">
       <div class="toast-title">
         <span>
-          <img class="image" src="/static/check2.png" v-if="type=='success'"/>
-          <img class="image" src="/static/error.png" v-if="type=='error'"/>
+          <img class="image" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/check2.png" v-if="type=='success'"/>
+          <img class="image" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/error.png" v-if="type=='error'"/>
         </span>
         <span>
           {{type == 'success' ? checked ? '开启' : '关闭' : ''}}{{type == 'success' ? '成功' : '无法联络 "坚果语音" APP'}}
         </span>
         <span v-if="type=='error'" @click="hideToast">
-          <img class="close" src="/static/close.png"/>
+          <img class="close" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close.png"/>
         </span>
       </div>
       <div class="toast-info" v-if="type=='error'&&checked">

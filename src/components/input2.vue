@@ -26,7 +26,6 @@
         focus: false,
         value: '',
         newValue: '',
-        keyword: '',
         isError: false,
         request: true
       }

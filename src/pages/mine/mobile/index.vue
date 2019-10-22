@@ -1,5 +1,5 @@
 <template>
-  <div class="demo-page mobile">
+  <div class="demo-page mobile-page">
     <title :name="'我的账号'"></title>
     <scroll-view class="demo-scroll" scroll-y="true"
                  :style="{height:'calc(100vh - '+titleHeight +'px)'}">
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -165,7 +165,7 @@
     @return $value * 1rpx;
   }
 
-  .mobile {
+  .mobile-page {
     width: 100vw;
     height: 100vh;
     background-color: #f0f0f0;

@@ -7,8 +7,11 @@
            :style="{'min-height':'calc(90vh - '+titleHeight +'px)'}">
         <div class="demo-context">
           <div style="background-color: white">
-            <div class="qrcode">
+            <div class="qrcode" :style="{filter:isOverdue?'grayscale(100%)':''}">
               <img :src="url"/>
+              <div v-if="isOverdue">
+                软件已到期
+              </div>
             </div>
             <div class="infomation">
               <div>让店员扫描上方小程序码</div>
@@ -26,7 +29,7 @@
               <span>{{item.StoreUserName ? item.StoreUserName : item.UserName}}</span>
               <span>权限</span>
               <span>
-                <img src="/static/right2.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </div>
             <div class="clerk animation" v-for="item in news">
@@ -42,7 +45,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -63,6 +66,11 @@
         items: [],
         news: [],
         url: ''
+      }
+    },
+    computed: {
+      isOverdue () {
+        return this.$store.getters.GET_ISOVERDUE
       }
     },
     methods: {
@@ -171,6 +179,19 @@
       img {
         width: rpx(350);
         height: rpx(350);
+      }
+      div {
+        position: absolute;
+        width: rpx(360);
+        left: rpx(198);
+        height: rpx(360);
+        top: calc(4vh - 2rpx);
+        color: white;
+        font-size: 7vw;
+        line-height: rpx(350);
+        font-weight: 600;
+        background: rgba(0, 0, 0, 0.35);
+        border-radius: 50%;
       }
     }
     .infomation {

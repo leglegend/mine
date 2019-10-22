@@ -44,9 +44,6 @@
       return {
         modelAnimation: {},
         contextAnimation: {},
-        price: '',
-        times: '',
-        gift: '',
         focus: false,
         focus1: false,
         focus2: false,

@@ -10,7 +10,7 @@
                    class="picker"
                    focus="true"/>
             <span class="section-area" @click="value=''">
-              <img src="/static/deletevalue.png" style="width: 28rpx;height: 28rpx;display: inline-block"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/deletevalue.png" style="width: 28rpx;height: 28rpx;display: inline-block"/>
             </span>
           </div>
           <div style="padding: 1vw"></div>
@@ -25,7 +25,7 @@
                       class="picker"
                       focus="true"/>
             <span class="section-area" @click="value=''">
-              <img src="/static/deletevalue.png" style="width: 28rpx;height: 28rpx;display: inline-block"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/deletevalue.png" style="width: 28rpx;height: 28rpx;display: inline-block"/>
             </span>
           </div>
           <div style="padding: 1vw"></div>
@@ -41,7 +41,7 @@
                    type="number"
                    focus="true"/>
             <span class="section-area" @click="value=''">
-              <img src="/static/deletevalue.png" style="width: 28rpx;height: 28rpx;display: inline-block"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/deletevalue.png" style="width: 28rpx;height: 28rpx;display: inline-block"/>
             </span>
           </div>
           <div style="padding: 1vw"></div>
@@ -68,7 +68,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -101,7 +101,7 @@
         this.endDate = e.mp.detail.value
       },
       valueChange (e) {
-        if (e.mp.detail.value === 0 || e.mp.detail.value === '0') {
+        if (this.name !== '现价' && (e.mp.detail.value === 0 || e.mp.detail.value === '0')) {
           this.value = ''
         }
       },
@@ -120,14 +120,14 @@
         if (request && this.value === '') {
           wx.showToast({
             title: '不能为空',
-            image: '/static/warn.png'
+            image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
           })
           return
         }
         if ((this.name === '金额' || this.name === '原价') && this.value === '0') {
           wx.showToast({
             title: '不能为0',
-            image: '/static/warn.png'
+            image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
           })
           return
         }
@@ -146,7 +146,7 @@
             key: 'remark',
             value: this.value
           })
-        } else if (this.name === '金额') {
+        } else if (this.name === '金额' || this.name === '现价') {
           wx.setStorageSync('data', {
             key: 'amount',
             value: this.value
@@ -165,14 +165,14 @@
           if (!this.beginDate || !this.endDate) {
             wx.showToast({
               title: '不能为空',
-              image: '/static/warn.png'
+              image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
             })
             return
           }
           if (this.checkDate() === false) {
             wx.showToast({
               title: '日期无效',
-              image: '/static/warn.png'
+              image: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/warn.png'
             })
             return
           }

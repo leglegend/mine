@@ -10,7 +10,7 @@
               <span class="header-logo"
                     v-bind:style="{'background':'url('+card.StoreLogo+')','background-size':'100% 100%'}"></span>
               <span class="header-name">{{card.StoreName}}</span>
-              <img class="header-code" src="/static/code.png"/>
+              <img class="header-code" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/code.png"/>
             </div>
             <div class="card-content">
               {{card.CardName ? card.CardName : '会员卡'}}
@@ -38,7 +38,7 @@
         <div class="footer" v-show="isLoading">加载中...</div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>

@@ -56,14 +56,14 @@
                 <div class="bg-context">
                   <span class="option-state" v-if="item.State==1">
                     <span>进行中</span>
-                    <img src="/static/sale.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/sale.png"/>
                   </span>
                   <span class="option-state" v-if="item.State==2" style="filter:grayscale(1)">
                     <span>未开始</span>
-                    <img src="/static/sale.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/sale.png"/>
                   </span>
                   <span class="overdue" v-if="item.State==3">
-                    <img src="/static/overdue.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/overdue.png"/>
                   </span>
                   <div class="bg-info">
                     <text>{{item.Title}}</text>
@@ -94,7 +94,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>

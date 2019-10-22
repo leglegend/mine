@@ -6,32 +6,38 @@
       <div class="demo-main" :style="{'min-height':'calc(90vh - '+titleHeight +'px)'}">
         <div style="padding: 1vh"></div>
         <div class="demo-context">
-          <div v-for="(item,index) in items" @click="changeFace(index)">
-            <card :item="item" :store="store"></card>
+          <div class="create-card" v-for="(item,index) in items" @click="changeFace(index,item)">
+            <card :card="item" :store="store" @showMore="showServices"></card>
           </div>
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
+    <div v-if="showMore">
+      <more :services="services" @close="showMore=false"></more>
+    </div>
   </div>
 </template>
 
 <script>
   import title from '@/components/title'
-  import card from '@/components/face-card'
+  import card from '@/components/card'
+  import more from '@/components/services'
 
   export default {
     components: {
-      title, card
+      title, card, more
     },
 
     data () {
       return {
         items: [],
         store: {},
+        services: [],
+        showMore: false,
         titleHeight: ''
       }
     },
@@ -42,15 +48,27 @@
           Uid: this.userId,
           StoreId: this.storeId
         }, this.firstLoad).then(res => {
+          let items = []
           for (let item of res.PrepaidCards) {
             item.ValidityDateTo = that.calcValidityDateTo(item.ValidityDate)
+            item.ValidityDateTime = that.calcValidityDate(item.ValidityDate)
+            item.StoreName = that.store.StoreName
+            item.StoreLogo = that.store.StoreLogo
+            if (that.cardIds.indexOf(item.PrepaidCardId) < 0) {
+              items.push(item)
+            }
           }
-          that.items = res.PrepaidCards
+          that.items = items
         })
       },
-      changeFace (index) {
+      showServices (services) {
+        this.services = services
+        this.showMore = true
+      },
+      changeFace (index, item) {
         let globalData = this.getGlobalData()
         globalData.currentFaceIndex = index
+        wx.setStorageSync('cardFace', item)
         wx.navigateBack({
           delta: 1
         })
@@ -63,6 +81,15 @@
         now.setDate(now.getDate() + date)
         return this.formatTime(now)
       },
+      calcValidityDate (validityDay) {
+        if (validityDay === 0) {
+          return '永久有效'
+        }
+        let year = Math.floor(validityDay / 365)
+        let month = Math.floor(validityDay % 365 / 30)
+        let day = validityDay % 365 % 30
+        return (year === 0 ? '' : year + '年') + (month === 0 ? '' : month + '月') + (day === 0 ? '' : day + '天')
+      },
       formatTime (date) {
         let year = date.getFullYear()
         let month = date.getMonth() + 1
@@ -71,18 +98,28 @@
         day = day < 10 ? '0' + day : day
         return year + '年' + month + '月' + day + '日'
       },
-      getStoreInfo () {
+      getStoreInfo (callback) {
         let that = this
         this.$post('/store/businessGetStoreInfo', {Uid: this.userId, StoreId: this.storeId}).then(res => {
           that.store = res
+          callback()
         })
       }
     },
     onLoad (option) {
       this.userId = option.userId
       this.storeId = option.storeId
-      this.getCardSetting()
-      this.getStoreInfo()
+      this.cardIds = []
+      this.showMore = false
+      let cardIds = wx.getStorageSync('cardIds')
+      if (cardIds) {
+        this.cardIds = cardIds
+        wx.removeStorageSync('cardIds')
+      }
+      let that = this
+      this.getStoreInfo(function () {
+        that.getCardSetting()
+      })
       let globalData = this.getGlobalData()
       globalData.currentFaceIndex = null
     },
@@ -102,104 +139,21 @@
     height: 100vh;
     background-color: #f0f0f0;
     .demo-context {
-      padding: 2vh 0;
+      padding: 1vh 0;
       background-color: white;
-    }
-    .create-card {
-      text-align: left;
-      width: 78vw;
-      height: rpx(336);
-      line-height: rpx(336);
-      padding: rpx(20);
-      box-shadow: 0 0 1vw 0 #7a7a7a;
-      border-radius: 10px;
-      background-color: #d5d5d5;
-      margin: 0 auto;
-      color: white;
-      transform: scale(0.9, 0.9);
-      font-size: 11vw;
-      .shadow {
-        position: absolute;
-        top: rpx(-2);
-        left: rpx(-2);
-        border: rpx(2) solid #cecece;
-        background-color: #dbdbdb;
-        width: 85vw;
-        height: rpx(336);
-        padding: rpx(20);
-        border-radius: rpx(20);
-        margin: 0 auto;
-        opacity: 0.3;
-      }
-
-      .card-left {
-        transform: rotate(7deg);
-        position: absolute;
-        left: 1vw;
-      }
-
-      .card-right {
-        transform: rotate(-4deg);
-        position: absolute;
-        left: calc(15vw / 2 - 11px);
-      }
-
-      .card-hearder {
-        height: 30%;
-        line-height: 7vh;
-      }
-
-      .card-content {
-        height: 40%;
-        line-height: 9vh;
-        text-align: center;
-        font-size: rpx(100);
-      }
-
-      .card-footer {
-        height: 30%;
-        padding-top: 1vh;
-        padding-left: 1vw;
-        line-height: 3vh;
-        font-size: rpx(25);
-        .footer-number {
-          padding-top: rpx(4);
-          text-shadow: 1px 1px 1px #7a7a7a;
-          color: #dcc913;
-          font-size: rpx(28);
+      .create-card {
+        width: 66.2vw;
+        height: 39.52vw;
+        margin: 3vw auto;
+        color: white;
+        position: relative;
+        .new-card-demo {
+          left: 0;
+          top: 0;
+          transform: scale(0.8, 0.8);
+          transform-origin: 0% 0%;
         }
       }
-
-      .header-logo {
-        width: 6vh;
-        height: 6vh;
-        font-size: 0.5em;
-        text-align: center;
-        line-height: 5vh;
-        display: inline-block;
-        border-radius: 50%;
-        vertical-align: middle;
-        background-size: 100% 100%;
-      }
-
-      .header-name {
-        height: 5vh;
-        line-height: 5vh;
-        display: inline-block;
-        font-size: rpx(32);
-        vertical-align: middle;
-        margin-left: 3vw;
-        width: 10vw;
-        white-space: nowrap;
-      }
-
-      .header-code {
-        height: 3vh;
-        width: 3vh;
-        display: inline-block;
-        vertical-align: middle;
-      }
-
     }
   }
 </style>

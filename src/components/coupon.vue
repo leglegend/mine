@@ -18,8 +18,10 @@
         <span>元</span>
       </div>
       <div class="left-gift" v-if="coupon.CouponType == 3">
-        <div
-          :style="{'background-image':'url('+coupon.CouponIcon+')','background-size':'100%,auto',filter:coupon.State==0?'grayscale(1)':''}"></div>
+        <div @click.stop="addPicture"
+             :style="{'background-image':'url('+coupon.CouponIcon+')','background-size':'100%,auto'}">
+          {{coupon.CouponIcon ? '' : '+'}}
+        </div>
       </div>
       <div class="min-money" v-if="coupon.UseMinMoney">
         满{{coupon.UseMinMoney}}元可用
@@ -31,7 +33,7 @@
         <span v-if="coupon.CouponType!=2&&coupon.IsBuyCard" style="margin-left: 1vw">
           仅购卡
         </span>
-        <span v-if="coupon.CouponType==2"
+        <span v-if="coupon.CouponType==2&&coupon.OriginalPrice"
               style="text-decoration:line-through; ">原价{{coupon.OriginalPrice}}元</span>
       </div>
       <div class="left-circle-top" :style="{background:color?color:''}"></div>
@@ -50,11 +52,11 @@
         </span>
       </div>
       <div class="right-date">
-        有效期：{{coupon.BeginDate}}至{{coupon.EndDate}}
+        有效期：{{coupon.RangeDate ? coupon.RangeDate == '0-0-0' ? '永久有效' : coupon.RangeDateRead : (coupon.BeginDate + '至' + coupon.EndDate)}}
       </div>
       <div class="right-remark" @click.stop="showRemark">
         <span>说<text>啊</text>明：{{coupon.CouponDescription}}</span>
-        <img src="/static/coupon-remark.png"/>
+        <img v-if="coupon.CouponDescription!='无'" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-remark.png"/>
       </div>
       <div class="right-point" v-for="i in 19" :style="{top:i*1.11+0.5+'vw',background:color?color:''}"></div>
     </span>
@@ -66,6 +68,9 @@
     methods: {
       showRemark () {
         this.$emit('remark')
+      },
+      addPicture () {
+        this.$emit('picture')
       }
     }
   }
@@ -125,12 +130,13 @@
         div {
           display: inline-block;
           width: 17vw;
-          padding-top: 4vw;
-          height: 13vw;
+          height: 17vw;
+          line-height: 17vw;
           border-radius: 50%;
-          font-size: 2.5vw;
+          font-size: 6vw;
           position: relative;
           background: rgba(250, 230, 224, 1);
+          color: #e5c5bb;
           img {
             display: inline-block;
             width: rpx(51);

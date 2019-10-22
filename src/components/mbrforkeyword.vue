@@ -39,10 +39,7 @@
     props: ['key', 'item', 'last', 'keyword'],
     data () {
       return {
-        item: {},
-        key: '',
         showKey: false,
-        keyword: '',
         partOne: '',
         partTwo: '',
         partThree: ''
@@ -56,7 +53,7 @@
       let partOne = ''
       let partTwo = ''
       let partThree = ''
-      if (item.UserMobile && item.UserStoreName.indexOf(key) > -1) {
+      if (item.UserMobile && item.UserMobile.indexOf(key) > -1) {
         keyWord = item.UserMobile
         this.showKey = true
         partOne = '电话：'

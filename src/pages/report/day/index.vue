@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="demo-footer" v-show="items.length==0||isOver" style="padding-top: 0">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -140,9 +140,8 @@
       }
     },
     onLoad (option) {
-      let globalData = this.getGlobalData()
-      this.userId = globalData.user.Userid
-      this.storeId = globalData.user.StoreId
+      this.userId = option.userId
+      this.storeId = option.storeId
       this.year = option.year
       this.month = option.month
       this.day = option.day

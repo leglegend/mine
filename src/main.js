@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import App from './App'
+import store from './store/store'
+import toast from './store/toast'
 
 import {post, get, modifyHerders, modifySign, getGlobalUrl, modifyServerPath} from './utils/requestMethod.js'
 import {sign} from './utils/sign.js'
 import {setGlobalData, getGlobalData, getPages} from './utils/globalData.js'
 
+Vue.prototype.$store = store
+Vue.prototype.$toastStore = toast
 Vue.prototype.$get = get
 Vue.prototype.linkSign = sign
 Vue.prototype.modifyHeaders = modifyHerders
@@ -15,24 +19,44 @@ Vue.prototype.getGlobalData = getGlobalData
 Vue.prototype.getGlobalUrl = getGlobalUrl
 Vue.prototype.getPages = getPages
 
-function relogin (url, body, showLoading, anyway) {
-  let globalData = getGlobalData()
-  let timestamp = Date.parse(new Date())
-  if (globalData.user) {
-    let signature = sign(globalData.user, timestamp, JSON.stringify(body))
-    modifySign(signature, timestamp)
+Vue.prototype.$mptoast = function (title, text, icon = '', duration = null, unshift) {
+  let that = this
+  let _data = {
+    title: title,
+    text: text,
+    icon,
+    duration,
+    callback: function () {
+      that.$store.commit('shiftToast')
+      if (that.$store.state.toasts.length > 0) {
+        that.$toastStore.commit('showToast', that.$store.state.toasts[0])
+      }
+    }
   }
+  if (this.$store.state.toasts.length === 0) {
+    this.$store.commit('pushToast', _data)
+    this.$toastStore.commit('showToast', _data)
+  } else {
+    if (unshift) {
+      this.$store.commit('unshiftToast', _data)
+    } else {
+      this.$store.commit('pushToast', _data)
+    }
+  }
+}
 
+function relogin (url, body, showLoading, anyway) {
   return post(url, body, showLoading, anyway)
 }
 
 Vue.prototype.$post = function (url, body, showLoading, anyway) {
   let globalData = this.getGlobalData()
-  let timestamp = Date.parse(new Date())
-  if (globalData.user) {
-    let sign = this.linkSign(globalData.user, timestamp, JSON.stringify(body))
-    this.modifySign(sign, timestamp)
-  }
+  // let timestamp = Date.parse(new Date())
+  // console.log(globalData.user)
+  // if (globalData.user) {
+  //  let sign = this.linkSign(globalData.user, timestamp, JSON.stringify(body))
+  //  this.modifySign(sign, timestamp)
+  // }
   return post(url, body, showLoading, anyway, function () {
     return new Promise((resolve, reject) => {
       let user = {
@@ -65,6 +89,7 @@ Vue.prototype.$post = function (url, body, showLoading, anyway) {
                 modifyHerders({
                   'userid': user.Userid,
                   'nonce': 'string',
+                  'token': res.SignToken,
                   'storeId': body.StoreId ? body.StoreId : 0
                 })
                 relogin(url, body, showLoading, anyway).then(function (resp) {

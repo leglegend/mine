@@ -20,7 +20,7 @@
               <span>店员姓名</span>
               <span>{{admin.StoreUserName ? admin.StoreUserName : '请填写'}}</span>
               <span>
-                <img src="/static/right2.png"/>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </div>
             <div class="permission-item" v-for="(item,index) in items">
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>

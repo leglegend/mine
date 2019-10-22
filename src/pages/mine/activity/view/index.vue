@@ -9,7 +9,7 @@
            :style="{'min-height':'100vh'}">
         <div class="create-camera" :style="{'padding-top':statusBarHeight +5+'px'}">
           <span @click="navigateBack">
-            <img class="title-icon" src="/static/return2.png"/>
+            <img class="title-icon" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/return2.png"/>
           </span>
         </div>
         <div class="create-context context-first">
@@ -65,7 +65,7 @@
                 <div class="right-name">
                   {{coupon0.CouponTitle}}
                   <span v-if="coupon0.IsUseVip">
-                    <img src="/static/buycard.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/buycard.png"/>
                   </span>
                 </div>
                 <div class="right-date">
@@ -73,7 +73,7 @@
                 </div>
                 <div class="right-remark" @click="couponRemark=coupon0.CouponDescription">
                   <span>说 明：{{coupon0.CouponDescription}}</span>
-                  <img src="/static/coupon-remark.png"/>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-remark.png"/>
                 </div>
               </span>
             </div>-->
@@ -84,8 +84,8 @@
                   :style="{background:activity.State!=1?'#DDDDDD':''}">
               领取优惠券
             </span>
-            <img src="/static/notbegin.png" v-if="activity.State==2">
-            <img src="/static/overdue.png" v-if="activity.State==3">
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/notbegin.png" v-if="activity.State==2">
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/overdue.png" v-if="activity.State==3">
           </div>
           <div class="getcoupon-info">
              <span v-if="activity&&activity.Id&&activity.State!=1">
@@ -134,7 +134,7 @@
                 <div class="right-name">
                   {{coupon1.CouponType == 0 ? '代金券' : coupon1.CouponType == 1 ? '打折券' : coupon1.CouponType == 2 ? '服务券' : '礼品券'}}
                   <span v-if="coupon1.IsUseVip">
-                    <img src="/static/buycard.png"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/buycard.png"/>
                   </span>
                 </div>
                 <div class="right-date">
@@ -142,7 +142,7 @@
                 </div>
                 <div class="right-remark" @click="couponRemark=coupon1.CouponDescription">
                   <span>说 明：{{coupon1.CouponDescription}}</span>
-                  <img src="/static/coupon-remark.png"/>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-remark.png"/>
                 </div>
               </span>
               </div>-->
@@ -173,14 +173,14 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 5vw;padding-bottom:25vw;background: rgba(44,63,71,0)">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
     <div class="view-buttons">
       <span>
         <div class="buttons-bg" style="background: #f6741c" @click="jumpToEdit">
-          <img src="/static/view-edit.png" style="width:35rpx;height: 35rpx"/>
+          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/view-edit.png" style="width:35rpx;height: 35rpx"/>
         </div>
         <div class="buttons-text">
           编辑
@@ -188,7 +188,7 @@
       </span>
       <span>
         <div class="buttons-bg" style="background: #155baa" @click="jumpToReport">
-          <img src="/static/view-data.png" style="width:51rpx;height: 42rpx"/>
+          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/view-data.png" style="width:51rpx;height: 42rpx"/>
         </div>
         <div class="buttons-text">
           看数据
@@ -196,7 +196,7 @@
       </span>
       <span>
         <div class="buttons-bg" style="background: #02b300" @click="showShareButtons">
-          <img src="/static/view-share.png" style="width:55rpx;height: 42rpx"/>
+          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/view-share.png" style="width:55rpx;height: 42rpx"/>
         </div>
         <div class="buttons-text">
           转发
@@ -206,13 +206,13 @@
     <div class="view-buttons2" :animation="animation">
       <div class="buttons-close">
         <span @click="hideShareButtons">
-          <img src="/static/close2.png"/>
+          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close2.png"/>
         </span>
       </div>
       <div class="buttons-context">
         <span>
           <div class="buttons-bg" @click="openMemberDialog">
-            <img src="/static/share-member.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/share-member.png"/>
           </div>
           <div class="buttons-text">
             群发会员
@@ -220,7 +220,7 @@
         </span>
         <span>
           <button class="buttons-bg" @click="jumpToNutCard">
-            <img src="/static/share-group.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/share-group.png"/>
           </button>
           <div class="buttons-text">
             转发到群
@@ -228,7 +228,7 @@
         </span>
         <span>
           <div class="buttons-bg" @click="openDialog">
-            <img src="/static/share-image.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/share-image.png"/>
           </div>
           <div class="buttons-text">
             生成分享图
@@ -236,7 +236,7 @@
         </span>
         <span>
           <div class="buttons-bg" @click="openQrCodeDialog">
-            <img src="/static/share-code.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/share-code.png"/>
           </div>
           <div class="buttons-text">
             二维码
@@ -246,7 +246,7 @@
       <div class="buttons-context">
         <span style="width: 50%">
           <button open-type="share" class="buttons-bg">
-            <img src="/static/share-group.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/share-group.png"/>
           </button>
           <div class="buttons-text">
             转发到群
@@ -254,7 +254,7 @@
         </span>
         <span style="width: 50%">
           <div class="buttons-bg" style="width: 100%" @click="openDialog">
-            <img src="/static/share-image.png"/>
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/share-image.png"/>
           </div>
           <div class="buttons-text" style="width: 100%">
             生成分享图
@@ -273,7 +273,7 @@
           </span>
           <span>
             <div style="background: #ff6700" @click="downloadImage">
-              <img src="/static/download-img.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/download-img.png"/>
               <text>下载</text>
             </div>
           </span>
@@ -383,8 +383,8 @@
         let url = this.getGlobalUrl().url
         if (url.indexOf('test') > 0) {
           path += '&type=test'
-        } else if (url.indexOf('demo') > 0) {
-          path += '&type=demo'
+        } else if (url.indexOf('home') > 0) {
+          path += '&type=home'
         }
         wx.navigateToMiniProgram({
           appId: 'wx7133eb2f1b1aaac2',
@@ -673,7 +673,7 @@
         context.draw(true)
         // 标题背景
         context.save()
-        context.drawImage('/static/ac-bg.png', 0.03 * width, 0.59 * width, 0.92 * width, 0.52 * width)
+        context.drawImage('https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ac-bg.png', 0.03 * width, 0.59 * width, 0.92 * width, 0.52 * width)
         context.draw(true)
         // 标题
         let title = this.activity.Title.split(/[\s\n]/)
@@ -702,7 +702,7 @@
         context.draw(true)
         // 券背景
         context.save()
-        context.drawImage('/static/coupon-bg.png', 0.095 * width, 0.92 * width, 0.8 * width, 0.21 * width)
+        context.drawImage('https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-bg.png', 0.095 * width, 0.92 * width, 0.8 * width, 0.21 * width)
         context.draw(true)
         // 券内容
         context.save()
@@ -868,6 +868,8 @@
       this.activityId = option.id
       this.bgUrl = ''
       this.bgHeight = ''
+      this.shareImagePath = ''
+      this.shareCode = ''
       this.showDialog = false
       this.showMemberDialog = false
       this.titleHeight = this.getGlobalData().titleHeight

@@ -12,7 +12,7 @@
       <div class="create-context">
         当该会员过来消费时，扫描您的店铺码，点击右上角，即可完成领卡！
       </div>
-      <img class="alipay-img" src="/static/createhelp.png"/>
+      <img class="alipay-img" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/merchants/createhelp.png"/>
       <div class="buttons">
         <span class="confirm" @click="doConfirm">知道了</span>
       </div>

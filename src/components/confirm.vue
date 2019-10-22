@@ -8,8 +8,8 @@
         </div>
       </div>
       <div class="buttons">
-        <span class="cancel" @click="doCancel">{{cancel}}</span>
-        <span class="confirm" @click="doConfirm">{{confirm}}</span>
+        <span class="cancel" @click="doCancel">{{cancel ? cancel : '取消'}}</span>
+        <span class="confirm" @click="doConfirm">{{confirm ? confirm : '确认'}}</span>
       </div>
     </div>
   </div>
@@ -77,7 +77,7 @@
     height: 100vh;
     position: fixed;
     top: 0;
-    z-index: 1001;
+    z-index: 3001;
     background-color: rgba(0, 0, 0, 0);
     padding-top: rpx(450);
     .confirm-context {

@@ -1,9 +1,11 @@
 <template>
   <div class="home">
     <div class="refresh" :animation="animationLoading" v-if="platform=='ios'">
-      <img class="loading1" src="/static/loading1.png"/>
-      <img class="loading2" :animation="animationLoading2" src="/static/loading2.png" v-if="showLoading"/>
-      <img class="loading3" src="/static/loading2.png" v-if="isRefreshing"/>
+      <img class="loading1" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/loading1.png"/>
+      <img class="loading2" :animation="animationLoading2"
+           src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/loading2.png" v-if="showLoading"/>
+      <img class="loading3" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/loading2.png"
+           v-if="isRefreshing"/>
     </div>
     <div v-show="auth==true">
       <div class="home-background">
@@ -76,7 +78,8 @@
           </div>
         </div>
         <div class="demo-footer" v-show="items.length==0||isOver" style="padding-top: 0">
-          <img class="demo-nutcards" src="/static/nutcards.png"/>
+          <img class="demo-nutcards"
+               src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
         </div>
       </div>
     </div>
@@ -85,7 +88,7 @@
         {{auth == false ? '没有权限 =_="' : ''}}
       </div>
       <div class="demo-footer" style="padding-top: 0">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
     </div>
     <div class="demo-noauth" v-show="auth==null">
@@ -93,19 +96,40 @@
         加载中...
       </div>
       <div class="demo-footer" style="padding-top: 0">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
     </div>
     <div class="home-help" @click="jumpToHelp">
       <span>帮助</span>
+    </div>
+    <div class="home-notify" v-if="showNotify">
+      <span class="notify-left">
+        <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/tixing.png"/>
+      </span>
+      <span class="notify-right">
+        <div>快捷收款使用期还剩{{remainingDays}}天</div>
+        <div>到期后将停用，请尽快开通“银行卡收款”,<text @click="jumpToGathering">马上去开通 ></text></div>
+      </span>
+      <div class="notify-close" @click="showNotify=false">
+        <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close.png"/>
+      </div>
+    </div>
+    <div class="home-tips" v-if="tips&&tips.length>0">
+      <div class="tip-item" v-for="item in tips" v-if="item.isShow!=false">
+        <hometoast :item="item" @close="closeTip(item)"></hometoast>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import item from '@/components/item'
+  import hometoast from '@/components/hometoast'
 
   export default {
+    components: {
+      item, hometoast
+    },
     data () {
       return {
         items: [],
@@ -124,15 +148,14 @@
         screenWidth: 0,
         time: '',
         statusBarHeight: 0,
+        remainingDays: 0,
+        changeData: 0,
         showLoading: false,
+        showNotify: false,
+        tips: [],
         platform: ''
       }
     },
-
-    components: {
-      item
-    },
-
     methods: {
       jumpToHelp () {
         const url = '../mine/help/main'
@@ -140,6 +163,14 @@
       },
       jumpToDetails (item) {
         const url = '../details/main?userId=' + this.userId + '&storeId=' + this.storeId + '&consumptionId=' + item.ConsumptionId
+        wx.navigateTo({url})
+      },
+      jumpToGathering () {
+        const url = '../mine/gathering/create/main?userId=' + this.userId + '&storeId=' + this.storeId
+        wx.navigateTo({url})
+      },
+      jumpToRenew (code) {
+        const url = '../mine/service/renew/main?storeId=' + this.$store.state.storeId + '&userId=' + this.$store.state.userId + '&code=' + code
         wx.navigateTo({url})
       },
       scroll (e) {
@@ -151,6 +182,10 @@
         console.log(e)
         this.left = e.clientX + 'px'
         this.top = e.clientY + 'px'
+      },
+      closeTip (item) {
+        item.isShow = false
+        this.changeData += 1
       },
       getConsumptions (page, callback) {
         let myDate = new Date()
@@ -194,6 +229,18 @@
           that.report = res
         })
       },
+      getNotify () {
+        let that = this
+        this.$post('/merchant/businessIsNeedCertification', {
+          Uid: that.userId,
+          StoreId: that.storeId
+        }).then(res => {
+          if (res.IsNeedCertification) {
+            that.showNotify = true
+            that.remainingDays = res.RemainingDays
+          }
+        })
+      },
       getPermissions (callback) {
         let that = this
         this.$post('/user/businessGetAdminPermissions', {
@@ -205,6 +252,30 @@
             callback(res.AdminPermissions)
           }
         })
+      },
+      getServiceTags () {
+        let that = this
+        this.$post('/storeCard/businessGetStoreServiceItems', {
+          Uid: that.userId,
+          StoreId: that.storeId
+        }).then(res => {
+          wx.setStorageSync('serviceTags', res.Services)
+        })
+      },
+      getSoftServerInfo () {
+        let that = this
+        this.$post('/soft/getSoftServerInfo', {
+          Uid: that.userId,
+          StoreId: that.storeId
+        }).then(res => {
+          that.$store.commit('overdueInfo', res)
+          if (res.ServiceTips && res.ServiceTips.length > 0) {
+            that.tips = res.ServiceTips
+            // for (let toast of res.ServiceTips) {
+            // that.$mptoast(toast.TipsTitle, toast.TipsSubTitle, toast.TipsType)
+            // }
+          }
+        })
       }
     },
     onLoad () {
@@ -213,8 +284,8 @@
       this.userId = globalData.user.Userid
       this.storeId = globalData.user.StoreId
       this.isLoading = true
-      // const url = '../mine/coupon/home/main?userId=' + this.userId + '&storeId=' + this.storeId
-      // wx.navigateTo({url})
+      this.showNotify = false
+      this.tips = []
       if (globalData.user.type !== 0) {
         this.getPermissions(function (permissions) {
           if (permissions && permissions.length > 0) {
@@ -238,6 +309,13 @@
         backgroundColorTop: '#021656',
         backgroundColorBottom: '#f0f0f0'
       })
+      if (this.$store.state.jumpInfo.path === 'renew') {
+        this.jumpToRenew(this.$store.state.jumpInfo.value)
+      }
+      // const url = '../mine/promotion/home/main?userId=' + this.userId + '&storeId=' + this.storeId
+      // wx.navigateTo({url})
+      this.getServiceTags()
+      this.getSoftServerInfo()
       this.screenWidth = this.getGlobalData().screenWidth
       this.statusBarHeight = this.getGlobalData().statusBarHeight + 6
       this.platform = this.getGlobalData().platform
@@ -247,6 +325,9 @@
       if (this.firstLoad) {
         return
       }
+      let globalData = this.getGlobalData()
+      this.userId = globalData.user.Userid
+      this.storeId = globalData.user.StoreId
       let permissions = wx.getStorageSync('auth')
       if (permissions && permissions.length > 0) {
         for (let item of permissions) {
@@ -326,6 +407,9 @@
       }
       this.page += 1
       this.getConsumptions(this.page)
+    },
+    onTabItemTap () {
+      this.$toastStore.commit('keepToast')
     },
     onShareAppMessage () {
       return {
@@ -539,7 +623,7 @@
       border-radius: 50%;
       background-color: rgba(255, 103, 0, 0.39);
       text-align: center;
-      z-index: 1001;
+      z-index: 998;
       color: white;
       font-size: 4.5vw;
       span {
@@ -551,6 +635,76 @@
         line-height: 13vw;
         border-radius: 50%;
         background-color: rgba(255, 103, 0, 1);
+      }
+    }
+    .home-notify {
+      position: fixed;
+      bottom: 3vw;
+      left: 6.4vw;
+      width: 87.1vw;
+      height: 20.1vw;
+      background: #F87272;
+      border-radius: 2.5vw;
+      box-sizing: border-box;
+      padding: 4.1vw 4.2vw 5.1vw 4.2vw;
+      color: white;
+      z-index: 1001;
+      span {
+        display: inline-block;
+        vertical-align: top;
+      }
+      .notify-left {
+        width: 6.4vw;
+        padding-right: 1.9vw;
+        img {
+          display: inline-block;
+          vertical-align: top;
+          width: 6.4vw;
+          height: 5.6vw;
+        }
+      }
+      .notify-right {
+        div {
+          &:nth-child(1) {
+            height: 5.6vw;
+            line-height: 5.6vw;
+            font-size: 3.9vw;
+          }
+          &:nth-child(2) {
+            padding-top: 2.8vw;
+            height: 2.6vw;
+            line-height: 2.6vw;
+            color: rgba(255, 255, 255, 1);
+            font-size: 2.5vw;
+          }
+        }
+        text {
+          color: #003D82;
+        }
+      }
+      .notify-close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 3.3vw;
+        width: 2.6vw;
+        height: 2.6vw;
+        img {
+          width: 2.6vw;
+          height: 2.6vw;
+          display: inline-block;
+          vertical-align: top;
+        }
+      }
+    }
+    .home-tips {
+      position: fixed;
+      bottom: 0;
+      padding: 2.5vw;
+      left: 0;
+      z-index: 999;
+      .tip-item {
+        padding: 2vw 0;
       }
     }
   }

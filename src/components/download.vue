@@ -3,11 +3,11 @@
     <div class="model-top" @click="turnOff"></div>
     <div class="model-buy" :style="{animation:isOver?'turnOff 200ms':'turnOn 200ms'}">
       <div class="model-close" @click="turnOff">
-        <img class="close" src="/static/close2.png"/>
+        <img class="close" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close2.png"/>
       </div>
       <div class="molde-success">
         <div class="molde-img">
-          <img src="/static/qrcodetest.png"/>
+          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/qrcodetest.png"/>
         </div>
         <div class="model-text">
           <div>A、复制下载链接后，使用手机浏览器打开即可下载</div>
@@ -31,10 +31,7 @@
       return {
         isOver: false,
         agree: true,
-        card: {},
         modelAnimation: {},
-        store: '',
-        uid: '',
         isSuccess: false,
         second: 3
       }
@@ -42,7 +39,7 @@
     methods: {
       download () {
         wx.saveImageToPhotosAlbum({
-          filePath: '/static/qrcodetest.png',
+          filePath: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/qrcodetest.png',
           success: function (res) {
             wx.showToast({
               title: '下载成功'
@@ -52,7 +49,7 @@
       },
       copyUrl () {
         wx.setClipboardData({
-          data: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Down/nutcards.apk',
+          data: 'https://www.nutcards.com/nutcards/download.html',
           success: function () {
             wx.showToast({
               title: '复制成功',

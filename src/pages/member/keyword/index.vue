@@ -4,7 +4,7 @@
     <div class="key-searck">
       <div class="search">
         <span>
-          <img src="/static/search2.png"/>
+          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/search2.png"/>
         </span>
         <input @blur="onBlur" @focus="onFocus" :focus="true"/>
       </div>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="demo-footer" v-show="items.length==0||isOver" style="padding-top: 0">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -116,10 +116,9 @@
         })
       }
     },
-    onLoad () {
-      let globalData = this.getGlobalData()
-      this.userId = globalData.user.Userid
-      this.storeId = globalData.user.StoreId
+    onLoad (option) {
+      this.userId = option.userId
+      this.storeId = option.storeId
       this.showCue = true
       this.items = []
       this.isOver = false

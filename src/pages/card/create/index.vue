@@ -14,76 +14,63 @@
               <switch :checked="state" @change="switchChange" color="#78BC6D"/>
           </span>
         </div>
-        <div class="demo-context create-context" v-show="firstLoad==false">
+        <div class="demo-context create-context" v-if="firstLoad==false">
           <div @click="jumpToFace">
-            <div class="create-card"
-                 v-bind:style="{'background':'url('+img+')','background-size':'100% 100%'}">
-              <div class="card-hearder">
-              <span class="header-logo"
-                    v-bind:style="{'background':'url('+store.StoreLogo+')','background-size':'100% 100%'}"></span>
-                <span class="header-name" style="width: 55vw">{{store.StoreName}}</span>
-                <img class="header-code" src="/static/code.png"/>
-              </div>
-              <div class="card-content"
-                   :style="{'font-size':cardName&&cardName.length>5?cardName.length<10?(145-cardName.length*9+'rpx'):'59rpx':'','line-height':cardName&&cardName.length>10?'67rpx':''}">
-                <text>{{computedCardName}}</text>
-              </div>
-              <div class="card-footer">
-                <div class="footer-number">0000 0000 0000 000</div>
-                <div class="footer-date">有效期<span
-                  v-if="validity[0]==0||(validity[0]==1&&validity[1]==0&&validity[2]==0)">永久</span>
-                  <span v-if="validity[0]!=0&&!(validity[0]==1&&validity[1]==0&&validity[2]==0)">
-                  <span>{{validity[0] == 1 ? '' : validityRange[0][validity[0]].name}}</span>
-                  <span>{{validity[1] == 0 ? '' : validityRange[1][validity[1]].name}}</span>
-                  <span>{{validity[2] == 0 ? '' : validityRange[2][validity[2]].name}}</span>
-                </span>
-                </div>
-              </div>
+            <div class="create-card">
+              <card :card="newCard" :name="cardName" @showMore="showMore=true"></card>
             </div>
             <div class="store-right">
-              <img src="/static/right2.png"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
             </div>
           </div>
 
           <form @submit="commit">
             <div v-if="card!=undefined" class="info">
               <custom :name="'CardName'"
-                      :title="'卡名'"
+                      :title="'卡囧名'"
                       :request="true"
                       :type="'input'"
                       :value="card.CardName"
                       @changeName="changeValue"></custom>
 
-              <div class="demo-input" @click="showTool=true"
+              <div class="demo-input" @click="showTool=true" v-if="cardType==1"
                    :style="{'border-bottom':isError?'1rpx solid red':'1rpx solid #bbbbbb'}">
                 <span class="name">面值<span class="request">*</span></span>
                 <span class="value" :style="{color:faceValue == null?'#dadada':'#7e7e7e'}">
-                {{faceValue == null ? '请输入' : faceValue.price + '元/' + faceValue.times + (cardType == 0 ? '次' : '元')}}
-                <span style="display: inline-block;color: red;padding-left: 5vw"
-                      v-if="faceValue!=null&&faceValue.gift!=''">额外赠{{faceValue.gift + (cardType == 0 ? '次' : '元')}}</span>
-              </span>
+                  {{faceValue == null ? '请输入' : faceValue.price + '元/' + faceValue.times + (cardType == 0 ? '次' : '元')}}
+                  <span style="display: inline-block;color: red;padding-left: 5vw"
+                        v-if="faceValue!=null&&faceValue.gift!=''">额外赠{{faceValue.gift + (cardType == 0 ? '次' : '元')}}</span>
+                </span>
               </div>
 
-              <!--<record :keyword="'Price'"
-                      :name="'售价'"
-                      :request="true"
-                      :type="'input'"
-                      :value="card.Price"
-                      @changeValue="changeValue"></record>
+              <div v-if="cardType==0">
+                <record :keyword="'Price'"
+                        :name="'售囧价'"
+                        :request="true"
+                        :context="'digit'"
+                        :type="'input'"
+                        :value="card.Price"></record>
+              </div>
 
-              <record :keyword="'CardValue'"
-                      :name="'卡价值'"
-                      :request="true"
-                      :type="'input'"
-                      :value="card.CardValue"
-                      @changeValue="changeValue"></record>
-
-              <record :keyword="'CardGivingValue'"
-                      :name="'赠送'"
-                      :request="true"
-                      :type="'input'"
-                      :value="card.CardGivingValue"
-                      @changeValue="changeValue"></record>-->
+              <div class="demo-input" @click="showAddModel" v-if="cardType==0"
+                   :style="{'border-bottom':isError?'1rpx solid red':'1rpx solid #bbbbbb'}">
+                <span class="name"><text>项<text style="visibility: hidden;">囧</text>目</text><span
+                  class="request">*</span></span>
+                <span class="value"
+                      style="white-space: nowrap;overflow: hidden;"
+                      :style="{color:services.length==0 ?'#dadada':'#7e7e7e'}">
+                  {{services.length == 0 ? '请输入' : ''}}
+                  <span style="display: inline-block;vertical-align: top;height: 7vh;line-height: 7vh"
+                        v-for="(item,index) in services">
+                    {{item.ItemName + item.CardValue + '次' + (index == services.length - 1 ? '' : '、')}}
+                  </span>
+                  <span class="gift-box" v-for="(item,index) in gifts">
+                    {{'赠' + item.ItemName + item.CardValue + '次'}}
+                  </span>
+                  <span style="display: inline-block;color: red;padding-left: 5vw"
+                        v-if="faceValue!=null&&faceValue.gift!=''">额外赠{{faceValue.gift + (cardType == 0 ? '次' : '元')}}</span>
+                </span>
+              </div>
 
               <div class="custom-box" v-if="cardType==1">
                 <div class="input" :style="{'border-bottom-color':'#d5d5d5'}">
@@ -119,15 +106,17 @@
                 </div>
               </div>
               <div class="demo-buttons">
-                <button class="cancel" v-show="info.type=='edit'" @click="deleting = true">删除此卡</button>
-                <button class="done" formType="submit">保存</button>
+                <button class="cancel" v-show="info.type=='edit'"
+                        @click="isOverdue?showToast=true:deleting = true" :class="isOverdue?'overdue-button2':''">删除此卡
+                </button>
+                <button class="done" formType="submit" :class="isOverdue?'overdue-button':''">保存</button>
               </div>
             </div>
           </form>
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -142,6 +131,15 @@
       <confirm :title="'确认删除吗？删除后不可恢复！'" :confirm="'删除'" :cancel="'取消'"
                @confirm="deleteCard" @cancel="deleting = false"></confirm>
     </div>
+    <div v-if="showAdd">
+      <add @close="showAdd=false" @save="doAddService" :items="newServices" :gifts="newGifts" :type="'create'"></add>
+    </div>
+    <div v-if="showMore">
+      <more :services="services" @close="showMore=false"></more>
+    </div>
+    <div v-if="showToast">
+      <renewtoast @close="showToast = false"></renewtoast>
+    </div>
   </div>
 </template>
 
@@ -152,10 +150,14 @@
   import confirm from '@/components/confirm'
   import {copy} from '../../../utils/index.js'
   import custom from '@/components/custom'
+  import card from '@/components/card'
+  import add from '@/components/addservice'
+  import more from '@/components/services'
+  import renewtoast from '@/components/renewtoast'
 
   export default {
     components: {
-      record, title, createcardtool, confirm, custom
+      record, title, createcardtool, confirm, custom, card, add, more, renewtoast
     },
 
     data () {
@@ -184,7 +186,15 @@
         titleHeight: null,
         cardName: '',
         isError: false,
-        state: null
+        state: null,
+        changeData: 0,
+        services: [],
+        newServices: [{}],
+        gifts: [],
+        newGifts: [],
+        showAdd: false,
+        showToast: false,
+        showMore: false
       }
     },
     computed: {
@@ -199,6 +209,9 @@
         } else {
           return '会员卡'
         }
+      },
+      isOverdue () {
+        return this.$store.getters.GET_ISOVERDUE
       }
     },
     methods: {
@@ -223,26 +236,32 @@
         if (this.validity[0] === 0 || (this.validity[0] === 1 && this.validity[1] === 0 && this.validity[2] === 0)) {
           this.newCard['ValidityDate'] = null
           this.store.ValidityDateTo = '永久有效'
+          this.newCard['ValidityDateTo'] = '永久有效'
+          this.newCard['ValidityDateTime'] = '永久有效'
           return
         }
         this.newCard['ValidityDate'] = (this.validity[0] - 1) * 365 + this.validity[1] * 30 + this.validity[2]
         this.store.ValidityDateTo = this.calcValidityDateTo(this.validity[0] * 365 + this.validity[1] * 30 + this.validity[2])
+        this.newCard['ValidityDateTo'] = this.store.ValidityDateTo
+        this.newCard['ValidityDateTime'] = this.calcValidityDateTime((this.validity[0] - 1) * 365 + this.validity[1] * 30 + this.validity[2])
+        this.changeData += 1
       },
       discountChange (e) {
         this.discount = e.mp.detail.value
+        if (this.discount[0] !== 0) {
+          this.newCard.CardDiscount = (this.discountRange[0][this.discount[0]] + '.' + this.discountRange[2][this.discount[2]]) * 1
+        } else {
+          this.newCard.CardDiscount = 10
+        }
+        this.changeData += 1
       },
       changeValue (key, value) {
         this.newCard[key] = value
         if (key === 'CardName') {
           this.cardName = value
+          this.newCard.CardName = value
         }
-      },
-      radioChange (e) {
-        this.rule.CardType = e.mp.detail.value
-        this.cardType = e.mp.detail.value
-      },
-      swiperChange (e) {
-        this.current = e.mp.detail.current
+        this.changeData += 1
       },
       confirm (price, times, gift) {
         this.isError = false
@@ -252,6 +271,57 @@
           gift: gift
         }
         this.showTool = false
+        this.newCard.CardPrice = times
+        this.newCard.CardGivingValue = gift
+        this.changeData += 1
+      },
+      showAddModel () {
+        let items = []
+        for (let item of this.services) {
+          items.push({
+            ItemId: item.ItemId,
+            ItemName: item.ItemName,
+            CardValue: item.CardValue
+          })
+        }
+        if (items.length > 0) {
+          this.newServices = items
+        } else {
+          this.newServices = [{}]
+        }
+        let gifts = []
+        for (let item of this.gifts) {
+          gifts.push({
+            IsGift: true,
+            ItemId: item.ItemId,
+            ItemName: item.ItemName,
+            CardValue: item.CardValue
+          })
+        }
+        this.newGifts = gifts
+        this.showAdd = true
+      },
+      doAddService (items, gifts) {
+        console.log(items)
+        console.log(gifts)
+        let cards = []
+        let services = []
+        for (let item of items) {
+          item.CardValue = item.CardValue * 1
+          cards.push(item)
+          services.push(item)
+        }
+        this.services = cards
+        if (gifts) {
+          this.gifts = gifts
+          for (let item of gifts) {
+            services.push(item)
+          }
+        }
+        this.isError = false
+        this.showAdd = false
+        this.newCard.Services = services
+        this.changeData += 1
       },
       calcCardDiscount (discount) {
         if (this.cardType && discount && discount !== 10) {
@@ -273,15 +343,29 @@
           that.card = res
           that.state = res.State
           that.newCard = copy(that.card)
+          that.newCard.StoreName = that.store.StoreName
+          that.newCard.StoreLogo = that.store.StoreLogo
           that.cardName = res.CardName
           that.cardType = res.CardType
           that.calcValidityDate(res.ValidityDate)
+          that.newCard.ValidityDateTime = that.calcValidityDateTime(res.ValidityDate)
           that.calcCardDiscount(res.CardDiscount)
           that.store.ValidityDateTo = that.calcValidityDateTo(res.ValidityDate)
-          that.faceValue = {
-            price: res.Price,
-            times: res.CardValue,
-            gift: res.CardGivingValue
+          that.newCard.ValidityDateTo = that.calcValidityDateTo(res.ValidityDate)
+          if (res.CardType) {
+            that.faceValue = {
+              price: res.Price,
+              times: res.CardValue,
+              gift: res.CardGivingValue
+            }
+          } else {
+            for (let item of res.Services) {
+              if (item.IsGift) {
+                that.gifts.push(item)
+              } else {
+                that.services.push(item)
+              }
+            }
           }
           that.img = res.CardImg
           that.firstLoad = false
@@ -316,6 +400,15 @@
         now.setDate(now.getDate() + date)
         return this.formatTime(now)
       },
+      calcValidityDateTime (validityDay) {
+        if (validityDay === 0) {
+          return '永久有效'
+        }
+        let year = Math.floor(validityDay / 365)
+        let month = Math.floor(validityDay % 365 / 30)
+        let day = validityDay % 365 % 30
+        return (year === 0 ? '' : year + '年') + (month === 0 ? '' : month + '月') + (day === 0 ? '' : day + '天')
+      },
       formatTime (date) {
         let year = date.getFullYear()
         let month = date.getMonth() + 1
@@ -325,6 +418,10 @@
         return year + '年' + month + '月' + day + '日'
       },
       commit (e) {
+        if (this.$store.getters.GET_ISOVERDUE) {
+          this.showToast = true
+          return
+        }
         let childrens = this.$children
         let isError = false
         let that = this
@@ -333,24 +430,45 @@
             isError = true
           }
         }
-        if (isError) {
+        console.log(this.cardType)
+        console.log(this.services)
+        if (this.cardType * 1 === 1 && this.faceValue === null) {
+          this.isError = true
           return false
         }
-        if (this.faceValue === null) {
+        if (this.cardType * 1 === 0 && this.services.length === 0) {
           this.isError = true
+          return false
+        }
+        if (isError) {
           return false
         }
         this.newCard.Uid = this.info.userId
         this.newCard.StoreId = this.info.storeId
         this.newCard.CardImg = this.img
-        this.newCard.Price = this.faceValue.price
-        this.newCard.CardValue = this.faceValue.times
-        this.newCard.CardGivingValue = this.faceValue.gift
+        if (this.cardType * 1 === 1) {
+          this.newCard.Price = this.faceValue.price
+          this.newCard.CardValue = this.faceValue.times
+          this.newCard.CardGivingValue = this.faceValue.gift
+        } else {
+          let services = []
+          for (let item of this.services) {
+            services.push(item)
+          }
+          for (let item of this.gifts) {
+            services.push(item)
+          }
+          this.newCard.Services = services
+          this.newCard.CardValue = 10
+          this.newCard.Price = e.mp.detail.value['Price']
+        }
         this.newCard.CardName = e.mp.detail.value['CardName']
         this.newCard.CardDiscount = 10
         if (this.discount[0] !== 0) {
           this.newCard.CardDiscount = this.discountRange[0][this.discount[0]] + '.' + this.discountRange[2][this.discount[2]]
         }
+        this.newCard.StoreName = null
+        this.newCard.StoreLogo = null
         if (this.info.type === 'edit') {
           this.newCard.PrepaidCardId = this.info.cardId
           this.newCard.State = this.state ? 1 : 0
@@ -387,6 +505,9 @@
         let that = this
         this.$post('/store/businessGetStoreInfo', {Uid: this.info.userId, StoreId: this.info.storeId}).then(res => {
           that.store = res
+          that.newCard['StoreName'] = res.StoreName
+          that.newCard['StoreLogo'] = res.StoreLogo
+          that.changeData += 1
         })
       }
     },
@@ -399,11 +520,17 @@
       this.firstLoad = true
       this.faceValue = null
       this.deleting = false
+      this.newCard = {}
       this.cardName = '会员卡'
       this.newCard['CardName'] = '会员卡'
       this.isError = false
       this.cardType = 1
       this.state = null
+      this.services = []
+      this.gifts = []
+      this.showAdd = false
+      this.showMore = false
+      this.showToast = false
       this.getStoreInfo()
       let that = this
       this.getCardSetting(function () {
@@ -415,8 +542,11 @@
             CardName: '会员卡'
           }
           that.cardType = option.cardType
+          that.newCard.CardType = option.cardType * 1
           that.img = that.rule.CardImages[0]
           that.newCard['ValidityDate'] = null
+          that.newCard['ValidityDateTo'] = '永久有效'
+          that.newCard['CardImg'] = that.rule.CardImages[0]
           that.store.ValidityDateTo = '永久有效'
         }
       })
@@ -426,6 +556,8 @@
         let globalData = this.getGlobalData()
         if (globalData.currentFaceIndex != null) {
           this.img = this.rule.CardImages[globalData.currentFaceIndex]
+          this.newCard['CardImg'] = this.rule.CardImages[globalData.currentFaceIndex]
+          this.changeData += 1
         }
       }
     },
@@ -470,7 +602,21 @@
     background-color: #f0f0f0;
     .create-context {
       background-color: white;
+      padding-top: 5vw;
       position: relative;
+      .gift-box {
+        height: 4.3vw;
+        line-height: 4.3vw;
+        vertical-align: middle;
+        padding: 0 2vw;
+        height: 4.3vw;
+        background: rgba(255, 103, 0, 0.1);
+        border-radius: 2.1vw;
+        margin-left: 1vw;
+        color: #FF6700;
+        font-size: 2.8vw;
+        text-align: center;
+      }
     }
     .card-state {
       padding: 5vw;
@@ -521,104 +667,17 @@
       }
     }
     .create-card {
-      width: 78vw;
-      height: rpx(336);
-      padding: rpx(20);
-      box-shadow: 0 0 1vw 0 #7a7a7a;
-      border-radius: 10px;
-      background-color: #d5d5d5;
+      width: 66.2vw;
+      height: 39.52vw;
       margin: 0 auto;
       color: white;
-      transform: scale(0.8, 0.8);
-      .shadow {
-        position: absolute;
-        top: rpx(-2);
-        left: rpx(-2);
-        border: rpx(2) solid #cecece;
-        background-color: #dbdbdb;
-        width: 85vw;
-        height: rpx(336);
-        padding: rpx(20);
-        border-radius: rpx(20);
-        margin: 0 auto;
-        opacity: 0.3;
+      position: relative;
+      .new-card-demo {
+        left: 0;
+        top: 0;
+        transform: scale(0.8, 0.8);
+        transform-origin: 0% 0%;
       }
-
-      .card-left {
-        transform: rotate(7deg);
-        position: absolute;
-        left: 1vw;
-      }
-
-      .card-right {
-        transform: rotate(-4deg);
-        position: absolute;
-        left: calc(15vw / 2 - 11px);
-      }
-
-      .card-hearder {
-        height: 30%;
-        line-height: 7vh;
-      }
-
-      .card-content {
-        height: rpx(134);
-        line-height: rpx(134);
-        text-align: center;
-        font-size: rpx(100);
-        overflow: hidden;
-        vertical-align: top;
-        display: block;
-        text {
-          display: inline-block;
-          vertical-align: top;
-        }
-      }
-
-      .card-footer {
-        height: 30%;
-        padding-top: 1vh;
-        padding-left: 1vw;
-        line-height: 3vh;
-        font-size: rpx(25);
-        .footer-number {
-          padding-top: rpx(4);
-          text-shadow: 1px 1px 1px #7a7a7a;
-          color: #dcc913;
-          font-size: rpx(28);
-        }
-      }
-
-      .header-logo {
-        width: 6vh;
-        height: 6vh;
-        font-size: 0.5em;
-        text-align: center;
-        line-height: 5vh;
-        display: inline-block;
-        border-radius: 50%;
-        vertical-align: middle;
-        background-size: 100% 100%;
-      }
-
-      .header-name {
-        height: 5vh;
-        line-height: 5vh;
-        display: inline-block;
-        font-size: rpx(32);
-        vertical-align: middle;
-        margin-left: 3vw;
-        width: 10vw;
-        white-space: nowrap;
-      }
-
-      .header-code {
-        height: 3vh;
-        width: 3vh;
-        display: inline-block;
-        vertical-align: middle;
-      }
-
     }
   }
 </style>

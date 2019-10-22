@@ -10,12 +10,12 @@
               <div class="coupon-item" :style="{filter:item.State?'':'grayscale(1)'}"
                    @click="jumpToView(item.CouponCenterType)">
                 <span class="item-logo">
-                  <img v-if="item.CouponCenterType==1" src="/static/coupon-open2.png"/>
-                  <img v-if="item.CouponCenterType==2" src="/static/coupon-renew2.png"/>
-                  <img v-if="item.CouponCenterType==3" src="/static/coupon-birthday2.png"/>
-                  <img v-if="item.CouponCenterType==4" src="/static/coupon-discount2.png"/>
-                  <img v-if="item.CouponCenterType==5" src="/static/coupon-group2.png"/>
-                  <img v-if="item.CouponCenterType==6" src="/static/coupon-appoint2.png"/>
+                  <img v-if="item.CouponCenterType==1" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-open2.png"/>
+                  <img v-if="item.CouponCenterType==2" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-renew2.png"/>
+                  <img v-if="item.CouponCenterType==3" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-birthday2.png"/>
+                  <img v-if="item.CouponCenterType==4" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-discount2.png"/>
+                  <img v-if="item.CouponCenterType==5" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-group2.png"/>
+                  <img v-if="item.CouponCenterType==6" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-appoint2.png"/>
                 </span>
                 <span class="item-context">
                   <div v-if="item.CouponCenterType==1">
@@ -28,7 +28,7 @@
                   </div>
                   <div v-if="item.CouponCenterType==2">
                     <div class="context-title">
-                      续费送券
+                      续费关怀
                     </div>
                     <div class="context-info">
                       老会员余额将用完时送券
@@ -82,35 +82,35 @@
                   </div>
                 </span>
                 <span class="option-state">
-                  <span>{{item.State ? '出售中' : '已暂停'}}</span>
-                  <img src="/static/sale.png"/>
+                  <span>{{item.State ? '已开启' : '已暂停'}}</span>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/sale.png"/>
                 </span>
               </div>
             </div>
           </div>
           <div class="no-coupon-items">
-            <span v-for="item in items" v-if="!item.created&&item.CouponCenterType!=1&&item.CouponCenterType!=2"
+            <span v-for="item in items" v-if="!item.created&&item.CouponCenterType!=1"
                   @click="jumpToCoupon(item.CouponCenterType)">
               <div class="no-coupon-logo">
                 <img v-if="item.CouponCenterType==1" style="width: 58rpx;height: 53rpx;"
-                     src="/static/coupon-open.png"/>
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-open.png"/>
                 <img v-if="item.CouponCenterType==2" style="width: 55rpx;height: 59rpx;"
-                     src="/static/coupon-renew.png"/>
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-renew.png"/>
                 <img v-if="item.CouponCenterType==3" style="width: 70rpx;height: 66rpx;"
-                     src="/static/coupon-birthday.png"/>
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-birthday.png"/>
                 <img v-if="item.CouponCenterType==4" style="width: 67rpx;height: 58rpx;"
-                     src="/static/coupon-discount.png"/>
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-discount.png"/>
                 <img v-if="item.CouponCenterType==5" style="width: 77rpx;height: 65rpx;"
-                     src="/static/coupon-group.png"/>
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-group.png"/>
                 <img v-if="item.CouponCenterType==6" style="width: 76rpx;height: 78rpx;"
-                     src="/static/coupon-appoint.png"/>
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-appoint.png"/>
               </div>
               <div v-if="item.CouponCenterType==1">
                 <div class="no-coupon-title">开卡送券</div>
                 <div class="no-coupon-context">新会员开卡时送券</div>
               </div>
               <div v-if="item.CouponCenterType==2">
-                <div class="no-coupon-title">续费送券</div>
+                <div class="no-coupon-title">续费关怀</div>
                 <div class="no-coupon-context">老会员余额将用完时送</div>
               </div>
               <div v-if="item.CouponCenterType==3">
@@ -146,7 +146,7 @@
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>

@@ -5,28 +5,24 @@
                  :style="{height:'calc(100vh - '+titleHeight +'px)'}">
       <div class="demo-main"
            :style="{'min-height':'calc(90vh - '+titleHeight +'px)'}">
-        <div class="demo-context">
-          <div class="button" v-if="!isSuccess" @click="unbind">
-            <div>解除绑定</div>
-          </div>
-          <div class="infomation" v-if="isSuccess">
+        <div class="demo-context" v-for="(item,index) in stores">
+          <div class="button">
             <div>
-              <img src="/static/accept.png"/>
-            </div>
-            <div>
-              已解除绑定
-            </div>
-            <div>
-              点击完成，将为您创建自己的店铺！
-            </div>
-            <div>
-              <span class="done" @click="done">完成</span>
+              <span class="store-name">{{item.StoreName}}</span>
+              <span style="text-align: right;width: 40vw">
+                <span class="store-remove" v-if="item.UserType">
+                  <span @click="unbind(item)">解除绑定</span>
+                </span>
+                <span class="store-change" v-if="item.StoreId != storeId">
+                  <span @click="changeStore(item)">切换店铺</span>
+                </span>
+              </span>
             </div>
           </div>
         </div>
       </div>
       <div class="demo-footer" style="padding-top: 0vh">
-        <img class="demo-nutcards" src="/static/nutcards.png"/>
+        <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
       </div>
       <div class="demo-bottom"></div>
     </scroll-view>
@@ -50,18 +46,25 @@
       return {
         titleHeight: null,
         deleting: false,
-        isSuccess: false
+        isSuccess: false,
+        current: {},
+        storeId: '',
+        stores: []
       }
     },
     methods: {
-      unbind () {
+      unbind (item) {
         this.deleting = true
-      },
-      deleteItem () {
-        this.deleting = true
+        this.current = item
       },
       done () {
         wx.removeStorageSync('auth')
+        const url = '../../index/main'
+        wx.reLaunch({url})
+      },
+      changeStore (item) {
+        wx.removeStorageSync('auth')
+        wx.setStorageSync('currentStore', item.StoreId)
         const url = '../../index/main'
         wx.reLaunch({url})
       },
@@ -70,16 +73,20 @@
         this.deleting = false
         this.$post('/user/businessRemoveAdmin', {
           Uid: that.userId,
-          StoreId: that.storeId,
+          StoreId: that.current.StoreId,
           UserId: that.userId
         }, true).then(res => {
           that.isSuccess = true
+          that.done()
         })
       }
     },
     onLoad (res) {
-      this.storeId = res.storeId
+      this.storeId = res.storeId * 1
       this.userId = res.userId
+      console.log(this.storeId)
+      let globalData = this.getGlobalData()
+      this.stores = globalData.storeList
       this.titleHeight = this.getGlobalData().titleHeight
     }
   }
@@ -94,14 +101,48 @@
     height: 100vh;
     background-color: #f0f0f0;
     .button {
-      padding-top: 2vh;
+      padding-top: 4vw;
       div {
-        height: 7vh;
-        line-height: 7vh;
+        height: 15vw;
+        line-height: 15vw;
         text-align: center;
         font-size: rpx(30);
-        color: #ff6700;
         background-color: white;
+        padding: 0 5vw;
+      }
+      span {
+        display: inline-block;
+      }
+      .store-name {
+        width: 50vw;
+        text-align: left;
+      }
+      .store-remove {
+        width: 20vw;
+        color: #ff6700;
+        span {
+          height: 7vw;
+          line-height: 7vw;
+          box-sizing: border-box;
+          border: 0.1vw solid #ff6700;
+          border-radius: 4vw;
+          width: 18vw;
+          font-size: rpx(25);
+          text-align: center;
+        }
+      }
+      .store-change {
+        width: 20vw;
+        color: white;
+        span {
+          height: 7vw;
+          line-height: 7vw;
+          background: #ff6700;
+          border-radius: 4vw;
+          width: 18vw;
+          font-size: rpx(25);
+          text-align: center;
+        }
       }
     }
     .infomation {
