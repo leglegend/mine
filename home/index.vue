@@ -14,7 +14,7 @@
             <div>
               <span
                 class="hello">{{store.StoreName ? (userType == 0 ? '店长：' : userType == 1 ? '店员：' : '') : ''}}{{store.StoreName ? (store.StoreUserName ? store.StoreUserName : store.UserName) : ''
-                }} {{hello}}2</span>
+                }} {{hello}}</span>
             </div>
           </span>
           <span @click="jumpToAccount">
