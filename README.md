@@ -5,6 +5,9 @@
 ## 运行指引
 
 ``` bash
+# 获取自仓库代码
+git subtree add --prefix=src/pages/mine https://github.com/ni5328109/mine.git master --squash
+
 # 初始化小程序
 npm install
 
