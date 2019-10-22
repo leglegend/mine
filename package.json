@@ -21,7 +21,9 @@
     "dev": "node build/dev-server.js wx",
     "start": "npm run dev",
     "build": "node build/build.js wx",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --ext .js,.vue src",
+    "pushmine": "git subtree push --prefix=src/pages/mine https://github.com/ni5328109/mine.git master",
+    "addmine": "git subtree add --prefix=src/pages/mine https://github.com/ni5328109/mine.git master --squash"
   },
   "dependencies": {
     "mpvue": "^2.0.0",
