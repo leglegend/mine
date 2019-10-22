@@ -311,7 +311,7 @@
           Uid: that.userId,
           StoreId: that.storeId,
           CardState: this.type
-        }, this.isFirstLoad).then(res => {
+        }, true).then(res => {
           let number = 0
           let items = []
           for (let item of res.Datas) {
@@ -378,7 +378,7 @@
         this.$post('/store/businessGetStoreUserStatistical', {
           Uid: that.userId,
           StoreId: that.storeId
-        }, this.isFirstLoad).then(res => {
+        }).then(res => {
           that.info = res
         })
       },
@@ -387,7 +387,7 @@
         this.$post('/store/businessGetStoreManagementData', {
           Uid: this.userId,
           StoreId: this.storeId
-        }, this.firstLoad).then(res => {
+        }).then(res => {
           that.store = res
         })
       },

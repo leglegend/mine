@@ -1,5 +1,5 @@
 let globalData = {
-  version: '2.48'
+  version: '2.49'
 }
 export function setGlobalData(data) {
   globalData = data

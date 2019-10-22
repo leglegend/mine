@@ -19,9 +19,21 @@ export function getGlobalUrl () {
 export function post (url, body, showLoading, anyway, callback) {
   let timestamp = Date.parse(new Date())
   console.log(header)
+  let requestHeader = {
+    'content-type': 'application/json',
+    'Accept': 'application/json; charset=utf-8 '
+  }
   if (header.userid) {
     let signstring = sign(header, timestamp, JSON.stringify(body))
-    modifySign(signstring, timestamp)
+    requestHeader = {
+      'content-type': 'application/json',
+      'Accept': 'application/json; charset=utf-8 ',
+      'userid': header.userid,
+      'token': header.token,
+      'nonce': 'string',
+      'signature': signstring,
+      'timestamp': timestamp
+    }
   }
   if (showLoading) {
     wx.showLoading({
@@ -36,7 +48,7 @@ export function post (url, body, showLoading, anyway, callback) {
       url: serverPath + url,
       data: body,
       method: 'POST',
-      header: header,
+      header: requestHeader,
       success: function (res) {
         console.log(res)
         if (showLoading) {
