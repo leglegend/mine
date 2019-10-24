@@ -41,8 +41,8 @@
             充值记录：
           </div>
           <div class="msg-item" v-for="item in items" :key="index">
-            <span>2019-09-20  10:22:10 </span>
-            <span>1000条 / 59元</span>
+            <span>{{item.CreateDate}}</span>
+            <span>{{item.ItemQuantity}}条 / {{item.Price}}元</span>
           </div>
         </div>
         <div class="footer" v-show="isOver&&items.length>0">—— &nbsp;没有更多了哦&nbsp; ——</div>
