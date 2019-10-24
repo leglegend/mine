@@ -55,9 +55,10 @@
               </span>
             <span class="item-right">
                 <div class="item-title">
-                  <span>{{item.UserName}}<img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ismember.png"
-                                              style="width: 14rpx;height: 22.4rpx;position: relative;top:2rpx"
-                                              v-if="item.IsVip"/></span>
+                  <span>{{item.UserName}}<img
+                    src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ismember.png"
+                    style="width: 14rpx;height: 22.4rpx;position: relative;top:2rpx"
+                    v-if="item.IsVip"/></span>
                   <span v-if="!item.LogType"><text>{{item.NewUserGetCount}}</text>/{{item.NewUserUsedCount}}</span>
                   <span v-if="item.LogType">仅浏览</span>
                 </div>
@@ -134,6 +135,7 @@
       this.userId = option.userId
       this.storeId = option.storeId
       this.activityId = option.activityId
+      this.page = 1
       this.user = wx.getStorageSync('share')
       this.getItems(1)
       wx.removeStorageSync('share')

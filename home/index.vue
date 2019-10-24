@@ -1,12 +1,16 @@
 <template>
-  <scroll-view scroll-y="true" class="mine">
-    <div style="height: 90vh;position:relative;z-index: 1;">
-      <div class="mine-title" :style="{'padding-top':titleHeight+'px'}">
-        <div class="title-context">
+  <div class="mine-page">
+    <scroll-view scroll-y="true" class="mine">
+      <div style="width: 100vw">
+        <div class="mine-top"></div>
+        <div class="mine-bottom"></div>
+        <div style="min-height: 90vh;position:relative;z-index: 1;">
+          <div class="mine-title" :style="{'padding-top':titleHeight+'px'}">
+            <div class="title-context">
           <span @click="showLogo(store.StoreLogo?store.StoreLogo:user.avatarUrl)">
             <img :src="store.StoreLogo?store.StoreLogo:user.avatarUrl"/>
           </span>
-          <span>
+              <span>
             <div @click="jumpToNutcards">
               {{store.StoreName ? store.StoreName : (user.nickName ? user.nickName : user.UserName)}}
               <img class="vip-icon" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/vip.png"/>
@@ -17,102 +21,144 @@
                 }} {{hello}}</span>
             </div>
           </span>
-          <span @click="jumpToAccount">
+              <span @click="jumpToAccount">
             <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/setting.png"/>
           </span>
-        </div>
-      </div>
-      <div class="mine-ice">
-        <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ice.png"/>
-      </div>
-      <div class="mine-buttons" v-show="auth" :style="{filter:isOverdue?'grayscale(100%)':''}">
+            </div>
+          </div>
+          <div class="mine-ice">
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ice.png"/>
+          </div>
+          <div class="mine-buttons" v-show="auth" :style="{filter:isOverdue?'grayscale(100%)':''}">
         <span @click="isOverdue?showToast2=true:jumpToMessage()">
           <div>
             <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/message.png"/>
           </div>
           <div>群发消息</div>
         </span>
-        <span @click="isOverdue?showToast2=true:jumpToActivity()">
+            <span @click="isOverdue?showToast2=true:jumpToActivity()">
           <div>
             <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupons.png"/>
           </div>
           <div>裂变式营销</div>
         </span>
-        <span @click="isOverdue?showToast2=true:jumpToCoupon()">
+            <span @click="isOverdue?showToast2=true:jumpToCoupon()">
           <div>
             <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-center.png"/>
           </div>
           <div>优惠券中心</div>
         </span>
-      </div>
-      <div class="gathering-buttons" v-show="auth">
+          </div>
+          <div class="gathering-buttons" v-show="auth">
         <span class="gathering-left" @click="jumpToCollect"><img style="width: 5.8vw;height: 5.8vw"
                                                                  src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/shoukuanjilu.png"/> 收款记录</span>
-        <span class="gathering-right" @click="jumpToGathering"><img style="width: 5.2vw;height: 5.2vw"
-                                                                    src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/qian.png"/> 收款账户设置</span>
-      </div>
-      <div style="margin-top: 20rpx;" v-show="auth"></div>
-      <div class="mine-options">
-        <div class="mine-option" v-if="store.IsShowVoiceSeting">
-          <div class="card-option">
+            <span class="gathering-right" @click="jumpToGathering"><img style="width: 5.2vw;height: 5.2vw"
+                                                                        src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/qian.png"/> 收款账户设置</span>
+          </div>
+          <div style="height:20rpx;position:relative;top:-2rpx" v-show="auth">
+            <div style="padding-top: 22rpx;background: #f0f0f0;"></div>
+          </div>
+          <div class="mine-options">
+            <div class="mine-option" @click="jumpToSetting">
+              <div class="card-option">
+            <span class="card-icon">
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/setting-item.png"/>
+            </span>
+                <span class="option-title">
+              <span>店铺设置</span>
+              <span>
+                店铺基本信息
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+              </span>
+            </span>
+              </div>
+            </div>
+            <div class="mine-option" @click="jumpToTimeSetting">
+              <div class="card-option">
+            <span class="card-icon">
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/setting-time.png"/>
+            </span>
+                <span class="option-title">
+              <span>营业时间/节日放假</span>
+              <span>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+              </span>
+            </span>
+              </div>
+            </div>
+            <div class="mine-option" @click="jumpToMessageSetting">
+              <div class="card-option">
+            <span class="card-icon">
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/setting-message.png"/>
+            </span>
+                <span class="option-title">
+              <span>短信中心</span>
+              <span>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+              </span>
+            </span>
+              </div>
+            </div>
+            <div class="mine-option" v-if="store.IsShowVoiceSeting">
+              <div class="card-option">
             <span class="card-icon">
               <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/voice.png"/>
             </span>
-            <span class="option-title">
+                <span class="option-title">
               <span>接收消卡/付款声音</span>
               <span>
                  <switch @change="switchChange" :checked="checked" color="#78bc6d"/>
               </span>
             </span>
-          </div>
-        </div>
-        <div class="mine-option" @click="jumpToCode">
-          <div class="card-option">
+              </div>
+            </div>
+            <div class="mine-option" @click="jumpToCode">
+              <div class="card-option">
             <span class="card-icon">
               <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/qrcode.png"/>
             </span>
-            <span class="option-title">
+                <span class="option-title">
               <span>打印店铺码</span>
               <span>
                 用户扫码必用
                 <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </span>
-          </div>
-        </div>
-        <div class="mine-option" @click="jumpToAdd" v-show="auth">
-          <div class="card-option">
+              </div>
+            </div>
+            <div class="mine-option" @click="jumpToAdd" v-show="auth">
+              <div class="card-option">
             <span class="card-icon">
               <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/clerk.png"/>
             </span>
-            <span class="option-title">
+                <span class="option-title">
               <span>添加店员</span>
               <span>
                 {{store.AdminCount == 0 || store.AdminCount == undefined ? '你不在店时，店员帮你打理' : (store.AdminCount + '名')}}
                 <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </span>
-          </div>
-        </div>
-        <div class="mine-option" @click="jumpToContact">
-          <div class="card-option">
+              </div>
+            </div>
+            <div class="mine-option" @click="jumpToContact">
+              <div class="card-option">
             <span class="card-icon">
               <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/service.png"/>
             </span>
-            <span class="option-title">
+                <span class="option-title">
               <span>咨询客服</span>
               <span>
                 <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </span>
-          </div>
-        </div>
-        <div class="mine-option" @click="jumpToNutcards">
-          <div class="card-option">
+              </div>
+            </div>
+            <div class="mine-option" @click="jumpToNutcards">
+              <div class="card-option">
             <span class="card-icon">
               <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/detail.png"/>
             </span>
-            <span class="option-title  no-line">
+                <span class="option-title  no-line">
               <span>商家服务中心</span>
               <span>
                 <text class="option-overdue" v-if="isOverdue">已到期</text>
@@ -121,23 +167,24 @@
                 <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
               </span>
             </span>
+              </div>
+            </div>
           </div>
         </div>
+        <div class="demo-footer" style="padding-top: 0vh;z-index: -1;">
+          <img class="demo-nutcards"
+               src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
+        </div>
       </div>
-    </div>
-    <div class="demo-footer" style="padding-top: 0vh;z-index: -1;">
-      <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
-    </div>
+    </scroll-view>
     <div v-if="showToast==true" class="toast-model">
       <toast :type="type" @hideToast="showToast=false" :checked="type=='success'?checked:!checked"></toast>
     </div>
     <div v-if="showToast2">
       <renewtoast @close="showToast2 = false"></renewtoast>
     </div>
-    <div class="ming-need-auth" v-if="showAuth" @click="showAuth=false">
-
-    </div>
-    <div class="mine-auth" v-if="!showAuth&&!isAuth">
+    <div class="ming-need-auth" v-if="showAuthModel!=0&&showAuth" @click="showAuth=false"></div>
+    <div class="mine-auth" v-if="showAuthModel!=0&&!showAuth&&!isAuth">
       <div class="auth-model">
         <div class="model-title">该操作需要您的授权</div>
         <div class="model-close" @click="showAuth=true">
@@ -148,7 +195,7 @@
         </div>
       </div>
     </div>
-    <div class="mine-auth" v-if="!showAuth&&!isBindMobile&&isAuth">
+    <div class="mine-auth" v-if="showAuthModel!=0&&!showAuth&&!isBindMobile&&isAuth">
       <div class="auth-model">
         <div class="model-title">需要您的手机号</div>
         <div class="model-close" @click="showAuth=true">
@@ -159,17 +206,21 @@
         </div>
       </div>
     </div>
-  </scroll-view>
+    <div v-if="showAuthModel==0&&firstLoad==false">
+      <authModel @confirm="onAuth"></authModel>
+    </div>
+  </div>
 </template>
 
 <script>
   import card from '@/components/card'
   import toast from '@/components/toast'
   import renewtoast from '@/components/renewtoast'
+  import authModel from '@/components/auth'
 
   export default {
     components: {
-      card, toast, renewtoast
+      card, toast, renewtoast, authModel
     },
 
     data () {
@@ -197,9 +248,24 @@
       },
       softVersion () {
         return this.$store.getters.GET_SOFTVERSION
+      },
+      showAuthModel () {
+        return this.$store.state.userId
       }
     },
     methods: {
+      jumpToSetting () {
+        const url = '../setting/store/main?userId=' + this.userId + '&storeId=' + this.storeId
+        wx.navigateTo({url})
+      },
+      jumpToTimeSetting () {
+        const url = '../setting/time/main?userId=' + this.userId + '&storeId=' + this.storeId
+        wx.navigateTo({url})
+      },
+      jumpToMessageSetting () {
+        const url = '../setting/message/main?userId=' + this.userId + '&storeId=' + this.storeId
+        wx.navigateTo({url})
+      },
       jumpToActivity () {
         const url = '../activity/home/main?userId=' + this.userId + '&storeId=' + this.storeId
         wx.navigateTo({url})
@@ -386,14 +452,31 @@
           globalData.mobile = mobile
           that.isBindMobile = true
         })
+      },
+      onAuth () {
+        this.storeId = this.globalData.storeId
+        this.userId = this.globalData.userId
+        this.userType = this.$store.state.userInfo.UserType
+        this.firstLoad = true
+        this.showToast2 = false
+        this.isAuth = !this.$store.state.userInfo.IsAuthorization
+        this.isBindMobile = !this.$store.state.userInfo.IsBindMobile
+        this.user = this.$store.state.userInfo
+        this.getStoreInfo()
+        let that = this
+        wx.getUserInfo({
+          success: function (res) {
+            that.user = JSON.parse(res.rawData)
+          }
+        })
       }
     },
     onLoad () {
       let globalData = this.getGlobalData()
       let that = this
-      this.userId = globalData.user.Userid
-      this.storeId = globalData.user.StoreId
-      this.userType = globalData.user.type
+      this.userId = this.$store.state.userId
+      this.storeId = this.$store.state.storeId
+      this.userType = this.$store.state.userInfo.UserType
       this.firstLoad = true
       this.showToast2 = false
       this.isAuth = !this.$store.state.userInfo.IsAuthorization
@@ -449,308 +532,329 @@
     @return $value * 1rpx;
   }
 
-  .mine {
+  .mine-page {
     width: 100vw;
     height: 100vh;
-    background-color: #f0f0f0;
-    .mine-title {
-      width: 100vw;
-      height: rpx(140);
-      background: linear-gradient(to right, #ff8100, #ff6700);
-      .title-context {
-        width: 90vw;
+    .mine {
+      width: 110vw;
+      height: 100vh;
+      .mine-top {
+        background: linear-gradient(to right, #ff8100, #ff6700);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 50vh;
+        z-index: 0;
+      }
+      .mine-bottom {
+        background: #f0f0f0;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 50vh;
+        z-index: 0;
+      }
+      .mine-title {
+        width: 100vw;
         height: rpx(140);
-        line-height: rpx(140);
-        margin: 0 auto;
-        span {
-          display: inline-block;
-          vertical-align: middle;
+        background: linear-gradient(to right, #ff8100, #ff6700);
+        .title-context {
+          width: 90vw;
           height: rpx(140);
-          &:nth-child(1) {
-            width: 21vw;
-            img {
-              display: inline-block;
-              width: rpx(130);
-              height: rpx(130);
-              border-radius: 50%;
-            }
-          }
-          &:nth-child(2) {
-            width: 60vw;
-            line-height: rpx(60);
-            color: white;
-            div {
-              &:nth-child(1) {
-                font-size: rpx(45);
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
+          line-height: rpx(140);
+          margin: 0 auto;
+          span {
+            display: inline-block;
+            vertical-align: middle;
+            height: rpx(140);
+            &:nth-child(1) {
+              width: 21vw;
+              img {
+                display: inline-block;
+                width: rpx(130);
+                height: rpx(130);
+                border-radius: 50%;
               }
-              &:nth-child(2) {
-                line-height: rpx(60);
-                font-size: rpx(20);
-                width: auto;
-                .hello {
-                  height: rpx(30);
-                  line-height: rpx(30);
-                  padding: rpx(5) rpx(25);
+            }
+            &:nth-child(2) {
+              width: 60vw;
+              line-height: rpx(60);
+              color: white;
+              div {
+                &:nth-child(1) {
+                  font-size: rpx(45);
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                }
+                &:nth-child(2) {
+                  line-height: rpx(60);
+                  font-size: rpx(20);
                   width: auto;
-                  background-color: #e05f00;
-                  border-radius: rpx(25);
+                  .hello {
+                    height: rpx(30);
+                    line-height: rpx(30);
+                    padding: rpx(5) rpx(25);
+                    width: auto;
+                    background-color: #e05f00;
+                    border-radius: rpx(25);
+                  }
                 }
               }
             }
-          }
-          &:nth-child(3) {
-            width: 9vw;
-            text-align: right;
-            line-height: rpx(60);
-            img {
-              display: inline-block;
-              vertical-align: middle;
-              width: rpx(42);
-              height: rpx(42);
-            }
-          }
-        }
-        .vip-icon {
-          width: 5.7vw;
-          height: 4.4vw;
-          vertical-align: top;
-          display: inline-block;
-          position: relative;
-          left: -0.5vw;
-        }
-      }
-    }
-    .mine-ice {
-      width: 100vw;
-      height: rpx(90);
-      padding-top: rpx(10);
-      overflow: hidden;
-      position: relative;
-      top: rpx(-1);
-      background: linear-gradient(to right, #ff8100, #ff6700);
-      img {
-        width: 100vw;
-        display: inline-block;
-        height: rpx(287);
-      }
-    }
-    .mine-buttons {
-      width: 92vw;
-      height: 21vw;
-      padding-left: 4vw;
-      padding-right: 4vw;
-      background-color: white;
-      position: relative;
-      z-index: 1000;
-      top: rpx(-2);
-      span {
-        display: inline-block;
-        width: 25%;
-        text-align: center;
-        position: relative;
-        top: -1vw;
-        div {
-          &:nth-child(1) {
-            img {
-              display: inline-block;
-              width: rpx(84);
-              height: rpx(84);
-            }
-          }
-          &:nth-child(2) {
-            font-size: rpx(25);
-          }
-        }
-      }
-    }
-    .gathering-buttons {
-      height: 13vw;
-      padding-top: 2.4vw;
-      border-top: 0.1vw solid #dddddd;
-      background: white;
-      box-sizing: border-box;
-      position: relative;
-      top: rpx(-2);
-      z-index: 1001;
-      span {
-        display: inline-block;
-        text-align: center;
-        width: 50%;
-        height: 8.3vw;
-        line-height: 8.3vw;
-        color: #4D4D4D;
-        font-size: 3.7vw;
-        vertical-align: top;
-        letter-spacing: 0.5vw;
-      }
-
-      .gathering-left {
-        box-sizing: border-box;
-        border-right: 0.1vw solid #dddddd;
-        img {
-          display: inline-block;
-          vertical-align: middle;
-          position: relative;
-          top: -0.5vw;
-          left: -0.5vw;
-        }
-      }
-      .gathering-right {
-        img {
-          display: inline-block;
-          vertical-align: middle;
-          position: relative;
-          left: -0.5vw;
-          top: -0.2vw;
-        }
-      }
-    }
-    .mine-options {
-      width: 100vw;
-      background-color: white;
-      position: relative;
-      .mine-option {
-        width: 90vw;
-        padding: 0 5vw;
-        height: rpx(101);
-        .card-option {
-          height: rpx(100);
-          line-height: rpx(100);
-          width: 90vw;
-          font-size: rpx(27);
-          span {
-            display: inline-block;
-            vertical-align: top;
-            height: rpx(100);
-            line-height: rpx(100);
-          }
-          .card-icon {
-            width: 8vw;
-            height: rpx(100);
-            line-height: rpx(100);
-            img {
-              display: inline-block;
-              height: rpx(50);
-              width: rpx(50);
-              vertical-align: middle;
-            }
-          }
-          .option-title {
-            width: 82vw;
-            border-bottom: rpx(1) solid #dddddd;
-            span {
+            &:nth-child(3) {
+              width: 9vw;
+              text-align: right;
+              line-height: rpx(60);
               img {
                 display: inline-block;
-                height: rpx(21);
-                width: rpx(13);
                 vertical-align: middle;
-                position: relative;
-                top: rpx(-1);
+                width: rpx(42);
+                height: rpx(42);
               }
-              &:nth-child(1) {
-                width: 30vw;
-              }
-              &:nth-child(2) {
-                width: 50vw;
-                padding-right: 2vw;
-                text-align: right;
-                color: #bfbfbf;
-              }
-            }
-            .option-overdue {
-              width: 10.8vw;
-              display: inline-block;
-              text-align: center;
-              height: 3.7vw;
-              line-height: 3.7vw;
-              background: #EC0000;
-              color: white;
-              border-radius: 19px;
-              font-size: 2.5vw;
-              margin-right: 1vw;
-              position: relative;
-              top: -0.3vw;
-            }
-            .option-test {
-              background: #78BC6D;
             }
           }
-          .no-line {
-            border-bottom: 0;
+          .vip-icon {
+            width: 5.7vw;
+            height: 4.4vw;
+            vertical-align: top;
+            display: inline-block;
+            position: relative;
+            left: -0.5vw;
           }
         }
       }
-      .service {
+      .mine-ice {
         width: 100vw;
-        padding: 0;
-        position: absolute;
-        bottom: rpx(102);
-        opacity: 0;
-      }
-    }
-    .toast-model {
-      position: fixed;
-      bottom: 0;
-      z-index: 1000;
-    }
-    .ming-need-auth {
-      z-index: 9999;
-      width: 100vw;
-      position: fixed;
-      left: 0;
-      top: 0;
-      height: 100vh;
-    }
-    .mine-auth {
-      z-index: 9999;
-      width: 100vw;
-      position: fixed;
-      left: 0;
-      top: 0;
-      height: 70vh;
-      background: rgba(0, 0, 0, 0.35);
-      padding-top: 30vh;
-      .auth-model {
-        padding-top: 3vw;
-        width: 80vw;
-        margin: 0 auto;
-        border-radius: 3vw;
-        background: white;
-        text-align: center;
+        height: rpx(90);
+        padding-top: rpx(10);
+        overflow: hidden;
         position: relative;
-        .model-title {
-          line-height: 20vw;
-          font-size: 6vw;
-          color: black;
+        top: rpx(-1);
+        background: linear-gradient(to right, #ff8100, #ff6700);
+        img {
+          width: 100vw;
+          display: inline-block;
+          height: rpx(287);
         }
-        .model-close {
-          width: 5vw;
-          height: 5vw;
-          position: absolute;
-          right: 3vw;
-          top: 3vw;
+      }
+      .mine-buttons {
+        width: 92vw;
+        height: 21vw;
+        padding-left: 4vw;
+        padding-right: 4vw;
+        background-color: white;
+        position: relative;
+        z-index: 1000;
+        top: rpx(-2);
+        span {
+          display: inline-block;
+          width: 25%;
+          text-align: center;
+          position: relative;
+          top: -1vw;
+          div {
+            &:nth-child(1) {
+              img {
+                display: inline-block;
+                width: rpx(84);
+                height: rpx(84);
+              }
+            }
+            &:nth-child(2) {
+              font-size: rpx(25);
+            }
+          }
+        }
+      }
+      .gathering-buttons {
+        height: 13vw;
+        padding-top: 2.4vw;
+        border-top: 0.1vw solid #dddddd;
+        background: white;
+        box-sizing: border-box;
+        position: relative;
+        top: rpx(-2);
+        z-index: 1001;
+        span {
+          display: inline-block;
+          text-align: center;
+          width: 50%;
+          height: 8.3vw;
+          line-height: 8.3vw;
+          color: #4D4D4D;
+          font-size: 3.7vw;
+          vertical-align: top;
+          letter-spacing: 0.5vw;
+        }
+
+        .gathering-left {
+          box-sizing: border-box;
+          border-right: 0.1vw solid #dddddd;
           img {
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+            top: -0.5vw;
+            left: -0.5vw;
+          }
+        }
+        .gathering-right {
+          img {
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+            left: -0.5vw;
+            top: -0.2vw;
+          }
+        }
+      }
+      .mine-options {
+        width: 100vw;
+        background-color: white;
+        position: relative;
+        .mine-option {
+          width: 90vw;
+          padding: 0 5vw;
+          height: rpx(101);
+          .card-option {
+            height: rpx(100);
+            line-height: rpx(100);
+            width: 90vw;
+            font-size: rpx(27);
+            span {
+              display: inline-block;
+              vertical-align: top;
+              height: rpx(100);
+              line-height: rpx(100);
+            }
+            .card-icon {
+              width: 8vw;
+              height: rpx(100);
+              line-height: rpx(100);
+              img {
+                display: inline-block;
+                height: rpx(50);
+                width: rpx(50);
+                vertical-align: middle;
+              }
+            }
+            .option-title {
+              width: 82vw;
+              border-bottom: rpx(1) solid #dddddd;
+              span {
+                img {
+                  display: inline-block;
+                  height: rpx(21);
+                  width: rpx(13);
+                  vertical-align: middle;
+                  position: relative;
+                  top: rpx(-1);
+                }
+                &:nth-child(1) {
+                  width: 30vw;
+                }
+                &:nth-child(2) {
+                  width: 50vw;
+                  padding-right: 2vw;
+                  text-align: right;
+                  color: #bfbfbf;
+                }
+              }
+              .option-overdue {
+                width: 10.8vw;
+                display: inline-block;
+                text-align: center;
+                height: 3.7vw;
+                line-height: 3.7vw;
+                background: #EC0000;
+                color: white;
+                border-radius: 19px;
+                font-size: 2.5vw;
+                margin-right: 1vw;
+                position: relative;
+                top: -0.3vw;
+              }
+              .option-test {
+                background: #78BC6D;
+              }
+            }
+            .no-line {
+              border-bottom: 0;
+            }
+          }
+        }
+        .service {
+          width: 100vw;
+          padding: 0;
+          position: absolute;
+          bottom: rpx(102);
+          opacity: 0;
+        }
+      }
+      .toast-model {
+        position: fixed;
+        bottom: 0;
+        z-index: 1000;
+      }
+      .ming-need-auth {
+        z-index: 9999;
+        width: 100vw;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+      }
+      .mine-auth {
+        z-index: 9999;
+        width: 100vw;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 70vh;
+        background: rgba(0, 0, 0, 0.35);
+        padding-top: 30vh;
+        .auth-model {
+          padding-top: 3vw;
+          width: 80vw;
+          margin: 0 auto;
+          border-radius: 3vw;
+          background: white;
+          text-align: center;
+          position: relative;
+          .model-title {
+            line-height: 20vw;
+            font-size: 6vw;
+            color: black;
+          }
+          .model-close {
             width: 5vw;
             height: 5vw;
-            display: inline-block;
-            vertical-align: top;
+            position: absolute;
+            right: 3vw;
+            top: 3vw;
+            img {
+              width: 5vw;
+              height: 5vw;
+              display: inline-block;
+              vertical-align: top;
+            }
           }
-        }
-        .model-button {
-          padding-bottom: 10vw;
-          padding-top: 3vw;
-          button {
-            display: inline-block;
-            height: 10vw;
-            line-height: 10vw;
-            width: 55vw;
-            color: white;
-            background: #00b500;
-            border-radius: 5vw;
-            font-size: 5vw;
+          .model-button {
+            padding-bottom: 10vw;
+            padding-top: 3vw;
+            button {
+              display: inline-block;
+              height: 10vw;
+              line-height: 10vw;
+              width: 55vw;
+              color: white;
+              background: #00b500;
+              border-radius: 5vw;
+              font-size: 5vw;
+            }
           }
         }
       }
