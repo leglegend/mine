@@ -378,6 +378,7 @@
           }
           picker {
             display: inline-block;
+            width: 70vw;
           }
           .industry {
             width: 80vw;
