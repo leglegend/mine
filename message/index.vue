@@ -38,7 +38,8 @@
             </div>
           </div>
           <div class="demo-footer" style="padding-top: 0">
-            <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
+            <img class="demo-nutcards"
+                 src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
           </div>
         </div>
       </div>
@@ -80,7 +81,8 @@
             </div>
           </div>
           <div class="demo-footer" v-show="isOver||items.length==0" style="padding-top: 0">
-            <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
+            <img class="demo-nutcards"
+                 src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
           </div>
         </scroll-view>
       </div>
@@ -204,7 +206,7 @@
           '-' + this.validityRange[2][this.validity[2]].value +
           ' ' + this.validityRange[3][this.validity[3]].value +
           ':' + this.validityRange[4][this.validity[4]].value
-        this.$post('/message/businessAddMessage', message).then(res => {
+        this.$post('/message/businessAddMessage', message, true).then(res => {
           that.$success('保存成功', false)
           that.current = 1
           that.getItems(1)
