@@ -143,6 +143,7 @@
           width: 18vw;
           font-size: rpx(25);
           text-align: center;
+          vertical-align: middle;
         }
       }
     }
