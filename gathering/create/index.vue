@@ -143,7 +143,8 @@
                     未签约
                   </span>
                   <span v-if="weixin.WechatMerStateOne==1">
-                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/already.png" style="width:32rpx;height: 25rpx;display: inline-block"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/already.png"
+                         style="width:32rpx;height: 25rpx;display: inline-block"/>
                   </span>
                 </div>
                 <div class="weixin-item" v-if="type!=0">
@@ -157,7 +158,8 @@
                     待打款
                   </span>
                   <span v-if="weixin.WechatMerStateTwo==1">
-                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/already.png" style="width:32rpx;height: 25rpx;display: inline-block"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/already.png"
+                         style="width:32rpx;height: 25rpx;display: inline-block"/>
                   </span>
                 </div>
                 <div class="weixin-item">
@@ -171,7 +173,8 @@
                     待授权
                   </span>
                   <span v-if="weixin.AliPayMerState==1">
-                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/already.png" style="width:32rpx;height: 25rpx;display: inline-block"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/already.png"
+                         style="width:32rpx;height: 25rpx;display: inline-block"/>
                   </span>
                 </div>
               </div>
@@ -181,7 +184,8 @@
                     微信收款{{type == 0 ? '' : '1'}}（签完后10分钟内得知结果）
                   </span>
                   <span>
-                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/already.png" style="width:32rpx;height: 25rpx;display: inline-block"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/already.png"
+                         style="width:32rpx;height: 25rpx;display: inline-block"/>
                   </span>
                 </div>
                 <div class="weixin-item">
@@ -189,7 +193,8 @@
                     支付宝收款 （签完后24小时得知结果）
                   </span>
                   <span>
-                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/already.png" style="width:32rpx;height: 25rpx;display: inline-block"/>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/already.png"
+                         style="width:32rpx;height: 25rpx;display: inline-block"/>
                   </span>
                 </div>
               </div>
@@ -691,8 +696,13 @@
           StoreId: that.storeId
         }, true).then(res => {
           if (res) {
+            if (res.StoreType === 1 && res.State === -4) {
+              that.type = 1
+              res.StoreType = 0
+            } else {
+              that.type = res.StoreType
+            }
             that.info = res
-            that.type = res.StoreType
             that.state = res.State
             if (res.MerBankCode) {
               that.showBank = true

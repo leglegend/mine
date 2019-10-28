@@ -13,7 +13,7 @@
             </div>
             <div class="title2">
               <span>如有特殊要求请联系客服微信：</span>
-              <span>linkfit123</span>
+              <span>jgkb6520</span>
             </div>
           </div>
           <div class="table-context">

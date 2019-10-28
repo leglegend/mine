@@ -88,20 +88,20 @@
             </div>
             <div class="mine-option" @click="jumpToMessageSetting">
               <div class="card-option">
-            <span class="card-icon">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/setting-message.png"/>
-            </span>
+                <span class="card-icon">
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/setting-message.png"/>
+                </span>
                 <span class="option-title">
-              <span>短信中心</span>
-              <span>
-                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
-              </span>
-            </span>
+                  <span>短信中心</span>
+                  <span>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                  </span>
+                </span>
               </div>
             </div>
             <div class="mine-option" v-if="store.IsShowVoiceSeting">
               <div class="card-option">
-            <span class="card-icon">
+                <span class="card-icon">
               <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/voice.png"/>
             </span>
                 <span class="option-title">
