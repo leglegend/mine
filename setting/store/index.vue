@@ -38,9 +38,9 @@
                       @changeValue="changeValue"></inputBox>
             <div class="store-logo">
               <span>店铺行业</span>
-              <picker @change="industryChange" :value="industryIndex" :range="industries">
+              <picker @change="industryChange" :value="industryIndex" :range="industries" range-key="StoreTypeName">
                 <span class="industry">
-                  {{industries[industryIndex]}}
+                  {{industries[industryIndex].StoreTypeName}}
                 </span>
               </picker>
             </div>
@@ -224,7 +224,11 @@
             res.WorkingTimeEnd = ''
           }
           if (res.StoreTypeId) {
-            that.industryIndex = res.StoreTypeId
+            for (let i = 0; i < that.industries.length; i++) {
+              if (that.industries[i].StoreTypeId === res.StoreTypeId) {
+                that.industryIndex = i
+              }
+            }
           }
           that.store = res
           that.logoUrl = res.StoreLogo
@@ -236,7 +240,7 @@
         store.Uid = this.info.userId
         store.StoreId = this.info.storeId
         store.StoreLogo = this.logoUrl
-        store.StoreTypeId = this.industryIndex
+        store.StoreTypeId = this.industries[this.industryIndex].StoreTypeId
         let that = this
         this.$post('/store/businessSetStoreInfo', store, true).then(res => {
           that.$success('保存成功', true)
@@ -270,6 +274,17 @@
           fail: (res) => {
             this.chooseImg = false
           }
+        })
+      },
+      getStoreType () {
+        let that = this
+        this.$post('/store/getStoreType', {
+          Uid: this.info.userId,
+          StoreId: this.info.storeId,
+          RootId: 0
+        }, true).then(res => {
+          that.industries = res.StoreTypes
+          that.getStoreInfo()
         })
       },
       getCropperImage () {
@@ -312,7 +327,7 @@
       this.info = option
       this.firstLoad = true
       this.industryIndex = 0
-      this.getStoreInfo()
+      this.getStoreType()
       this.titleHeight = this.getGlobalData().titleHeight
       this.chooseImg = false
       this.url = this.getGlobalUrl().url
