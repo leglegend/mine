@@ -176,39 +176,39 @@
                src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
         </div>
       </div>
+      <div v-if="showToast==true" class="toast-model">
+        <toast :type="type" @hideToast="showToast=false" :checked="type=='success'?checked:!checked"></toast>
+      </div>
+      <div v-if="showToast2">
+        <renewtoast @close="showToast2 = false"></renewtoast>
+      </div>
+      <div class="ming-need-auth" v-if="showAuthModel!=0&&showAuth" @click="showAuth=false"></div>
+      <div class="mine-auth" v-if="showAuthModel!=0&&!showAuth&&!isAuth">
+        <div class="auth-model">
+          <div class="model-title">该操作需要您的授权</div>
+          <div class="model-close" @click="showAuth=true">
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close2.png"/>
+          </div>
+          <div class="model-button">
+            <button @getuserinfo="getUserInfo" open-type="getUserInfo">微信授权</button>
+          </div>
+        </div>
+      </div>
+      <div class="mine-auth" v-if="showAuthModel!=0&&!showAuth&&!isBindMobile&&isAuth">
+        <div class="auth-model">
+          <div class="model-title">需要您的手机号</div>
+          <div class="model-close" @click="showAuth=true">
+            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close2.png"/>
+          </div>
+          <div class="model-button">
+            <button @getphonenumber="getPhoneNumber" open-type="getPhoneNumber">获取手机号</button>
+          </div>
+        </div>
+      </div>
+      <div v-if="showAuthModel==0&&firstLoad==false">
+        <authModel @confirm="onAuth"></authModel>
+      </div>
     </scroll-view>
-    <div v-if="showToast==true" class="toast-model">
-      <toast :type="type" @hideToast="showToast=false" :checked="type=='success'?checked:!checked"></toast>
-    </div>
-    <div v-if="showToast2">
-      <renewtoast @close="showToast2 = false"></renewtoast>
-    </div>
-    <div class="ming-need-auth" v-if="showAuthModel!=0&&showAuth" @click="showAuth=false"></div>
-    <div class="mine-auth" v-if="showAuthModel!=0&&!showAuth&&!isAuth">
-      <div class="auth-model">
-        <div class="model-title">该操作需要您的授权</div>
-        <div class="model-close" @click="showAuth=true">
-          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close2.png"/>
-        </div>
-        <div class="model-button">
-          <button @getuserinfo="getUserInfo" open-type="getUserInfo">微信授权</button>
-        </div>
-      </div>
-    </div>
-    <div class="mine-auth" v-if="showAuthModel!=0&&!showAuth&&!isBindMobile&&isAuth">
-      <div class="auth-model">
-        <div class="model-title">需要您的手机号</div>
-        <div class="model-close" @click="showAuth=true">
-          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close2.png"/>
-        </div>
-        <div class="model-button">
-          <button @getphonenumber="getPhoneNumber" open-type="getPhoneNumber">获取手机号</button>
-        </div>
-      </div>
-    </div>
-    <div v-if="showAuthModel==0&&firstLoad==false">
-      <authModel @confirm="onAuth"></authModel>
-    </div>
   </div>
 </template>
 
@@ -538,6 +538,8 @@
     .mine {
       width: 110vw;
       height: 100vh;
+      position: relative;
+      z-index: 1;
       .mine-top {
         background: linear-gradient(to right, #ff8100, #ff6700);
         position: fixed;

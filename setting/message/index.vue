@@ -37,19 +37,19 @@
         </div>
         <div style="padding-top: 3.1vw;background: #F0F0F0"></div>
         <div class="message-items">
-          <div class="items-title">
+          <div class="items-title" v-show="items.length>0">
             充值记录：
           </div>
           <div class="msg-item" v-for="item in items" :key="index">
             <span>{{item.CreateDate}}</span>
             <span>{{item.ItemQuantity}}条 / {{item.Price}}元</span>
           </div>
+          <div class="demo-noitems" style="width: 89vw" v-show="items.length==0&&!isLoading">
+            ———— 当前还没有记录 ————
+          </div>
         </div>
         <div class="footer" v-show="isOver&&items.length>0">—— &nbsp;没有更多了哦&nbsp; ——</div>
         <div class="footer" v-show="isLoading">加载中...</div>
-        <div class="demo-noitems" v-show="items.length==0&&!isLoading">
-          还没有数据哦 =_="
-        </div>
       </div>
       <div class="demo-footer" v-show="isOver||items.length==0" style="padding-top: 0vh">
         <img class="demo-nutcards" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/nutcards.png"/>
@@ -73,6 +73,7 @@
         balance: 0,
         isOver: false,
         isLoading: true,
+        isFirstLoad: true,
         titleHeight: null
       }
     },
@@ -121,6 +122,7 @@
           StoreId: this.storeId
         }, true).then(res => {
           that.balance = res.StoreSmsBalance
+          that.isFirstLoad = false
         })
       }
     },
@@ -130,12 +132,13 @@
       this.balance = 0
       this.page = 1
       this.items = []
+      this.isFirstLoad = true
       this.getBalance()
       this.getItems(1)
       this.titleHeight = this.getGlobalData().titleHeight
     },
     onShow () {
-      if (this.userId) {
+      if (!this.isFirstLoad) {
         this.getBalance()
         this.getItems(1)
       }
