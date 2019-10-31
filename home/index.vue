@@ -184,7 +184,7 @@
       </div>
       <div class="ming-need-auth" v-if="showAuthModel!=0&&showAuth" @click="showAuth=false"></div>
       <div class="mine-auth" v-if="showAuthModel!=0&&!showAuth&&!isAuth">
-        <div class="auth-model">
+        <div class="mine-auth-model">
           <div class="model-title">该操作需要您的授权</div>
           <div class="model-close" @click="showAuth=true">
             <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close2.png"/>
@@ -195,7 +195,7 @@
         </div>
       </div>
       <div class="mine-auth" v-if="showAuthModel!=0&&!showAuth&&!isBindMobile&&isAuth">
-        <div class="auth-model">
+        <div class="mine-auth-model">
           <div class="model-title">需要您的手机号</div>
           <div class="model-close" @click="showAuth=true">
             <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close2.png"/>
@@ -480,11 +480,9 @@
       this.firstLoad = true
       this.showToast2 = false
       this.isAuth = !this.$store.state.userInfo.IsAuthorization
-      // this.isAuth = false
       this.isBindMobile = !this.$store.state.userInfo.IsBindMobile
       this.user = this.$store.state.userInfo
-      // this.showAuth = !(this.isAuth && this.isBindMobile)
-      this.showAuth = false
+      this.showAuth = !(this.isAuth && this.isBindMobile)
       this.getStoreInfo()
       let date = new Date()
       if (date.getHours() > 6 && date.getHours() < 12) {
@@ -818,7 +816,7 @@
         height: 70vh;
         background: rgba(0, 0, 0, 0.35);
         padding-top: 30vh;
-        .auth-model {
+        .mine-auth-model {
           padding-top: 3vw;
           width: 80vw;
           margin: 0 auto;
