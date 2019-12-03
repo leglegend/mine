@@ -1,7 +1,7 @@
 <template>
   <div class="msg-record-page">
     <title :name="'发送记录'"></title>
-    <scroll-view class="msg-record-scroll" scroll-y="true"
+    <scroll-view class="msg-record-scroll" scroll-y="true" @scrolltolower="scrolltolower"
                  :style="{height:'calc(100vh - '+titleHeight +'px)'}">
       <div class="msg-record-main" :style="{'min-height':'calc(90vh - '+titleHeight +'px)'}">
         <div class="msg-record-context">

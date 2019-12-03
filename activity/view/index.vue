@@ -31,52 +31,6 @@
             <text :style="{color:activity.State!=1?'#dddddd':''}">{{activity.Title}}</text>
           </div>
           <div class="first-coupon" v-if="activity.IsOneReward">
-            <!--<div class="coupon">
-              <span class="coupon-left">
-                <div class="left-cash" v-if="coupon0.CouponType == 0">
-                  <span>￥</span>
-                  <span>{{coupon0.CouponValue}}</span>
-                </div>
-                <div class="left-discount" v-if="coupon0.CouponType == 1">
-                  <span>{{coupon0.value1}}.</span>
-                  <span>{{coupon0.value2}}</span>
-                  <span>折</span>
-                </div>
-                <div class="left-discount" v-if="coupon0.CouponType == 2">
-                  <span>{{coupon0.CouponValue}}</span>
-                  <span></span>
-                  <span>元</span>
-                </div>
-                <div class="left-gift" v-if="coupon0.CouponType == 3">
-                  <div
-                    :style="{'background-image':'url('+coupon0.CouponIcon+')','background-size':'100%,auto'}"></div>
-                </div>
-                <div class="left-type" v-if="coupon0.CouponType!=3">
-                  <span v-if="coupon0.CouponType!=2">
-                    {{coupon0.IsMore ? '通用券' : '互斥券'}}{{coupon0.IsBuyCard ? '仅购卡' : ''}}
-                  </span>
-                  <span v-if="coupon0.CouponType==2"
-                        style="text-decoration:line-through; ">原价{{coupon0.OriginalPrice}}元</span>
-                </div>
-                <div class="left-circle-top"></div>
-                <div class="left-circle-bottom"></div>
-              </span>
-              <span class="coupon-right">
-                <div class="right-name">
-                  {{coupon0.CouponTitle}}
-                  <span v-if="coupon0.IsUseVip">
-                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/buycard.png"/>
-                  </span>
-                </div>
-                <div class="right-date">
-                  有效期：{{coupon0.BeginDate}}至{{coupon0.EndDate}}
-                </div>
-                <div class="right-remark" @click="couponRemark=coupon0.CouponDescription">
-                  <span>说 明：{{coupon0.CouponDescription}}</span>
-                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-remark.png"/>
-                </div>
-              </span>
-            </div>-->
             <coupon :coupon="coupon0" @remark="couponRemark=coupon0.CouponDescription"></coupon>
           </div>
           <div class="first-button" v-if="activity.IsOneReward">
@@ -455,7 +409,7 @@
             src: res.Message,
             success: function (resp) {
               that.shareCode = resp.path
-              let coupon = that.coupon0 ? that.coupon0 : that.coupon1
+              let coupon = that.activity.IsOneReward ? that.coupon0 : that.coupon1
               if (coupon.CouponType === 3) {
                 wx.getImageInfo({
                   src: coupon.CouponIcon,

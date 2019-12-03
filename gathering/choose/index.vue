@@ -107,6 +107,10 @@
           StoreId: that.storeId
         }).then(res => {
           if (res) {
+            if (res.PayPreferentialEndDate) {
+              let dates = res.PayPreferentialEndDate.split('-')
+              res.PayPreferentialEndDate = dates[1] * 1 + '月' + dates[2] * 1 + '日'
+            }
             that.state = res
           } else {
             that.state = {

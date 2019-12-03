@@ -385,7 +385,9 @@
             that.$post('/weixin/userAuthorization', loginInfo, true).then(function (res) {
               user.Token = res.SignToken
               user.Userid = res.Id
+              getApp().globalData.userId = res.Id
               user.StoreId = res.UserStores[0].StoreId
+              getApp().globalData.storeId = user.StoreId
               user.type = res.UserStores[0].UserType
               that.type = res.UserStores[0].UserType
               that.storeId = res.UserStores[0].StoreId
@@ -397,6 +399,7 @@
                     user.type = item.UserType
                     that.type = res.UserStores[0].UserType
                     that.storeId = item.StoreId
+                    getApp().globalData.storeId = item.StoreId
                   }
                 }
               }

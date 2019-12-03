@@ -1,6 +1,6 @@
 <template>
   <div class="demo-page mine-agreement">
-    <web-view src="https://www.nutcards.com/help.html?type=weixin">
+    <web-view src="https://www.nutcards.com/help.html">
 
     </web-view>
   </div>
