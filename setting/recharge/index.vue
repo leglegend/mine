@@ -16,8 +16,19 @@
             <span>*</span>
             提示: 已充值短信不支持退款，请选择适合的套餐
           </div>
+          <div class="recharge-info" @click="accept=!accept">
+            <span>
+              <img v-if="accept" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/checked.png"/>
+              <img v-if="!accept" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/uncheck.png"/>
+            </span>
+            <span>
+              <div>根据运营商规则每70个字符占用一条短信数量，超过70字符按2条</div>
+              <div>短信扣除，以此类推</div>
+              <div>*请阅读短信扣除规则，并勾选</div>
+            </span>
+          </div>
           <div class="recharge-button">
-            <span @click="doRecharge">确定充值</span>
+            <span @click="doRecharge" :style="{background:accept?'':'#f0f0f0'}">确定充值</span>
           </div>
         </div>
       </div>
@@ -41,6 +52,7 @@
       return {
         items: [],
         currentItem: {},
+        accept: false,
         titleHeight: null
       }
     },
@@ -49,6 +61,9 @@
         this.currentItem = item
       },
       doRecharge () {
+        if (!this.accept) {
+          return
+        }
         let that = this
         this.$post('/smsCenter/buySmsAddedService', {
           Uid: this.userId,
@@ -98,6 +113,7 @@
       this.storeId = option.storeId
       this.items = []
       this.currentItem = {}
+      this.accept = false
       this.getItems()
       this.titleHeight = this.getGlobalData().titleHeight
     }
@@ -143,8 +159,46 @@
             padding-top: 6.5vw;
             color: #C48F21;
             font-size: 3.3vw;
+            padding-bottom: 3.9vw;
             span {
               color: #FC493A;
+            }
+          }
+          .recharge-info {
+            width: 100vw;
+            position: relative;
+            box-sizing: border-box;
+            background: #F0F0F0;
+            left: -12.4vw;
+            font-size: 2.8vw;
+            img {
+              width: 4.4vw;
+              height: 4.4vw;
+            }
+            span {
+              display: inline-block;
+              vertical-align: top;
+              &:nth-child(1) {
+                width: 4.4vw;
+                padding: 5.5vw 3.1vw 0 5.7vw;
+              }
+              &:nth-child(2) {
+                width: 85vw;
+              }
+            }
+            div {
+              line-height: 2.8vw;
+              &:nth-child(1) {
+                padding-top: 2.7vw;
+              }
+              &:nth-child(2) {
+                padding-top: 1.4vw;
+              }
+              &:nth-child(3) {
+                padding-top: 1.4vw;
+                padding-bottom: 2.7vw;
+                color: #FC493A;
+              }
             }
           }
           .recharge-button {

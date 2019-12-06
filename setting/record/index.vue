@@ -4,6 +4,14 @@
     <scroll-view class="msg-record-scroll" scroll-y="true" @scrolltolower="scrolltolower"
                  :style="{height:'calc(100vh - '+titleHeight +'px)'}">
       <div class="msg-record-main" :style="{'min-height':'calc(90vh - '+titleHeight +'px)'}">
+        <div class="message-top">
+          <div class="top-context">
+            <span class="context-left">*</span>
+            <span class="context-right">
+              提示：根据运营商规则每70个字符占用一条短信数量，超过70字符按2条短信扣除，以此类推
+            </span>
+          </div>
+        </div>
         <div class="msg-record-context">
           <div class="context-title">发送总数量：{{count}}&nbsp;条</div>
           <div class="context-items">
@@ -11,6 +19,10 @@
               <span>{{item.Mobile}}</span>
               <span>{{item.SmsType}}</span>
               <span>{{item.SendTime}}</span>
+              <div v-if="item.SmsDeduction>1">
+                <text>*</text>
+                此条短信长度{{item.TemplateLength}}，扣除{{item.SmsDeduction}}条短信量
+              </div>
             </div>
           </div>
           <div class="footer" style="background: white" v-show="isOver&&items.length>0">—— &nbsp;没有更多了哦&nbsp; ——</div>
@@ -101,6 +113,26 @@
       .msg-record-main {
         min-height: 80vh;
         background: white;
+        .message-top {
+          padding: 4.5vw 7vw;
+          background: #FFEDAD;
+          .top-context {
+            line-height: 5vw;
+            span {
+              display: inline-block;
+              vertical-align: top;
+              font-size: 3.3vw;
+              &:nth-child(1) {
+                color: #FC493A;
+                width: 4vw;
+              }
+              &:nth-child(2) {
+                color: #C48F21;
+                width: 82vw;
+              }
+            }
+          }
+        }
         .msg-record-context {
           padding: 6.7vw 0;
           .context-title {
@@ -112,8 +144,6 @@
           .context-items {
             padding: 0 7.6vw;
             .context-item {
-              height: 13.8vw;
-              line-height: 13.8vw;
               border-bottom: 0.1vw solid #E9E9E9;
               span {
                 height: 13.8vw;
@@ -133,6 +163,16 @@
                   width: 35%;
                   text-align: right;
                 }
+              }
+              div {
+                line-height: 3vw;
+                font-size: 2.6vw;
+                color: #C48F21;
+                position: relative;
+                top: -2vw;
+              }
+              text {
+                color: #FC493A;
               }
             }
           }

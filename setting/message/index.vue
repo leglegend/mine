@@ -232,14 +232,13 @@
           padding: 5.5vw 8vw;
           background: white;
           .items-title {
-            font-weight: 600;
-            font-size: 3.5vw;
+            font-size: 3vw;
+            color: #929292;
           }
           .msg-item {
             height: 13vw;
             line-height: 13vw;
             border-bottom: 0.1vw solid #E9E9E9;
-            color: #898989;
             font-size: 3.3vw;
             span {
               display: inline-block;
@@ -251,6 +250,7 @@
               }
               &:nth-child(2) {
                 text-align: right;
+                color: #78BC6D;
               }
             }
           }
