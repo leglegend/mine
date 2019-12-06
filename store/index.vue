@@ -71,9 +71,10 @@
       doDelete () {
         let that = this
         this.deleting = false
-        this.$post('/user/businessRemoveAdmin', {
+        this.$post('/user/userRemoveStoreAdmin', {
           Uid: that.userId,
-          StoreId: that.current.StoreId,
+          StoreId: this.storeId,
+          RemoveStoreId: that.current.StoreId,
           UserId: that.userId
         }, true).then(res => {
           that.isSuccess = true
