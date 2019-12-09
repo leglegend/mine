@@ -64,9 +64,15 @@
       },
       changeStore (item) {
         wx.removeStorageSync('auth')
-        wx.setStorageSync('currentStore', item.StoreId)
-        const url = '../../index/main'
-        wx.reLaunch({url})
+        let that = this
+        this.$post('/store/storeCutover', {
+          Uid: that.userId,
+          StoreId: this.storeId,
+          CutoverStoreId: item.StoreId
+        }, true).then(res => {
+          const url = '../../index/main'
+          wx.reLaunch({url})
+        })
       },
       doDelete () {
         let that = this
