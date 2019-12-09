@@ -3,7 +3,7 @@
     <title :name="'绑定店铺'"></title>
     <scroll-view class="demo-scroll" scroll-y="true"
                  :style="{height:'calc(100vh - '+titleHeight +'px)'}">
-      <div class="demo-main"
+      <div class="demo-main" style="background: #f0f0f0;"
            :style="{'min-height':'calc(90vh - '+titleHeight +'px)'}">
         <div class="demo-context" v-for="(item,index) in stores">
           <div class="button">
