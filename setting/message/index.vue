@@ -42,7 +42,7 @@
           </div>
           <div class="msg-item" v-for="item in items" :key="index">
             <span>{{item.CreateDate}}</span>
-            <span>{{item.ItemQuantity}}条 / {{item.Price}}元</span>
+            <span>{{item.ItemQuantity}}条 / {{item.Price ? item.Price + '元' : '免费'}}</span>
           </div>
           <div class="demo-noitems" style="width: 89vw" v-show="items.length==0&&!isLoading">
             ———— 当前还没有记录 ————
