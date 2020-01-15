@@ -3,44 +3,44 @@
     <div class="gathering-title-bg" :style="{height:titleHeight+'px'}">
     </div>
     <div class="gathering-create-bg">
-      <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/gathering-bg.png" v-if="type==0"/>
+      <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/gathering-bg.png" v-if="type==0||type==-1"/>
       <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/gathering-bg2.png" v-if="type==1"/>
       <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/gathering-bg3.png" v-if="type==2"/>
     </div>
-    <div class="create-context-tabs">
-        <span class="first-tab" :class="type==0?'select':''" @click="changeType(0)">
-          <div class="tab-top">
-            <span>个人</span>
-            <div class="tab-already" v-if="(state==10&&info.StoreType==0)||(info.IsUpGrade&&state!=10)">
-              已开通
-            </div>
+    <div class="create-context-tabs" style="display: none">
+      <span class="first-tab" :class="type==0?'select':''" @click="changeType(0)">
+        <div class="tab-top">
+          <span>个人</span>
+          <div class="tab-already" v-if="(state==10&&info.StoreType==0)||(info.IsUpGrade&&state!=10)">
+            已开通
           </div>
-          <div class="tab-bottom"></div>
-          <div class="tab-top tab-shadow"></div>
-          <div class="tab-bottom"></div>
-        </span>
+        </div>
+        <div class="tab-bottom"></div>
+        <div class="tab-top tab-shadow"></div>
+        <div class="tab-bottom"></div>
+      </span>
       <span class="first-tab second-tab" :class="type==1?'select':''" @click="changeType(1)">
-          <div class="tab-top">
-            <span>个体工商户</span>
-            <div class="tab-already" v-if="state==10&&info.StoreType==1">
-              已开通
-            </div>
+        <div class="tab-top">
+          <span>个体工商户</span>
+          <div class="tab-already" v-if="state==10&&info.StoreType==1">
+            已开通
           </div>
-          <div class="tab-bottom"></div>
-          <div class="tab-top tab-shadow"></div>
-          <div class="tab-bottom"></div>
-        </span>
+        </div>
+        <div class="tab-bottom"></div>
+        <div class="tab-top tab-shadow"></div>
+        <div class="tab-bottom"></div>
+      </span>
       <span class="first-tab thrid-tab" :class="type==2?'select':''" @click="changeType(2)">
-          <div class="tab-top">
-            <span>企业/公司</span>
-            <div class="tab-already" v-if="state==10&&info.StoreType==2">
-              已开通
-            </div>
+        <div class="tab-top">
+          <span>企业/公司</span>
+          <div class="tab-already" v-if="state==10&&info.StoreType==2">
+            已开通
           </div>
-          <div class="tab-bottom"></div>
-          <div class="tab-top tab-shadow"></div>
-          <div class="tab-bottom"></div>
-        </span>
+        </div>
+        <div class="tab-bottom"></div>
+        <div class="tab-top tab-shadow"></div>
+        <div class="tab-bottom"></div>
+      </span>
     </div>
     <title :name="'填写资料'" :noline="true" :service="true" :background="'rgba(240, 240, 240, 0)'"
            :color="'#ffffff'"></title>
@@ -82,6 +82,34 @@
                 <span>收款（包括信用卡、花呗）没有限制</span>
               </div>
             </div>
+            <div class="create-select" v-if="type!=0">
+              <span class="select-item" @click="changeType(1)">
+                <span>
+                  <img v-if="type==1"
+                       src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/recharge-check.png"/>
+                  <img v-if="type!=1"
+                       src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/recharge-uncheck.png"/>
+                </span>
+                <span>
+                  个体工商户
+                </span>
+              </span>
+              <span class="select-item" @click="changeType(2)">
+                <span>
+                  <img v-if="type==2"
+                       src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/recharge-check.png"/>
+                  <img v-if="type!=2"
+                       src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/recharge-uncheck.png"/>
+                </span>
+                <span>
+                  企业/公司
+                </span>
+              </span>
+              <div class="select-bottom"></div>
+            </div>
+            <div class="create-none" v-if="type==-1">
+              —— &nbsp;请先选择您的商户类型&nbsp; ——
+            </div>
             <div class="create-state" v-if="info.State!=undefined&&info.State!=-4&&info.State!=-1&&info.State!=10">
               <div class="state-fail" v-if="info.State==-3">
                 <div class="fail-icon">
@@ -106,32 +134,49 @@
                   <div>期间不能提交其它身份资料</div>
                 </div>
               </div>
-              <div class="state-fail" v-if="info.State==0">
-                <div class="fail-icon">
+              <div class="state-success" v-if="info.State==0">
+                <span class="success-icon">
                   <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/shenhezhong.png"/>
-                </div>
-                <div class="fail-title" style="color: #FB841F">
-                  资料审核中
-                </div>
-                <div class="fail-context">
-                  <div>审核时间：{{type == 2 ? '3' : '1'}}个工作日。</div>
-                  <div>如审核通过，您将分别收到微信签约、支付宝签约两条短信，</div>
-                  <div>然后按指引完成签约即可</div>
-                </div>
+                </span>
+                <span>
+                  <div class="success-title" style="color: #FB841F">
+                    资料审核中
+                  </div>
+                  <div class="success-context">
+                    <div>审核时间：{{type == 2 ? '3' : '1'}}个工作日。</div>
+                    <div>如审核通过，您将分别收到微信签约、</div>
+                    <div>支付宝签约两条短信，</div>
+                    <div>然后按指引完成签约即可</div>
+                  </div>
+                </span>
               </div>
-              <div class="state-fail" v-if="info.State==1">
-                <div class="fail-icon">
+              <div class="state-success" v-if="info.State==1">
+                <span class="success-icon">
                   <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/tongguo.png"/>
-                </div>
-                <div class="fail-title" style="color:#37B734;">
-                  资料审核通过
-                </div>
-                <div class="fail-context">
-                  <div>资料审核通过,您应已收到微信签约、支付宝签约两条短信，</div>
-                  <div>然后按指引完成签约 ，签约完成后即可开通  </div>
-                </div>
+                </span>
+                <span>
+                  <div class="fail-title" style="color:#37B734;">
+                    资料审核通过
+                  </div>
+                  <div class="fail-context">
+                    <div>资料审核通过,您应已收到微信签约、</div>
+                    <div>支付宝签约两条短信，</div>
+                    <div>然后按指引完成签约 ，签约完成后即可开通  </div>
+                  </div>
+                </span>
               </div>
               <div class="state-bottom" v-if="info.State!=-5"></div>
+              <div class="state-gzh" v-if="info.State==0">
+                <img @click="saveGzhImg"
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/gzh.png"/>
+                <div>
+                  <text>*</text>
+                  请关注公众号及时接收审核消息
+                </div>
+                <div>
+                  点击二维码保存图片
+                </div>
+              </div>
             </div>
             <div class="create-weixin" v-if="info.State==1">
               <div v-if="!(info.IsUpGrade&&type==0)">
@@ -240,7 +285,7 @@
                 </div>
               </div>
             </div>
-            <form @submit="submit" v-if="info.State!=1&&info.State!=10&&info.State!=-5">
+            <form @submit="submit" v-if="info.State!=1&&info.State!=10&&info.State!=-5&&type!=-1">
               <div class="create-items" :class="isSaving?'error-items':''"
                    v-if="!(state!=-4&&state!=-3&&info.State==-4)">
                 <inputBox :name="'店铺简称'" :request="true" :placeholder="'请填写简称'" :remark="'它有什么作用'"
@@ -301,7 +346,7 @@
                             :disabled="isDisabled"></inputBox>
                 </div>
                 <div class="photo-item">
-                  <span class="item-name">身份证<text>*</text></span>
+                  <span class="item-name">法人身份证<text>*</text></span>
                   <span class="item-value" style="padding-right: 5.4vw"
                         @click="isDisabled?viewPhoto(info.ImgIdcardFornt):upload='ImgIdcardFornt'">
                     <span v-if="!info.ImgIdcardFornt">正面</span>
@@ -314,7 +359,22 @@
                   </span>
                 </div>
                 <div class="photo-item">
-                  <span class="item-name">银行卡<text>*</text></span>
+                  <span class="item-name">收款人身份证<text>*</text></span>
+                  <span class="item-value" style="padding-right: 5.4vw"
+                        @click="isDisabled?viewPhoto(info.ImgBeneficiaryIdcardFornt):upload='ImgBeneficiaryIdcardFornt'">
+                    <span v-if="!info.ImgBeneficiaryIdcardFornt">正面</span>
+                    <div v-if="info.ImgBeneficiaryIdcardFornt"
+                         :style="{'background-image':'url('+info.ImgBeneficiaryIdcardFornt+')'}"></div>
+                  </span>
+                  <span class="item-value"
+                        @click="isDisabled?viewPhoto(info.ImgBeneficiaryIdcardBack):upload='ImgBeneficiaryIdcardBack'">
+                    <span v-if="!info.ImgBeneficiaryIdcardBack">反面</span>
+                    <div v-if="info.ImgBeneficiaryIdcardBack"
+                         :style="{'background-image':'url('+info.ImgBeneficiaryIdcardBack+')'}"></div>
+                  </span>
+                </div>
+                <div class="photo-item">
+                  <span class="item-name">收款人银行卡<text>*</text></span>
                   <span class="item-value"
                         @click="isDisabled?viewPhoto(info.ImgBankCard):upload='ImgBankCard'">
                     <span v-if="!info.ImgBankCard">正面</span>
@@ -446,9 +506,10 @@
           <img style="width: 68.3vw;height: 43.4vw;"
                src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/xukezheng.png"
                v-if="upload=='ImgOpBankCode'"/>
-          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/face.jpg" v-if="upload=='ImgIdcardFornt'"/>
+          <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/face.jpg"
+               v-if="upload=='ImgIdcardFornt'||upload=='ImgBeneficiaryIdcardFornt'"/>
           <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/merchants/back.jpg"
-               v-if="upload=='ImgIdcardBack'"/>
+               v-if="upload=='ImgIdcardBack'||upload=='ImgBeneficiaryIdcardBack'"/>
           <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Images/merchants/bank.jpg"
                v-if="upload=='ImgBankCard'"/>
           <img style="width: 68.3vw;height: 58.9vw;"
@@ -489,6 +550,18 @@
         </div>
       </div>
     </div>
+    <div class="error-dialog" v-if="message">
+      <div class="mptoast-close" @click="message=''">
+        <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/close.png"/>
+      </div>
+      <span class="mptoast-icon">
+        <img style="width: 7.5vw;height: 6.6vw;"
+             src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/gantanhao.png"/>
+      </span>
+      <span class="mptoast-context">
+        <div class="title">{{message}}</div>
+      </span>
+    </div>
   </div>
 </template>
 
@@ -514,6 +587,8 @@
         showBank: false,
         needBranch: false,
         showBranch: false,
+        changeData: 0,
+        message: '',
         state: -4, // 状态 -4未创建 -3未通过 -1提交升级 0正在审核 1通过审核 10已通过
         titleHeight: null
       }
@@ -559,6 +634,29 @@
       },
       showRemark (name) {
         this.remark = name
+      },
+      saveGzhImg () {
+        wx.showLoading({title: '加载中...'})
+        wx.downloadFile({
+          url: 'https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/gzh.png',
+          success: function (res) {
+            console.log(res)
+            if (res.errMsg === 'downloadFile:ok') {
+              wx.saveImageToPhotosAlbum({
+                filePath: res.tempFilePath,
+                success: function (res) {
+                  wx.hideLoading()
+                  wx.showToast({
+                    title: '保存成功'
+                  })
+                },
+                fail: function () {
+                  wx.hideLoading()
+                }
+              })
+            }
+          }
+        })
       },
       takeAll (upload) {
         if (this.isDisabled) {
@@ -622,11 +720,14 @@
           success: function (res) {
             let data = JSON.parse(res.data)
             that.info[that.upload] = data.Data[0].FilePath
+            console.log(that.upload)
+            console.log(that.info)
             wx.hideLoading()
             if (that.upload === 'ImgBankCard') {
               that.checkBankCode()
             }
             that.upload = null
+            that.changeData += 1
           },
           fail: function (res) {
             console.log(res)
@@ -712,6 +813,9 @@
               that.needBranch = true
             }
             that.changeType(that.type)
+            if (res.State === -4) {
+              that.type = -1
+            }
           }
           that.isFirstLoad = false
         })
@@ -737,7 +841,7 @@
             isError = true
           }
         }
-        if ((this.info.ImgIdcardFornt && this.info.ImgIdcardBack && this.info.ImgCashierScene && this.info.ImgPanoramic && this.info.ImgShopPhoto && this.info.ImgBankCard) === false) {
+        if ((this.info.ImgIdcardFornt && this.info.ImgIdcardBack && this.info.ImgBeneficiaryIdcardFornt && this.info.ImgBeneficiaryIdcardBack && this.info.ImgCashierScene && this.info.ImgPanoramic && this.info.ImgShopPhoto && this.info.ImgBankCard) === false) {
           isError = true
         }
         if (this.type === 1 && !this.info.ImgCorpCode) {
@@ -763,8 +867,12 @@
           this.info.MerAddress = e.mp.detail.value.MerAddress
         }
         console.log(this.info)
-        this.$post('/merchant/businessSetCertification', this.info, true).then(res => {
-          that.getGatheringInfo()
+        this.$post('/merchant/businessSetCertification', this.info, true, true).then(res => {
+          if (res.StatusCode === 200) {
+            that.getGatheringInfo()
+          } else {
+            this.message = res.Message
+          }
         })
       },
       doUpgrade () {
@@ -803,6 +911,7 @@
       this.showBranch = false
       this.showBank = false
       this.needBranch = false
+      this.message = ''
       this.getGatheringInfo()
       this.getWeixinInfo()
       this.url = this.getGlobalUrl().url
@@ -826,7 +935,7 @@
       top: 0;
       left: 0;
       overflow: hidden;
-      z-index: 100;
+      z-index: 0;
       img {
         width: 100vw;
         height: 53vw;
@@ -925,11 +1034,10 @@
       z-index: 10;
       .gathering-create-main {
         .gathering-create-context {
-          padding: 36.9vw 3.7vw 0 3.7vw;
+          padding: 27.8vw 3.7vw 0 3.7vw;
           .create-context {
             background: rgba(255, 255, 255, 1);
-            border-bottom-left-radius: 1.9vw;
-            border-bottom-right-radius: 1.9vw;
+            border-radius: 1.9vw;
             box-shadow: 0vw 0.5vw 3vw 1vw rgba(0, 0, 0, 0.08);
             padding-top: 4vw;
             padding-bottom: 10vw;
@@ -956,12 +1064,56 @@
                 }
               }
             }
+            .create-select {
+              height: 15vw;
+              text-align: center;
+              .select-item {
+                display: inline-block;
+                vertical-align: top;
+                height: 13.2vw;
+                display: inline-block;
+                width: 50%;
+                span {
+                  height: 4.6vw;
+                  display: inline-block;
+                  vertical-align: middle;
+                  color: #868686;
+                  font-size: 3.5vw;
+                  &:nth-child(1) {
+                    width: 5.6vw;
+                    padding-right: 1vw;
+                  }
+                  &:nth-child(2) {
+                    height: 13.2vw;
+                    line-height: 13.2vw;
+                  }
+                }
+                img {
+                  width: 4.6vw;
+                  height: 4.6vw;
+                  vertical-align: top;
+                  display: inline-block;
+                }
+              }
+              .select-bottom {
+                height: 1.8vw;
+                background: #F0F0F0;
+              }
+            }
+            .create-none {
+              height: 80vw;
+              line-height: 80vw;
+              text-align: center;
+              font-size: 3.5vw;
+              color: #AAAAAA;
+            }
             .create-state {
-              height: 34vw;
+              // height: 34vw;
               padding-bottom: 4vw;
               position: relative;
               .state-fail {
                 padding-top: 6vw;
+                padding-bottom: 4vw;
                 text-align: center;
                 .fail-icon {
                   height: 8.3vw;
@@ -989,6 +1141,7 @@
               }
               .state-success {
                 padding-top: 7.7vw;
+                padding-bottom: 4vw;
                 span {
                   display: inline-block;
                   vertical-align: top;
@@ -1017,6 +1170,30 @@
                   line-height: 3.7vw;
                   color: #AAAAAA;
                   font-size: 2.4vw;
+                }
+              }
+              .state-gzh {
+                text-align: center;
+                padding-top: 5vw;
+                font-size: 2.4vw;
+                color: #868686;
+                padding-bottom: 5vw;
+                border-top: 0.1vw solid #BCBCBC;
+                img {
+                  width: 25.8vw;
+                  height: 25.8vw;
+                }
+                div {
+                  line-height: 2.4vw;
+                  &:nth-child(1) {
+                    padding-top: 2.4vw;
+                  }
+                  &:nth-child(2) {
+                    padding-top: 1vw;
+                  }
+                }
+                text {
+                  color: #FF0000;
                 }
               }
               .state-bottom {
@@ -1120,7 +1297,7 @@
                   padding-top: 1.6vw;
                   font-size: 3.7vw;
                   color: #181818;
-                  width: 21vw;
+                  width: 25vw;
                 }
                 .item-value {
                   width: 25.2vw;
@@ -1258,6 +1435,77 @@
           box-sizing: border-box;
           font-size: 4.4vw;
           color: rgba(55, 183, 52, 1);
+        }
+      }
+    }
+    .error-dialog {
+      width: 95vw;
+      padding: 4vw 0 5vw 2vw;
+      z-index: 999;
+      // height: 20vw;
+      background: #F87272;
+      border-radius: 2.8vw;
+      color: white;
+      box-sizing: border-box;
+      position: absolute;
+      left: 2.5vw;
+      bottom: 5vw;
+      .mptoast-close {
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 3.5vw;
+        width: 3vw;
+        height: 3vw;
+        img {
+          display: inline-block;
+          width: 3vw;
+          height: 3vw;
+          vertical-align: top;
+        }
+      }
+      .mptoast-left {
+        padding-left: 5vw;
+      }
+      .mptoast-icon {
+        width: 11.5vw;
+        text-align: center;
+        display: inline-block;
+        vertical-align: top;
+      }
+      .mptoast-context {
+        display: inline-block;
+        width: 80vw;
+        .title {
+          line-height: 6.8vw;
+          font-size: 4.3vw;
+          font-weight: 600;
+        }
+        .text {
+          font-size: 3.2vw;
+          line-height: 4vw;
+          padding-top: 1.8vw;
+          a {
+            display: inline-block;
+            color: #023D82;
+            text-decoration: underline;
+            margin-left: 2vw;
+          }
+        }
+      }
+      .mptoast-again {
+        padding-left: 5vw;
+        padding-top: 3vw;
+        span {
+          display: inline-block;
+          width: 31.2vw;
+          height: 6.9vw;
+          line-height: 6.9vw;
+          text-align: center;
+          color: #78BC6D;
+          font-size: 3.8vw;
+          background: white;
+          border-radius: 3.5vw;
         }
       }
     }

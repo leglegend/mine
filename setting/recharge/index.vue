@@ -19,7 +19,7 @@
           <div class="recharge-info" @click="accept=!accept">
             <span>
               <img v-if="accept" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/checked.png"/>
-              <img v-if="!accept" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/uncheck.png"/>
+              <span v-if="!accept" class="unaccept" style="width: 4.4vw;height: 4.4vw;padding: 0;"></span>
             </span>
             <span>
               <div>根据运营商规则每70个字符占用一条短信数量，超过70字符按2条</div>
@@ -185,6 +185,13 @@
               &:nth-child(2) {
                 width: 85vw;
               }
+            }
+            .unaccept {
+              width: 4.4vw !important;
+              height: 4.4vw !important;
+              border-radius: 50%;
+              box-sizing: border-box;
+              border: 0.3vw solid rgba(192, 192, 192, 0.51);
             }
             div {
               line-height: 2.8vw;

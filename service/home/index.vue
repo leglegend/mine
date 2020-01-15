@@ -103,7 +103,7 @@
               <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/hetong.png" style="width: 8.2vw;height: 8.7vw;"/>
             </div>
             <div class="two-title">
-              我要合同
+              电子合同
             </div>
           </span>
         </div>

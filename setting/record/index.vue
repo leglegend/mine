@@ -76,9 +76,7 @@
           PageIndex: page
         }).then(res => {
           that.count = res.TotalCount
-          if (res.Data.length < 20) {
-            that.isOver = true
-          }
+          that.isOver = res.Data.length < 20
           for (let i in res.Data) {
             that.items.push(res.Data[i])
           }

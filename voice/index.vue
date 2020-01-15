@@ -3,7 +3,7 @@
     <title :name="'坚果语音'"></title>
     <scroll-view class="demo-scroll" scroll-y="true"
                  :style="{height:'calc(100vh - '+getGlobalData().titleHeight +'px)'}">
-      <div class="demo-main" style="background-color: white"
+      <div class="demo-main" style="background-color: white;position: relative;"
            :style="{'min-height':'calc(90vh - '+getGlobalData().titleHeight +'px)'}">
         <div class="demo-context">
           <div class="top">
@@ -36,6 +36,9 @@
               </div>
               <div>
                 坚果软件的使用商家均可免费安装
+              </div>
+              <div>
+                注：对苹果、华为、小米设备已完全支持，其他品牌由于机型繁杂，可能出现未知问题，已在加紧适配中
               </div>
             </div>
           </div>
@@ -158,6 +161,15 @@
         div:nth-child(3) {
           font-size: rpx(20);
           color: #a7a7a7;
+        }
+        div:nth-child(4) {
+          position: absolute;
+          bottom: 0;
+          text-align: left;
+          font-size: rpx(20);
+          color: #a7a7a7;
+          left: 0;
+          padding: 0 8vw;
         }
       }
     }

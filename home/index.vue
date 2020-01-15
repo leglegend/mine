@@ -30,60 +30,87 @@
             <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ice.png"/>
           </div>
           <div class="mine-buttons" v-show="auth" :style="{filter:isOverdue?'grayscale(100%)':''}">
-        <span @click="isOverdue?showToast2=true:jumpToMessage()">
-          <div>
-            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/message.png"/>
-          </div>
-          <div>群发消息</div>
-        </span>
+            <span @click="isOverdue?showToast2=true:jumpToMessage()">
+              <div>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/message.png"/>
+              </div>
+              <div>群发消息</div>
+            </span>
             <span @click="isOverdue?showToast2=true:jumpToActivity()">
-          <div>
-            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupons.png"/>
-          </div>
-          <div>裂变式营销</div>
-        </span>
+              <div>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupons.png"/>
+              </div>
+              <div>裂变式营销</div>
+            </span>
             <span @click="isOverdue?showToast2=true:jumpToCoupon()">
-          <div>
-            <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-center.png"/>
-          </div>
-          <div>优惠券中心</div>
-        </span>
+              <div>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-center.png"/>
+              </div>
+              <div>优惠券中心</div>
+            </span>
           </div>
           <div class="gathering-buttons" v-show="auth">
-        <span class="gathering-left" @click="jumpToCollect"><img style="width: 5.8vw;height: 5.8vw"
-                                                                 src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/shoukuanjilu.png"/> 收款记录</span>
+            <span class="gathering-left" @click="jumpToCollect"><img style="width: 5.8vw;height: 5.8vw"
+                                                                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/shoukuanjilu.png"/> 收款记录</span>
             <span class="gathering-right" @click="jumpToGathering"><img style="width: 5.2vw;height: 5.2vw"
                                                                         src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/qian.png"/> 收款账户设置</span>
           </div>
-          <div style="height:20rpx;position:relative;top:-2rpx" v-show="auth">
-            <div style="padding-top: 22rpx;background: #f0f0f0;"></div>
+          <div style="height:20rpx;" v-show="auth">
+            <div style="padding-top: 20rpx;background: #f0f0f0;"></div>
           </div>
           <div class="mine-options">
             <div class="mine-option" @click="jumpToSetting">
               <div class="card-option">
-            <span class="card-icon">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/setting-item.png"/>
-            </span>
+                <span class="card-icon">
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/setting-item.png"/>
+                </span>
                 <span class="option-title">
-              <span>店铺设置</span>
-              <span>
-                店铺基本信息
-                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
-              </span>
-            </span>
+                  <span>店铺设置</span>
+                  <span>
+                    店铺基本信息
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div class="mine-option" @click="jumpToPoint">
+              <div class="card-option">
+                <span class="card-icon">
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/point-item.png"/>
+                </span>
+                <span class="option-title">
+                  <span>积分</span>
+                  <span>
+                    {{isOpenIntegral ? '已开启' : '未开启'}}
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div class="mine-option" @click="jumpToProduct">
+              <div class="card-option">
+                <span class="card-icon">
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/price-item.png"/>
+                </span>
+                <span class="option-title">
+                  <span>价目表</span>
+                  <span>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                  </span>
+                </span>
               </div>
             </div>
             <div class="mine-option" @click="jumpToTimeSetting">
               <div class="card-option">
-            <span class="card-icon">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/setting-time.png"/>
-            </span>
+                <span class="card-icon">
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/setting-time.png"/>
+                </span>
                 <span class="option-title">
-              <span>营业时间/节日放假</span>
-              <span>
-                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
-              </span>
-            </span>
+                  <span>营业时间/节日放假</span>
+                  <span>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                  </span>
+                </span>
               </div>
             </div>
             <div class="mine-option" @click="jumpToMessageSetting">
@@ -102,71 +129,71 @@
             <div class="mine-option" v-if="store.IsShowVoiceSeting">
               <div class="card-option">
                 <span class="card-icon">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/voice.png"/>
-            </span>
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/voice.png"/>
+                </span>
                 <span class="option-title">
-              <span>接收消卡/付款声音</span>
-              <span>
-                 <switch @change="switchChange" :checked="checked" color="#78bc6d"/>
-              </span>
-            </span>
+                  <span>接收消卡/付款声音</span>
+                  <span>
+                    <switch @change="switchChange" :checked="checked" color="#78bc6d"/>
+                  </span>
+                </span>
               </div>
             </div>
             <div class="mine-option" @click="jumpToCode">
               <div class="card-option">
-            <span class="card-icon">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/qrcode.png"/>
-            </span>
+                <span class="card-icon">
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/qrcode.png"/>
+                </span>
                 <span class="option-title">
-              <span>打印店铺码</span>
-              <span>
-                用户扫码必用
-                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
-              </span>
-            </span>
+                  <span>打印店铺码</span>
+                  <span>
+                    用户扫码必用
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                  </span>
+                </span>
               </div>
             </div>
             <div class="mine-option" @click="jumpToAdd" v-show="auth">
               <div class="card-option">
-            <span class="card-icon">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/clerk.png"/>
-            </span>
+                <span class="card-icon">
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/clerk.png"/>
+                </span>
                 <span class="option-title">
-              <span>添加店员</span>
-              <span>
-                {{store.AdminCount == 0 || store.AdminCount == undefined ? '你不在店时，店员帮你打理' : (store.AdminCount + '名')}}
-                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
-              </span>
-            </span>
+                  <span>添加店员</span>
+                  <span>
+                    {{store.AdminCount == 0 || store.AdminCount == undefined ? '你不在店时，店员帮你打理' : (store.AdminCount + '名')}}
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                  </span>
+                </span>
               </div>
             </div>
             <div class="mine-option" @click="jumpToContact">
               <div class="card-option">
-            <span class="card-icon">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/service.png"/>
-            </span>
+                <span class="card-icon">
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/service.png"/>
+                </span>
                 <span class="option-title">
-              <span>咨询客服</span>
-              <span>
-                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
-              </span>
-            </span>
+                  <span>咨询客服</span>
+                  <span>
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                  </span>
+                </span>
               </div>
             </div>
             <div class="mine-option" @click="jumpToNutcards">
               <div class="card-option">
-            <span class="card-icon">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/detail.png"/>
-            </span>
-                <span class="option-title  no-line">
-              <span>商家服务中心</span>
-              <span>
-                <text class="option-overdue" v-if="isOverdue">已到期</text>
-                <text class="option-overdue option-test" v-if="!isOverdue&&softVersion==0">试用期</text>
-                {{date ? date + ' 到期' : ''}}
-                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
-              </span>
-            </span>
+                <span class="card-icon">
+                  <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/detail.png"/>
+                </span>
+                <span class="option-title">
+                  <span>商家服务中心</span>
+                  <span>
+                    <text class="option-overdue" v-if="isOverdue">已到期</text>
+                    <text class="option-overdue option-test" v-if="!isOverdue&&softVersion==0">试用期</text>
+                    {{date ? date + ' 到期' : ''}}
+                    <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/right2.png"/>
+                  </span>
+                </span>
               </div>
             </div>
           </div>
@@ -239,7 +266,8 @@
         userType: null,
         isAuth: '',
         isBindMobile: '',
-        showAuth: false
+        showAuth: false,
+        isOpenIntegral: false
       }
     },
     computed: {
@@ -254,6 +282,14 @@
       }
     },
     methods: {
+      jumpToPoint () {
+        const url = '../setting/point/main?userId=' + this.userId + '&storeId=' + this.storeId
+        wx.navigateTo({url})
+      },
+      jumpToProduct () {
+        const url = '../setting/product/main?userId=' + this.userId + '&storeId=' + this.storeId
+        wx.navigateTo({url})
+      },
       jumpToSetting () {
         const url = '../setting/store/main?userId=' + this.userId + '&storeId=' + this.storeId
         wx.navigateTo({url})
@@ -361,6 +397,11 @@
           this.wxGetUserInfo(1)
         }
       },
+      getPointInfo () {
+        this.$post('/storeIntegral/businessGetIntegralSet', {}).then(res => {
+          this.isOpenIntegral = res.IsOpenIntegral
+        })
+      },
       wxGetUserInfo (index) {
         let that = this
         let user = {
@@ -466,6 +507,7 @@
         this.isBindMobile = !this.$store.state.userInfo.IsBindMobile
         this.user = this.$store.state.userInfo
         this.getStoreInfo()
+        this.getPointInfo()
         let that = this
         wx.getUserInfo({
           success: function (res) {
@@ -487,6 +529,7 @@
       this.user = this.$store.state.userInfo
       this.showAuth = !(this.isAuth && this.isBindMobile)
       this.getStoreInfo()
+      this.getPointInfo()
       let date = new Date()
       if (date.getHours() > 6 && date.getHours() < 12) {
         this.hello = '早上好'
@@ -518,6 +561,7 @@
         return
       }
       this.getStoreInfo()
+      this.getPointInfo()
     },
     onShareAppMessage () {
       return {
@@ -633,10 +677,9 @@
         width: 100vw;
         height: rpx(90);
         padding-top: rpx(10);
-        overflow: hidden;
         position: relative;
-        top: rpx(-1);
-        background: linear-gradient(to right, #ff8100, #ff6700);
+        z-index: 999;
+        // background: linear-gradient(to right, #ff8100, #ff6700);
         img {
           width: 100vw;
           display: inline-block;
@@ -651,7 +694,6 @@
         background-color: white;
         position: relative;
         z-index: 1000;
-        top: rpx(-2);
         span {
           display: inline-block;
           width: 25%;
@@ -675,11 +717,9 @@
       .gathering-buttons {
         height: 13vw;
         padding-top: 2.4vw;
-        border-top: 0.1vw solid #dddddd;
         background: white;
         box-sizing: border-box;
         position: relative;
-        top: rpx(-2);
         z-index: 1001;
         span {
           display: inline-block;
@@ -695,7 +735,7 @@
 
         .gathering-left {
           box-sizing: border-box;
-          border-right: 0.1vw solid #dddddd;
+          position: relative;
           img {
             display: inline-block;
             vertical-align: middle;
@@ -703,6 +743,17 @@
             top: -0.5vw;
             left: -0.5vw;
           }
+        }
+        .gathering-left:after {
+          position: absolute;
+          content: '';
+          width: 1px;
+          right: 0;
+          top: 0;
+          height: 100%;
+          background-color: #dddddd;
+          transform: scale(0.4, 1);
+          transform-origin: center center;
         }
         .gathering-right {
           img {
@@ -713,6 +764,17 @@
             top: -0.2vw;
           }
         }
+      }
+      .gathering-buttons:after {
+        position: absolute;
+        content: '';
+        width: 100%;
+        left: 0;
+        top: 0;
+        height: 1px;
+        background-color: #dddddd;
+        transform: scale(1, 0.4);
+        transform-origin: center top;
       }
       .mine-options {
         width: 100vw;
@@ -746,7 +808,7 @@
             }
             .option-title {
               width: 82vw;
-              border-bottom: rpx(1) solid #dddddd;
+              position: relative;
               span {
                 img {
                   display: inline-block;
@@ -787,6 +849,19 @@
             .no-line {
               border-bottom: 0;
             }
+          }
+        }
+        .mine-option:not(:last-child) {
+          .option-title:after {
+            position: absolute;
+            content: '';
+            width: 100%;
+            left: 0;
+            bottom: 0;
+            height: 1px;
+            background-color: #dddddd;
+            transform: scale(1, 0.4);
+            transform-origin: center bottom;
           }
         }
         .service {
