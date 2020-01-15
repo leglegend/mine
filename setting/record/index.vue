@@ -13,7 +13,8 @@
           </div>
         </div>
         <div class="msg-record-context">
-          <div class="context-title">发送总数量：{{count}}&nbsp;条</div>
+          <div class="context-title">发送总数量：{{count.TotalSendCount}}&nbsp;条 <span
+            v-if="count.WaitSendCount">({{count.WaitSendCount}}条待发短信正在审核中)</span></div>
           <div class="context-items">
             <div class="context-item" v-for="item in items">
               <span>{{item.Mobile}}</span>
@@ -51,7 +52,7 @@
     data () {
       return {
         items: [],
-        count: 0,
+        count: {},
         isOver: false,
         isLoading: false,
         titleHeight: null
@@ -75,7 +76,6 @@
           PageSize: 20,
           PageIndex: page
         }).then(res => {
-          that.count = res.TotalCount
           that.isOver = res.Data.length < 20
           for (let i in res.Data) {
             that.items.push(res.Data[i])
@@ -85,6 +85,16 @@
           }
           that.isLoading = false
         })
+      },
+      getCount () {
+        let that = this
+        this.isLoading = true
+        this.$post('/smsCenter/getStoreSmsSendLogCount', {
+          Uid: that.userId,
+          StoreId: that.storeId
+        }).then(res => {
+          that.count = res
+        })
       }
     },
     onLoad (option) {
@@ -92,7 +102,9 @@
       this.storeId = option.storeId
       this.page = 1
       this.items = []
+      this.count = {}
       this.getItems(1)
+      this.getCount()
       this.titleHeight = this.getGlobalData().titleHeight
     }
   }
@@ -138,6 +150,9 @@
             font-size: 3.5vw;
             font-weight: 600;
             border-bottom: 0.1vw solid #E9E9E9;
+            span {
+              color: red;
+            }
           }
           .context-items {
             padding: 0 7.6vw;

@@ -166,14 +166,14 @@
                 </span>
               </div>
               <div class="state-bottom" v-if="info.State!=-5"></div>
-              <div class="state-gzh" v-if="info.State==0">
+              <div class="state-gzh" v-if="info.State==0&&showCode">
                 <img @click="saveGzhImg"
                      src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/gzh.png"/>
                 <div>
                   <text>*</text>
                   请关注公众号及时接收审核消息
                 </div>
-                <div>
+                <div style="padding-top: 0.5vw">
                   点击二维码保存图片
                 </div>
               </div>
@@ -588,6 +588,7 @@
         needBranch: false,
         showBranch: false,
         changeData: 0,
+        showCode: false,
         message: '',
         state: -4, // 状态 -4未创建 -3未通过 -1提交升级 0正在审核 1通过审核 10已通过
         titleHeight: null
@@ -899,6 +900,14 @@
         }, true).then(res => {
           that.getGatheringInfo()
         })
+      },
+      getShowCode () {
+        let that = this
+        this.$post('/weiXin/checkUserIsAttentionOfficialAccount', {
+          Uid: that.userId
+        }, true).then(res => {
+          that.showCode = !res.IsAttentionOfficialAccount
+        })
       }
     },
     onLoad (option) {
@@ -911,9 +920,11 @@
       this.showBranch = false
       this.showBank = false
       this.needBranch = false
+      this.showCode = false
       this.message = ''
       this.getGatheringInfo()
       this.getWeixinInfo()
+      this.getShowCode()
       this.url = this.getGlobalUrl().url
       this.titleHeight = this.getGlobalData().titleHeight
     }

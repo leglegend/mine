@@ -209,7 +209,7 @@
       <div v-if="showToast2">
         <renewtoast @close="showToast2 = false"></renewtoast>
       </div>
-      <div class="ming-need-auth" v-if="showAuthModel!=0&&showAuth" @click="showAuth=false"></div>
+      <div class="ming-need-auth" v-if="showAuth&&showAuthModel!=0" @click="showAuth=false"></div>
       <div class="mine-auth" v-if="showAuthModel!=0&&!showAuth&&!isAuth">
         <div class="mine-auth-model">
           <div class="model-title">该操作需要您的授权</div>
