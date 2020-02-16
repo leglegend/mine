@@ -341,8 +341,8 @@
         wx.navigateTo({url})
       },
       jumpToContract () {
-        // const url = '../../agreement/main?storeId=' + this.storeId + '&userId=' + this.userId
-        const url = '../contract/main?storeId=' + this.storeId + '&userId=' + this.userId
+        const url = '../../agreement/main?storeId=' + this.storeId + '&userId=' + this.userId
+        // const url = '../contract/main?storeId=' + this.storeId + '&userId=' + this.userId
         wx.navigateTo({url})
       },
       jumpToTable () {
