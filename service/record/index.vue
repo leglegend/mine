@@ -19,7 +19,7 @@
                 <span>{{item.PayPrice + '元'}}</span>
               </div>
               <div class="item-bottom">
-                {{item.CreateDate}} &nbsp;&nbsp; {{item.State == 1 ? '订购成功' : item.State == 0 ? '待入账' : '已删除'}}
+                {{item.CreateDate}} &nbsp;&nbsp; {{softVersions[item.SoftVersion]}} &nbsp;&nbsp; {{item.State == 1 ? '订购成功' : item.State == 0 ? '待入账' : '已删除'}}
                 <span v-if="item.IsUserSoftCoupon">优惠码</span>
               </div>
             </div>
@@ -49,6 +49,7 @@
       return {
         titleHeight: null,
         items: [],
+        softVersions: ['', '试用版', '基础版', '标准版', '预约版', '营销版', '', '', '', '', '高级版'],
         page: 1,
         isLoading: false, // 正在加载明细
         isOver: false // 消费明细是否加载完

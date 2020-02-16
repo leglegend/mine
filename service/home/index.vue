@@ -18,16 +18,22 @@
                   有效期至 : {{date}}
                 </span>
                 <div class="top-renew">
-                  <span>
+                  <span v-if="!isOverdue">
                     立即续费
                   </span>
+                  <img v-if="isOverdue"
+                       src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/service-renew-bt.png"/>
                 </div>
               </span>
               <span class="card-right">
-                <img v-if="!isOverdue" class="right-bg" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/service-bg.png"/>
-                <img v-if="isOverdue" class="right-bg2" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/service-bg2.png"/>
-                <img v-if="!isCertification" class="right-img" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/weirenzheng.png"/>
-                <img v-if="isCertification" class="right-img" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/yirenzheng.png"/>
+                <img v-if="!isOverdue" class="right-bg"
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/service-bg.png"/>
+                <img v-if="isOverdue" class="right-bg2"
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/service-bg2.png"/>
+                <img v-if="!isCertification" class="right-img"
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/weirenzheng.png"/>
+                <img v-if="isCertification" class="right-img"
+                     src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/yirenzheng.png"/>
               </span>
             </div>
             <!--<div class="card-middle">
@@ -57,8 +63,20 @@
               </span>
             </div>-->
             <!--<img class="card-nutcard" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/NUTCARD-text.png"/>-->
-            <img v-if="isOverdue" class="card-version" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/yidaoqi.png"/>
-            <img v-if="!isOverdue&&softVersion==0" class="card-version" src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/shiyongqi.png"/>
+            <img v-if="isOverdue" class="card-version"
+                 src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/yidaoqi.png"/>
+            <img v-if="!isOverdue&&(softVersion==0||softVersion==1)" class="card-version"
+                 src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/shiyongqi.png"/>
+            <img v-if="!isOverdue&&softVersion==2" class="card-version"
+                 src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/card-version-2.png"/>
+            <img v-if="!isOverdue&&softVersion==3" class="card-version"
+                 src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/card-version-3.png"/>
+            <img v-if="!isOverdue&&softVersion==4" class="card-version"
+                 src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/card-version-4.png"/>
+            <img v-if="!isOverdue&&softVersion==5" class="card-version"
+                 src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/card-version-5.png"/>
+            <img v-if="!isOverdue&&softVersion==10" class="card-version"
+                 src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/card-version-10.png"/>
           </div>
           <div class="card-logs">
             <span @click="jumpToFee">什么叫支付手续费?</span>
@@ -76,7 +94,8 @@
         <div class="part-two">
           <span @click="jumpToAccount">
             <div class="two-logo">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/edit-phone.png" style="width: 8vw;height: 9vw;"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/edit-phone.png"
+                   style="width: 8vw;height: 9vw;"/>
             </div>
             <div class="two-title">
               修改手机号
@@ -84,7 +103,8 @@
           </span>
           <span @click="jumpToExport">
             <div class="two-logo">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/export.png" style="width: 7.3vw;height: 9vw;"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/export.png"
+                   style="width: 7.3vw;height: 9vw;"/>
             </div>
             <div class="two-title">
               导出数据
@@ -92,7 +112,8 @@
           </span>
           <span @click="jumpToTable">
             <div class="two-logo">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/taipai.png" style="width: 10.7vw;height: 8.8vw;"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/taipai.png"
+                   style="width: 10.7vw;height: 8.8vw;"/>
             </div>
             <div class="two-title">
               我要台牌
@@ -100,7 +121,8 @@
           </span>
           <span @click="jumpToContract">
             <div class="two-logo">
-              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/hetong.png" style="width: 8.2vw;height: 8.7vw;"/>
+              <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/hetong.png"
+                   style="width: 8.2vw;height: 8.7vw;"/>
             </div>
             <div class="two-title">
               电子合同
@@ -319,7 +341,8 @@
         wx.navigateTo({url})
       },
       jumpToContract () {
-        const url = '../../agreement/main?storeId=' + this.storeId + '&userId=' + this.userId
+        // const url = '../../agreement/main?storeId=' + this.storeId + '&userId=' + this.userId
+        const url = '../contract/main?storeId=' + this.storeId + '&userId=' + this.userId
         wx.navigateTo({url})
       },
       jumpToTable () {
@@ -467,6 +490,12 @@
                     color: #7C581C;
                     letter-spacing: 0.3vw;
                     font-weight: 600;
+                  }
+                  img {
+                    display: inline-block;
+                    vertical-align: top;
+                    width: 23vw;
+                    height: 5.8vw;
                   }
                 }
               }

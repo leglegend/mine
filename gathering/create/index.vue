@@ -358,7 +358,7 @@
                     <div v-if="info.ImgIdcardBack" :style="{'background-image':'url('+info.ImgIdcardBack+')'}"></div>
                   </span>
                 </div>
-                <div class="photo-item">
+                <!--<div class="photo-item">
                   <span class="item-name">收款人身份证<text>*</text></span>
                   <span class="item-value" style="padding-right: 5.4vw"
                         @click="isDisabled?viewPhoto(info.ImgBeneficiaryIdcardFornt):upload='ImgBeneficiaryIdcardFornt'">
@@ -372,7 +372,7 @@
                     <div v-if="info.ImgBeneficiaryIdcardBack"
                          :style="{'background-image':'url('+info.ImgBeneficiaryIdcardBack+')'}"></div>
                   </span>
-                </div>
+                </div>-->
                 <div class="photo-item">
                   <span class="item-name">收款人银行卡<text>*</text></span>
                   <span class="item-value"
@@ -842,7 +842,7 @@
             isError = true
           }
         }
-        if ((this.info.ImgIdcardFornt && this.info.ImgIdcardBack && this.info.ImgBeneficiaryIdcardFornt && this.info.ImgBeneficiaryIdcardBack && this.info.ImgCashierScene && this.info.ImgPanoramic && this.info.ImgShopPhoto && this.info.ImgBankCard) === false) {
+        if ((this.info.ImgIdcardFornt && this.info.ImgIdcardBack && this.info.ImgCashierScene && this.info.ImgPanoramic && this.info.ImgShopPhoto && this.info.ImgBankCard) === false) {
           isError = true
         }
         if (this.type === 1 && !this.info.ImgCorpCode) {
