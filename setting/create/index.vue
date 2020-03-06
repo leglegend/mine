@@ -20,6 +20,10 @@
               <inputBox :name="type?'VipPrice':'ItemVipPrice'" :title="'会员价'" :type="'digit'" :info="'请输入'"
                         :value="product.VipPrice||product.ItemVipPrice||''"/>
             </div>
+            <div class="create-item" v-if="type==0">
+              <inputBox :name="'ItemUnit'" :title="'单位'" :type="'text'" :info="'次'"
+                        :value="product.ItemUnit||''"/>
+            </div>
             <div class="create-item-select">
               <span class="select-title">
                 是否参与会员折扣

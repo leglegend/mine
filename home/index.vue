@@ -30,23 +30,11 @@
             <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/ice.png"/>
           </div>
           <div class="mine-buttons" v-show="auth" :style="{filter:isOverdue?'grayscale(100%)':''}">
-            <span @click="isOverdue?showToast2=true:jumpToMessage()">
-              <div>
-                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/message.png"/>
-              </div>
-              <div>群发消息</div>
-            </span>
             <span @click="isOverdue?showToast2=true:jumpToActivity()">
               <div>
                 <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupons.png"/>
               </div>
               <div>裂变式营销</div>
-            </span>
-            <span @click="isOverdue?showToast2=true:jumpToCoupon()">
-              <div>
-                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-center.png"/>
-              </div>
-              <div>优惠券中心</div>
             </span>
           </div>
           <div class="gathering-buttons" v-show="auth">
