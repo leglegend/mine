@@ -36,6 +36,12 @@
               </div>
               <div>裂变式营销</div>
             </span>
+            <span @click="isOverdue?showToast2=true:jumpToCoupon()" v-if="showCouponActivity">
+              <div>
+                <img src="https://linkfit-pro.oss-cn-hangzhou.aliyuncs.com/Business/static/coupon-center.png"/>
+              </div>
+              <div>优惠券中心</div>
+            </span>
           </div>
           <div class="gathering-buttons" v-show="auth">
             <span class="gathering-left" @click="jumpToCollect"><img style="width: 5.8vw;height: 5.8vw"
@@ -267,6 +273,10 @@
       },
       showAuthModel () {
         return this.$store.state.userId
+      },
+      showCouponActivity () {
+        let path = this.getGlobalData().path
+        return path === 'marketing'
       }
     },
     methods: {
